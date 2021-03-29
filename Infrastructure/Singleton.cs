@@ -2,56 +2,42 @@
 
 namespace Fralle.Core.Infrastructure
 {
-  public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
-  {
-    static T _instance;
-    static bool shuttingDown;
+	public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+	{
+		static T instance;
 
-    public static T Instance
-    {
-      get
-      {
-        if (shuttingDown)
-        {
-          Debug.LogWarning($"[Singleton] Instance '{typeof(T)}' already destroyed. Returning null.");
-          return null;
-        }
+		public static T Instance
+		{
+			get
+			{
+				if (instance != null)
+					return instance;
 
-        if (_instance != null) return _instance;
+				instance = (T)FindObjectOfType(typeof(T));
 
-        _instance = (T)FindObjectOfType(typeof(T));
+				if (instance != null)
+					return instance;
 
-        if (_instance != null) return _instance;
+				var singletonObject = new GameObject();
+				instance = singletonObject.AddComponent<T>();
+				singletonObject.name = typeof(T).ToString() + " (Singleton)";
 
-        var singletonObject = new GameObject();
-        _instance = singletonObject.AddComponent<T>();
-        singletonObject.name = typeof(T).ToString() + " (Singleton)";
+				DontDestroyOnLoad(singletonObject);
 
-        DontDestroyOnLoad(singletonObject);
+				return instance;
+			}
+		}
 
-        return _instance;
-      }
-    }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2696:Instance members should not write to \"static\" fields", Justification = "<Pending>")]
+		protected virtual void Awake()
+		{
+			if (instance != null && instance != this as T)
+			{
+				Destroy(gameObject);
+				return;
+			}
 
-    protected virtual void Awake()
-    {
-      if (_instance != null && _instance != this as T)
-      {
-        Destroy(gameObject);
-        return;
-      }
-
-      _instance = this as T;
-    }
-
-    void OnApplicationQuit()
-    {
-      shuttingDown = true;
-    }
-
-    void OnDestroy()
-    {
-      shuttingDown = true;
-    }
-  }
+			instance = this as T;
+		}
+	}
 }
