@@ -4,6 +4,6 @@
   {
     Awake,
     Start,
-    OnEnable
+    Enable
   }
 }

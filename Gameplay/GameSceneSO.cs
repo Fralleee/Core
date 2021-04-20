@@ -3,14 +3,14 @@
 namespace Fralle.Core.Gameplay
 {
 	[CreateAssetMenu(menuName = "Core/GameScene")]
-	public class GameSceneSO : ScriptableObject
+	public class GameSceneSo : ScriptableObject
 	{
 		[Header("Information")]
-		public string sceneName;
-		public string shortDescription;
+		public string SceneName;
+		public string ShortDescription;
 
 		[Header("Sounds")]
-		public AudioClip music;
+		public AudioClip Music;
 
 	}
 }

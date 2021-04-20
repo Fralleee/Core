@@ -5,11 +5,11 @@ namespace Fralle.Core.CameraControls
 	public class CameraFollowTransform : MonoBehaviour
 	{
 
-		public Transform transformToFollow;
+		public Transform TransformToFollow;
 
 		void LateUpdate()
 		{
-			transform.position = transformToFollow.position;
+			transform.position = TransformToFollow.position;
 		}
 	}
 }

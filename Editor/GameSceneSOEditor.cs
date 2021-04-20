@@ -8,54 +8,54 @@ using UnityEngine.SceneManagement;
 
 namespace Fralle.Core.Gameplay
 {
-	[CustomEditor(typeof(GameSceneSO), true)]
-	public class GameSceneSOEditor : Editor
+	[CustomEditor(typeof(GameSceneSo), true)]
+	public class GameSceneSoEditor : Editor
 	{
 		private const string NO_SCENES_WARNING = "There is no Scene associated to this location yet. Add a new scene with the dropdown below";
-		private GUIStyle _headerLabelStyle;
-		private static readonly string[] _excludedProperties = { "m_Script", "sceneName" };
+		private GUIStyle headerLabelStyle;
+		private static readonly string[] ExcludedProperties = { "m_Script", "sceneName" };
 
-		private string[] _sceneList;
-		private GameSceneSO _gameSceneInspected;
+		private string[] sceneList;
+		private GameSceneSo gameSceneInspected;
 
 		private void OnEnable()
 		{
-			_gameSceneInspected = target as GameSceneSO;
+			gameSceneInspected = target as GameSceneSo;
 			PopulateScenePicker();
 			InitializeGuiStyles();
 		}
 
 		public override void OnInspectorGUI()
 		{
-			EditorGUILayout.LabelField("Scene information", _headerLabelStyle);
+			EditorGUILayout.LabelField("Scene information", headerLabelStyle);
 			EditorGUILayout.Space();
 			DrawScenePicker();
-			DrawPropertiesExcluding(serializedObject, _excludedProperties);
+			DrawPropertiesExcluding(serializedObject, ExcludedProperties);
 		}
 
 		private void DrawScenePicker()
 		{
-			var sceneName = _gameSceneInspected.sceneName;
+			var sceneName = gameSceneInspected.SceneName;
 			EditorGUI.BeginChangeCheck();
-			var selectedScene = _sceneList.ToList().IndexOf(sceneName);
+			var selectedScene = sceneList.ToList().IndexOf(sceneName);
 
 			if (selectedScene < 0)
 			{
 				EditorGUILayout.HelpBox(NO_SCENES_WARNING, MessageType.Warning);
 			}
 
-			selectedScene = EditorGUILayout.Popup("Scene", selectedScene, _sceneList);
+			selectedScene = EditorGUILayout.Popup("Scene", selectedScene, sceneList);
 			if (EditorGUI.EndChangeCheck())
 			{
 				Undo.RecordObject(target, "Changed selected scene");
-				_gameSceneInspected.sceneName = _sceneList[selectedScene];
+				gameSceneInspected.SceneName = sceneList[selectedScene];
 				MarkAllDirty();
 			}
 		}
 
 		private void InitializeGuiStyles()
 		{
-			_headerLabelStyle = new GUIStyle(EditorStyles.largeLabel)
+			headerLabelStyle = new GUIStyle(EditorStyles.largeLabel)
 			{
 				fontStyle = FontStyle.Bold,
 				fontSize = 18,
@@ -69,10 +69,10 @@ namespace Fralle.Core.Gameplay
 		private void PopulateScenePicker()
 		{
 			var sceneCount = SceneManager.sceneCountInBuildSettings;
-			_sceneList = new string[sceneCount];
+			sceneList = new string[sceneCount];
 			for (int i = 0; i < sceneCount; i++)
 			{
-				_sceneList[i] = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
+				sceneList[i] = Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i));
 			}
 		}
 

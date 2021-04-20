@@ -11,11 +11,11 @@ namespace Fralle.Core.Profiling
 		ProfilerRecorder mainThreadTimeRecorder;
 		ProfilerRecorder drawCallsCountRecorder;
 
-		public float frameTime;
-		public float fps;
-		public float gcMemory;
-		public float systemMemory;
-		public float drawCalls;
+		public float FrameTime;
+		public float Fps;
+		public float GcMemory;
+		public float SystemMemory;
+		public float DrawCalls;
 
 		static double GetRecorderFrameAverage(ProfilerRecorder recorder)
 		{
@@ -51,11 +51,11 @@ namespace Fralle.Core.Profiling
 
 		void Update()
 		{
-			frameTime = (float)GetRecorderFrameAverage(mainThreadTimeRecorder) * (1e-6f);
-			fps = 1000 / frameTime;
-			gcMemory = gcMemoryRecorder.LastValue / (1024f * 1024f);
-			systemMemory = systemMemoryRecorder.LastValue / (1024f * 1024f);
-			drawCalls = drawCallsCountRecorder.LastValue;
+			FrameTime = (float)GetRecorderFrameAverage(mainThreadTimeRecorder) * (1e-6f);
+			Fps = 1000 / FrameTime;
+			GcMemory = gcMemoryRecorder.LastValue / (1024f * 1024f);
+			SystemMemory = systemMemoryRecorder.LastValue / (1024f * 1024f);
+			DrawCalls = drawCallsCountRecorder.LastValue;
 		}
 	}
 }

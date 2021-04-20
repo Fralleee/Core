@@ -6,21 +6,21 @@ namespace Fralle.Core.Audio
   [CreateAssetMenu(menuName = "Audio/Event")]
   public class AudioEvent : ScriptableObject
   {
-    public AudioClip[] clips;
+    public AudioClip[] Clips;
 
-    public Vector2 volumeRange;
-    public Vector2 pitchRange;
+    public Vector2 VolumeRange;
+    public Vector2 PitchRange;
 
-    public int playCount = 1;
-    public float playDelay = 1f;
+    public int PlayCount = 1;
+    public float PlayDelay = 1f;
 
     public void Play(AudioSource source)
     {
-      if (clips.Length == 0) return;
+      if (Clips.Length == 0) return;
 
-      source.clip = clips[Random.Range(0, clips.Length)];
-      source.volume = Random.Range(volumeRange.x, volumeRange.y);
-      source.pitch = Random.Range(pitchRange.x, pitchRange.y);
+      source.clip = Clips[Random.Range(0, Clips.Length)];
+      source.volume = Random.Range(VolumeRange.x, VolumeRange.y);
+      source.pitch = Random.Range(PitchRange.x, PitchRange.y);
       source.Play();
     }
   }

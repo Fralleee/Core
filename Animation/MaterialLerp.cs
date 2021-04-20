@@ -4,13 +4,13 @@ namespace Fralle.Core.Animation
 {
   public class MaterialLerp : MonoBehaviour
   {
-    public Material mat1;
-    public Material mat2;
-    public Material mat3;
-    public Material mat4;
-    public Material mat5;
+    public Material Mat1;
+    public Material Mat2;
+    public Material Mat3;
+    public Material Mat4;
+    public Material Mat5;
 
-    public float lerptime;
+    public float Lerptime;
 
     float q;
     float w;
@@ -22,7 +22,7 @@ namespace Fralle.Core.Animation
     {
       rend = GetComponent<Renderer>();
 
-      rend.material = mat1;
+      rend.material = Mat1;
     }
 
     void Update()
@@ -30,26 +30,26 @@ namespace Fralle.Core.Animation
       if (Input.GetKey(KeyCode.Q))
       {
 
-        rend.material.Lerp(mat1, mat2, q);
-        q += Time.deltaTime / lerptime;
+        rend.material.Lerp(Mat1, Mat2, q);
+        q += Time.deltaTime / Lerptime;
       }
 
       if (Input.GetKey(KeyCode.W))
       {
-        rend.material.Lerp(mat2, mat3, w);
-        w += Time.deltaTime / lerptime;
+        rend.material.Lerp(Mat2, Mat3, w);
+        w += Time.deltaTime / Lerptime;
       }
 
       if (Input.GetKey(KeyCode.E))
       {
-        rend.material.Lerp(mat3, mat4, e);
-        e += Time.deltaTime / lerptime;
+        rend.material.Lerp(Mat3, Mat4, e);
+        e += Time.deltaTime / Lerptime;
       }
 
       if (Input.GetKey(KeyCode.R))
       {
-        rend.material.Lerp(mat4, mat5, r);
-        r += Time.deltaTime / lerptime;
+        rend.material.Lerp(Mat4, Mat5, r);
+        r += Time.deltaTime / Lerptime;
       }
 
     }

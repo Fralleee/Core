@@ -26,16 +26,13 @@ namespace Fralle.Core
 
 
 			// Action that can return a value
-			Func<int> func1 = delegate
-			{ return 1; };
+			Func<int> func1 = () => 1;
 			int a = func1();
 
-			Func<int, int> func2 = delegate (int param1)
-			{ return param1 + 1; };
+			Func<int, int> func2 = param1 => param1 + 1;
 			int b = func2(1);
 
-			Func<int, float, int> func3 = delegate (int param1, float param2)
-			{ return param1 + ((int)param2) + 1; };
+			Func<int, float, int> func3 = (param1, param2) => param1 + ((int)param2) + 1;
 			int c = func3(1, 1.1f);
 
 			Func<int, float, int> func3B = FuncExampleFunction;
@@ -43,8 +40,7 @@ namespace Fralle.Core
 
 
 			// Basically a func but can only take one parameter and always returns a bool (Func<int, bool>)
-			Predicate<int> pred1 = delegate (int param1)
-			{ return true; };
+			Predicate<int> pred1 = param1 => true;
 			bool b1 = pred1(1);
 
 

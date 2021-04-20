@@ -5,13 +5,13 @@ namespace Fralle.Core.Pooling
 	[System.Serializable]
 	public class PoolItem
 	{
-		public GameObject obj;
-		public PooledObject refScript;
+		public GameObject Obj;
+		public PooledObject RefScript;
 
 		public PoolItem(GameObject obj, PooledObject refScript)
 		{
-			this.obj = obj;
-			this.refScript = refScript;
+			this.Obj = obj;
+			this.RefScript = refScript;
 		}
 	}
 }

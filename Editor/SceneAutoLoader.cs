@@ -34,34 +34,22 @@ namespace Fralle.Core
 		{
 			string masterScene = EditorUtility.OpenFilePanel("Select Master Scene", Application.dataPath, "unity");
 			masterScene = masterScene.Replace(Application.dataPath, "Assets");  //project relative instead of absolute path
-			if (!string.IsNullOrEmpty(masterScene))
-			{
-				MasterScene = masterScene;
-				LoadMasterOnPlay = true;
-			}
-		}
-
-		[MenuItem("File/Scene Autoload/Load Master On Play", true)]
-		static bool ShowLoadMasterOnPlay()
-		{
-			return !LoadMasterOnPlay;
-		}
-		[MenuItem("File/Scene Autoload/Load Master On Play")]
-		static void EnableLoadMasterOnPlay()
-		{
+			if (string.IsNullOrEmpty(masterScene)) return;
+			MasterScene = masterScene;
 			LoadMasterOnPlay = true;
 		}
 
+		[MenuItem("File/Scene Autoload/Load Master On Play", true)]
+		static bool ShowLoadMasterOnPlay() => !LoadMasterOnPlay;
+
+		[MenuItem("File/Scene Autoload/Load Master On Play")]
+		static void EnableLoadMasterOnPlay() => LoadMasterOnPlay = true;
+
 		[MenuItem("File/Scene Autoload/Don't Load Master On Play", true)]
-		static bool ShowDontLoadMasterOnPlay()
-		{
-			return LoadMasterOnPlay;
-		}
+		static bool ShowDontLoadMasterOnPlay() => LoadMasterOnPlay;
+
 		[MenuItem("File/Scene Autoload/Don't Load Master On Play")]
-		static void DisableLoadMasterOnPlay()
-		{
-			LoadMasterOnPlay = false;
-		}
+		static void DisableLoadMasterOnPlay() => LoadMasterOnPlay = false;
 
 		static void OnPlayModeChanged(PlayModeStateChange state)
 		{
@@ -74,9 +62,9 @@ namespace Fralle.Core
 			if (!EditorApplication.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode)
 			{
 				PreviousScene = SceneManager.GetActiveScene().path;
-				KeepMasterSceneOpen = MasterSceneIsOpen;
+				keepMasterSceneOpen = MasterSceneIsOpen;
 
-				if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo() && !KeepMasterSceneOpen)
+				if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo() && !keepMasterSceneOpen)
 				{
 					try
 					{
@@ -84,7 +72,7 @@ namespace Fralle.Core
 					}
 					catch
 					{
-						Debug.LogError(string.Format("error: scene not found: {0}", MasterScene));
+						Debug.LogError($"error: scene not found: {MasterScene}");
 						EditorApplication.isPlaying = false;
 
 					}
@@ -96,28 +84,26 @@ namespace Fralle.Core
 			}
 
 			// Stopped Playing
-			if (!EditorApplication.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode && !KeepMasterSceneOpen)
+			if (EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode || keepMasterSceneOpen) return;
+			try
 			{
-				try
-				{
-					EditorSceneManager.CloseScene(SceneManager.GetSceneByPath(MasterScene), true);
-				}
-				catch
-				{
-					Debug.LogError(string.Format("error: scene not found: {0}", PreviousScene));
-				}
+				EditorSceneManager.CloseScene(SceneManager.GetSceneByPath(MasterScene), true);
+			}
+			catch
+			{
+				Debug.LogError($"error: scene not found: {PreviousScene}");
 			}
 		}
 
 		// Properties are remembered as editor preferences.
-		const string cEditorPrefLoadMasterOnPlay = "Fralle.SceneAutoLoader.LoadMasterOnPlay";
-		const string cEditorPrefMasterScene = "Fralle.SceneAutoLoader.MasterScene";
-		const string cEditorPrefPreviousScene = "Fralle.SceneAutoLoader.PreviousScene";
+		const string CEditorPrefLoadMasterOnPlay = "Fralle.SceneAutoLoader.LoadMasterOnPlay";
+		const string CEditorPrefMasterScene = "Fralle.SceneAutoLoader.MasterScene";
+		const string CEditorPrefPreviousScene = "Fralle.SceneAutoLoader.PreviousScene";
 
 		static bool LoadMasterOnPlay
 		{
-			get { return EditorPrefs.GetBool(cEditorPrefLoadMasterOnPlay, false); }
-			set { EditorPrefs.SetBool(cEditorPrefLoadMasterOnPlay, value); }
+			get => EditorPrefs.GetBool(CEditorPrefLoadMasterOnPlay, false);
+			set => EditorPrefs.SetBool(CEditorPrefLoadMasterOnPlay, value);
 		}
 
 		static bool MasterSceneIsOpen
@@ -132,19 +118,18 @@ namespace Fralle.Core
 				return false;
 			}
 		}
-		static bool KeepMasterSceneOpen;
+		static bool keepMasterSceneOpen;
 		static string MasterScene
 		{
-			get { return EditorPrefs.GetString(cEditorPrefMasterScene, "Master.unity"); }
-			set { EditorPrefs.SetString(cEditorPrefMasterScene, value); }
+			get => EditorPrefs.GetString(CEditorPrefMasterScene, "Master.unity");
+			set => EditorPrefs.SetString(CEditorPrefMasterScene, value);
 		}
 
 		static string PreviousScene
 		{
-			get { return EditorPrefs.GetString(cEditorPrefPreviousScene, SceneManager.GetActiveScene().path); }
-			set { EditorPrefs.SetString(cEditorPrefPreviousScene, value); }
+			get => EditorPrefs.GetString(CEditorPrefPreviousScene, SceneManager.GetActiveScene().path);
+			set => EditorPrefs.SetString(CEditorPrefPreviousScene, value);
 		}
 	}
 }
-
 #endif

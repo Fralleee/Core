@@ -4,14 +4,14 @@ namespace Fralle.Core.Pooling
 {
 	public class PooledObject : MonoBehaviour
 	{
-		[HideInInspector] public Pool poolScript; // stores the location of the object pool script for this object
-		[HideInInspector] public float timeSpawned;
+		[HideInInspector] public Pool PoolScript; // stores the location of the object pool script for this object
+		[HideInInspector] public float TimeSpawned;
 
 		public bool Despawn(float del)
 		{ // -1 will use delay specified in this script
 			if (del >= 0)
 			{
-				if (poolScript)
+				if (PoolScript)
 				{
 					Invoke("DoDespawn", del);
 					gameObject.SetActive(false);
@@ -30,9 +30,9 @@ namespace Fralle.Core.Pooling
 
 		bool DoDespawn()
 		{
-			if (poolScript)
+			if (PoolScript)
 			{
-				poolScript.Despawn(gameObject, this);
+				PoolScript.Despawn(gameObject, this);
 				return true;
 			}
 			return false;

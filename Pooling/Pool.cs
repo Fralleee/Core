@@ -5,10 +5,10 @@ namespace Fralle.Core.Pooling
 {
 	public class Pool : MonoBehaviour
 	{
-		public PoolBlock poolBlock;
+		public PoolBlock PoolBlock;
 
-		[HideInInspector] public Stack<PoolItem> pool;
-		[HideInInspector] public List<PoolItem> masterPool; // only used when using EmptyBehavior.ReuseOldest
+		[HideInInspector] public Stack<PoolItem> PoolStack;
+		[HideInInspector] public List<PoolItem> MasterPool; // only used when using EmptyBehavior.ReuseOldest
 
 		int addedObjects;
 		int failedSpawns;
@@ -21,9 +21,9 @@ namespace Fralle.Core.Pooling
 #if UNITY_EDITOR
 		void OnValidate()
 		{
-			if (!loaded && poolBlock != null && poolBlock.maxSize <= poolBlock.size)
+			if (!loaded && PoolBlock != null && PoolBlock.MaxSize <= PoolBlock.Size)
 			{
-				poolBlock.maxSize = poolBlock.size * 2;
+				PoolBlock.MaxSize = PoolBlock.Size * 2;
 			}
 		}
 #endif
@@ -33,19 +33,19 @@ namespace Fralle.Core.Pooling
 			loaded = true;
 
 			// required to allow creation or modification of pools at runtime. (Timing of script creation and initialization can get wonkey)
-			if (poolBlock == null)
+			if (PoolBlock == null)
 			{
-				poolBlock = new PoolBlock(0, EmptyBehavior.Grow, 0, MaxEmptyBehavior.Fail, null, false);
+				PoolBlock = new PoolBlock(0, EmptyBehavior.Grow, 0, MaxEmptyBehavior.Fail, null, false);
 			}
 			else
 			{
-				poolBlock = new PoolBlock(poolBlock.size, poolBlock.emptyBehavior, poolBlock.maxSize, poolBlock.maxEmptyBehavior, poolBlock.prefab, poolBlock.printLogOnQuit);
+				PoolBlock = new PoolBlock(PoolBlock.Size, PoolBlock.EmptyBehavior, PoolBlock.MaxSize, PoolBlock.MaxEmptyBehavior, PoolBlock.Prefab, PoolBlock.PrintLogOnQuit);
 			}
-			pool = new Stack<PoolItem>();
-			masterPool = new List<PoolItem>();
+			PoolStack = new Stack<PoolItem>();
+			MasterPool = new List<PoolItem>();
 
-			origSize = Mathf.Max(0, poolBlock.size);
-			poolBlock.size = 0;
+			origSize = Mathf.Max(0, PoolBlock.Size);
+			PoolBlock.Size = 0;
 
 			for (int i = 0; i < origSize; i++)
 			{
@@ -61,7 +61,7 @@ namespace Fralle.Core.Pooling
 
 		void StatInit()
 		{ // for logging after dynamic creation of pool objects from other scripts
-			initSize = poolBlock.size - origSize;
+			initSize = PoolBlock.Size - origSize;
 		}
 
 		public GameObject Spawn()
@@ -98,8 +98,8 @@ namespace Fralle.Core.Pooling
 				obj.transform.GetChild((int)child).gameObject.SetActive(true);
 			}
 
-			if (peakObjects < poolBlock.size - pool.Count)
-			{ peakObjects = poolBlock.size - pool.Count; } // for logging
+			if (peakObjects < PoolBlock.Size - PoolStack.Count)
+			{ peakObjects = PoolBlock.Size - PoolStack.Count; } // for logging
 			return obj;
 		}
 
@@ -112,48 +112,55 @@ namespace Fralle.Core.Pooling
 			obj.transform.localPosition = Vector3.zero;
 			obj.transform.localRotation = Quaternion.identity;
 			pooledObject.CancelInvoke();
-			pool.Push(new PoolItem(obj, pooledObject));
+			PoolStack.Push(new PoolItem(obj, pooledObject));
 		}
 
 		public GameObject GetObject()
 		{ // get object from pool, creating one if necessary and if settings allow
 			GameObject result = null;
-			if (pool.Count == 0)
+			if (PoolStack.Count == 0)
 			{
-				if (poolBlock.emptyBehavior == EmptyBehavior.Fail)
-				{ failedSpawns++; return null; }
-
-				if (poolBlock.emptyBehavior == EmptyBehavior.ReuseOldest)
+				switch (PoolBlock.EmptyBehavior)
 				{
-					result = FindOldest();
-					if (result != null)
-					{ reusedObjects++; }
+					case EmptyBehavior.Fail:
+						failedSpawns++; return null;
+					case EmptyBehavior.ReuseOldest:
+					{
+						result = FindOldest();
+						if (result != null)
+						{ reusedObjects++; }
+
+						break;
+					}
 				}
 
-				if (poolBlock.emptyBehavior == EmptyBehavior.Grow)
+				if (PoolBlock.EmptyBehavior != EmptyBehavior.Grow) return result;
+				if (PoolBlock.Size >= PoolBlock.MaxSize)
 				{
-					if (poolBlock.size >= poolBlock.maxSize)
+					switch (PoolBlock.MaxEmptyBehavior)
 					{
-						if (poolBlock.maxEmptyBehavior == MaxEmptyBehavior.Fail)
-						{ failedSpawns++; return null; }
-						if (poolBlock.maxEmptyBehavior == MaxEmptyBehavior.ReuseOldest)
+						case MaxEmptyBehavior.Fail:
+							failedSpawns++; return null;
+						case MaxEmptyBehavior.ReuseOldest:
 						{
 							result = FindOldest();
 							if (result != null)
 							{ reusedObjects++; }
+
+							break;
 						}
 					}
-					else
-					{
-						addedObjects++;
-						return CreateObject();
-					}
+				}
+				else
+				{
+					addedObjects++;
+					return CreateObject();
 				}
 			}
 			else
 			{
-				pool.Peek().refScript.timeSpawned = Time.time;
-				return pool.Pop().obj;
+				PoolStack.Peek().RefScript.TimeSpawned = Time.time;
+				return PoolStack.Pop().Obj;
 			}
 			return result;
 		}
@@ -163,21 +170,18 @@ namespace Fralle.Core.Pooling
 			GameObject result = null;
 			int oldestIndex = 0;
 			float oldestTime = Mathf.Infinity;
-			if (masterPool.Count > 0)
+			if (MasterPool.Count <= 0) return null;
+			for (int i = 0; i < MasterPool.Count; i++)
 			{
-				for (int i = 0; i < masterPool.Count; i++)
-				{
-					if (masterPool[i] == null || masterPool[i].obj == null)
-					{ continue; } // make sure object still exsists
-					if (masterPool[i].refScript.timeSpawned < oldestTime)
-					{
-						oldestTime = masterPool[i].refScript.timeSpawned;
-						result = masterPool[i].obj;
-						oldestIndex = i;
-					}
-				}
-				masterPool[oldestIndex].refScript.timeSpawned = Time.time;
+				if (MasterPool[i] == null || MasterPool[i].Obj == null)
+				{ continue; } // make sure object still exsists
+
+				if (!(MasterPool[i].RefScript.TimeSpawned < oldestTime)) continue;
+				oldestTime = MasterPool[i].RefScript.TimeSpawned;
+				result = MasterPool[i].Obj;
+				oldestIndex = i;
 			}
+			MasterPool[oldestIndex].RefScript.TimeSpawned = Time.time;
 			return result;
 		}
 
@@ -188,40 +192,38 @@ namespace Fralle.Core.Pooling
 		public GameObject CreateObject(bool createInPool)
 		{ // true when creating an item in the pool without spawing it
 			GameObject obj = null;
-			if (poolBlock.prefab)
-			{
-				obj = Instantiate(poolBlock.prefab, transform.position, transform.rotation);
-				PooledObject oprScript = obj.GetComponent<PooledObject>();
-				if (oprScript == null)
-				{ oprScript = obj.AddComponent<PooledObject>(); }
-				oprScript.poolScript = this;
-				oprScript.timeSpawned = Time.time;
-				masterPool.Add(new PoolItem(obj, oprScript));
+			if (!PoolBlock.Prefab) return obj;
+			obj = Instantiate(PoolBlock.Prefab, transform.position, transform.rotation);
+			PooledObject oprScript = obj.GetComponent<PooledObject>();
+			if (oprScript == null)
+			{ oprScript = obj.AddComponent<PooledObject>(); }
+			oprScript.PoolScript = this;
+			oprScript.TimeSpawned = Time.time;
+			MasterPool.Add(new PoolItem(obj, oprScript));
 
-				if (createInPool)
-				{
-					pool.Push(new PoolItem(obj, oprScript));
-					obj.SetActive(false);
-					obj.transform.SetParent(transform, false);
-				}
-				poolBlock.size++;
+			if (createInPool)
+			{
+				PoolStack.Push(new PoolItem(obj, oprScript));
+				obj.SetActive(false);
+				obj.transform.SetParent(transform, false);
 			}
+			PoolBlock.Size++;
 			return obj;
 		}
 
 		public int GetActiveCount()
 		{
-			return poolBlock.size - pool.Count;
+			return PoolBlock.Size - PoolStack.Count;
 		}
 
 		public int GetAvailableCount()
 		{
-			return pool.Count;
+			return PoolStack.Count;
 		}
 
 		void OnApplicationQuit()
 		{
-			if (poolBlock.printLogOnQuit)
+			if (PoolBlock.PrintLogOnQuit)
 			{
 				PrintLog();
 			}
@@ -229,7 +231,7 @@ namespace Fralle.Core.Pooling
 
 		public void PrintLog()
 		{
-			Debug.Log(transform.name + ":       Start Size: " + origSize + "    Init Added: " + initSize + "    Grow Objects: " + addedObjects + "    End Size: " + poolBlock.size + "\n" +
+			Debug.Log(transform.name + ":       Start Size: " + origSize + "    Init Added: " + initSize + "    Grow Objects: " + addedObjects + "    End Size: " + PoolBlock.Size + "\n" +
 				"    Failed Spawns: " + failedSpawns + "    Reused Objects: " + reusedObjects + "     Most objects active at once: " + peakObjects);
 		}
 

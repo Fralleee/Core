@@ -5,8 +5,8 @@ namespace Fralle.Core.Pooling
 {
 	public class PoolManager : MonoBehaviour
 	{
-		public bool allowCreate = true;
-		public bool allowModify = true;
+		public bool AllowCreate = true;
+		public bool AllowModify = true;
 
 		[Tooltip("When the scene is stopped, creates a report showing pool usage:\n\n" +
 			"Start Size - Size of pool when beginning the scene.\n\n" +
@@ -16,9 +16,9 @@ namespace Fralle.Core.Pooling
 			"Failed Spawns - Number of Spawn() requests that didn't return a spawn.\n\n" +
 			"Reused Objects - Number of times an object was reused before despawning normally.\n\n" +
 			"Most Objects Active - The most items for this pool active at once.")]
-		public bool printAllLogsOnQuit;
+		public bool PrintAllLogsOnQuit;
 
-		[HideInInspector] public Dictionary<GameObject, Pool> poolRef;
+		[HideInInspector] public Dictionary<GameObject, Pool> PoolRef;
 
 		void Awake()
 		{
@@ -27,10 +27,7 @@ namespace Fralle.Core.Pooling
 
 		void CheckDict()
 		{
-			if (poolRef == null)
-			{ // dictionary hasn't been created yet
-				poolRef = new Dictionary<GameObject, Pool>();
-			}
+			PoolRef ??= new Dictionary<GameObject, Pool>();
 		}
 
 		public bool InitializeSpawn(GameObject obj, float addPool, int minPool, EmptyBehavior emptyBehavior, MaxEmptyBehavior maxEmptyBehavior, bool modBehavior)
@@ -40,12 +37,12 @@ namespace Fralle.Core.Pooling
 			CheckDict();
 			bool tempModify = false;
 
-			if (poolRef.ContainsKey(obj) && poolRef[obj] == null)
+			if (PoolRef.ContainsKey(obj) && PoolRef[obj] == null)
 			{ // check for broken reference
-				poolRef.Remove(obj); // remove it
+				PoolRef.Remove(obj); // remove it
 			}
 			bool result;
-			if (poolRef.ContainsKey(obj))
+			if (PoolRef.ContainsKey(obj))
 			{
 				result = true; // already have refrence
 			}
@@ -53,7 +50,7 @@ namespace Fralle.Core.Pooling
 			{
 				if (MakePoolRef(obj) == null)
 				{ // ref not found
-					if (allowCreate)
+					if (AllowCreate)
 					{
 						CreatePool(obj, 0, 0, emptyBehavior, maxEmptyBehavior);
 						tempModify = true; // may modify a newly created pool
@@ -70,38 +67,34 @@ namespace Fralle.Core.Pooling
 				}
 			}
 
-			if (result && (allowModify || tempModify) && (addPool > 0 || minPool > 0))
-			{
-				int size = poolRef[obj].poolBlock.size;
-				int l1 = 0;
-				int l2 = 0;
-				if (addPool >= 0)
-				{ // not negative
-					if (addPool < 1)
-					{ // is a percentage
-						l2 = Mathf.RoundToInt(size * addPool);
-					}
-					else
-					{ // not a percentage
-						l1 = Mathf.RoundToInt(addPool);
-					}
+			if (!result || (!AllowModify && !tempModify) || (!(addPool > 0) && minPool <= 0)) return result;
+			int size = PoolRef[obj].PoolBlock.Size;
+			int l1 = 0;
+			int l2 = 0;
+			if (addPool >= 0)
+			{ // not negative
+				if (addPool < 1)
+				{ // is a percentage
+					l2 = Mathf.RoundToInt(size * addPool);
 				}
-				int loop = 0;
-				int a = size == 0 ? 0 : Mathf.Max(l1, l2);
-				if (size < minPool)
-				{ loop = minPool - size; }
-				loop += a;
-				for (int i = 0; i < loop; i++)
-				{
-					poolRef[obj].CreateObject(true);
-				}
-				poolRef[obj].poolBlock.maxSize = poolRef[obj].poolBlock.size * 2;
-				if (modBehavior)
-				{
-					poolRef[obj].poolBlock.emptyBehavior = emptyBehavior;
-					poolRef[obj].poolBlock.maxEmptyBehavior = maxEmptyBehavior;
+				else
+				{ // not a percentage
+					l1 = Mathf.RoundToInt(addPool);
 				}
 			}
+			int loop = 0;
+			int a = size == 0 ? 0 : Mathf.Max(l1, l2);
+			if (size < minPool)
+			{ loop = minPool - size; }
+			loop += a;
+			for (int i = 0; i < loop; i++)
+			{
+				PoolRef[obj].CreateObject(true);
+			}
+			PoolRef[obj].PoolBlock.MaxSize = PoolRef[obj].PoolBlock.Size * 2;
+			if (!modBehavior) return true;
+			PoolRef[obj].PoolBlock.EmptyBehavior = emptyBehavior;
+			PoolRef[obj].PoolBlock.MaxEmptyBehavior = maxEmptyBehavior;
 
 			return result;
 		}
@@ -112,30 +105,22 @@ namespace Fralle.Core.Pooling
 			{ return null; } // object wasn't defined
 			CheckDict();
 
-			if (poolRef.ContainsKey(obj))
-			{ // reference already created
-				if (poolRef[obj] != null)
+			if (PoolRef.ContainsKey(obj))
+			{
+				// reference already created
+				if (PoolRef[obj] != null)
 				{ // make sure pool still exsists
-					return poolRef[obj].Spawn(child, pos, rot, usePosRot, parent); // create spawn
+					return PoolRef[obj].Spawn(child, pos, rot, usePosRot, parent); // create spawn
 				}
-				else
-				{ // pool no longer exsists
-					poolRef.Remove(obj); // remove reference
-					return null;
-				}
+
+				// pool no longer exsists
+				PoolRef.Remove(obj); // remove reference
+				return null;
 			}
-			else
-			{ // ref not yet created
-				Pool childScript = MakePoolRef(obj); // create ref
-				if (childScript == null)
-				{ // ref not found
-					return null;
-				}
-				else
-				{
-					return childScript.Spawn(child, pos, rot, usePosRot, parent); // create spawn
-				}
-			}
+
+			// ref not yet created
+			Pool childScript = MakePoolRef(obj); // create ref
+			return childScript == null ? null : childScript.Spawn(child, pos, rot, usePosRot, parent);
 		}
 
 		Pool MakePoolRef(GameObject obj)
@@ -143,11 +128,9 @@ namespace Fralle.Core.Pooling
 			for (int i = 0; i < transform.childCount; i++)
 			{
 				Pool childScript = transform.GetChild(i).GetComponent<Pool>();
-				if (childScript && obj == childScript.poolBlock.prefab)
-				{
-					poolRef.Add(obj, childScript);
-					return childScript;
-				}
+				if (!childScript || obj != childScript.PoolBlock.Prefab) continue;
+				PoolRef.Add(obj, childScript);
+				return childScript;
 			}
 			return null;
 		}
@@ -156,60 +139,35 @@ namespace Fralle.Core.Pooling
 		{
 			if (prefab == null)
 			{ return 0; } // object wasn't defined
-			Pool childScript;
-			if (poolRef.ContainsKey(prefab))
-			{ // reference already created
-				childScript = poolRef[prefab];
-			}
-			else
-			{ // ref not yet created
-				childScript = MakePoolRef(prefab); // create ref
-			}
+
+			var childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : MakePoolRef(prefab);
 			if (childScript == null)
 			{ // pool not found
 				return 0;
 			}
-			else
-			{
-				return childScript.poolBlock.size - childScript.pool.Count;
-			}
+
+			return childScript.PoolBlock.Size - childScript.PoolStack.Count;
 		}
 
 		public int GetAvailableCount(GameObject prefab)
 		{
 			if (prefab == null)
 			{ return 0; } // object wasn't defined
-			Pool childScript;
-			if (poolRef.ContainsKey(prefab))
-			{ // reference already created
-				childScript = poolRef[prefab];
-			}
-			else
-			{ // ref not yet created
-				childScript = MakePoolRef(prefab); // create ref
-			}
-			if (childScript == null)
-			{ // pool not found
-				return 0;
-			}
-			else
-			{
-				return childScript.pool.Count;
-			}
+
+			var childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : MakePoolRef(prefab);
+			return childScript == null ? 0 : childScript.PoolStack.Count;
 		}
 
 		public bool RemoveAll()
 		{
 			bool result = true;
-			GameObject[] tempObj = new GameObject[poolRef.Count];
+			GameObject[] tempObj = new GameObject[PoolRef.Count];
 			int i = 0;
-			foreach (GameObject obj in poolRef.Keys)
+			foreach (GameObject obj in PoolRef.Keys)
 			{
-				if (poolRef[obj] != null)
-				{
-					tempObj[i] = obj;
-					i++;
-				}
+				if (PoolRef[obj] == null) continue;
+				tempObj[i] = obj;
+				i++;
 			}
 			for (int t = 0; t < tempObj.Length; t++)
 			{
@@ -222,7 +180,7 @@ namespace Fralle.Core.Pooling
 		public bool DespawnAll()
 		{
 			bool result = true;
-			foreach (GameObject obj in poolRef.Keys)
+			foreach (GameObject obj in PoolRef.Keys)
 			{
 				if (!DespawnPool(obj))
 				{ result = false; }
@@ -236,9 +194,9 @@ namespace Fralle.Core.Pooling
 			{ return false; } // object wasn't defined
 
 			Pool childScript;
-			if (poolRef.ContainsKey(prefab))
+			if (PoolRef.ContainsKey(prefab))
 			{ // reference already created
-				childScript = poolRef[prefab];
+				childScript = PoolRef[prefab];
 			}
 			else
 			{ // ref not yet created
@@ -248,13 +206,11 @@ namespace Fralle.Core.Pooling
 			{ // pool not found
 				return false;
 			}
-			else
-			{
-				bool result = DespawnPool(prefab);
-				Destroy(childScript.gameObject);
-				poolRef.Remove(prefab);
-				return result;
-			}
+
+			bool result = DespawnPool(prefab);
+			Destroy(childScript.gameObject);
+			PoolRef.Remove(prefab);
+			return result;
 		}
 
 		public bool DespawnPool(GameObject prefab)
@@ -262,9 +218,9 @@ namespace Fralle.Core.Pooling
 			if (prefab == null)
 			{ return false; } // object wasn't defined
 			Pool childScript;
-			if (poolRef.ContainsKey(prefab))
+			if (PoolRef.ContainsKey(prefab))
 			{ // reference already created
-				childScript = poolRef[prefab];
+				childScript = PoolRef[prefab];
 			}
 			else
 			{ // ref not yet created
@@ -274,14 +230,12 @@ namespace Fralle.Core.Pooling
 			{ // pool not found
 				return false;
 			}
-			else
+
+			for (int i = 0; i < childScript.MasterPool.Count; i++)
 			{
-				for (int i = 0; i < childScript.masterPool.Count; i++)
-				{
-					childScript.Despawn(childScript.masterPool[i].obj, childScript.masterPool[i].refScript);
-				}
-				return true;
+				childScript.Despawn(childScript.MasterPool[i].Obj, childScript.MasterPool[i].RefScript);
 			}
+			return true;
 		}
 
 		public void CreatePool()
@@ -298,11 +252,11 @@ namespace Fralle.Core.Pooling
 			if (Application.isPlaying)
 			{
 				obj.name = prefab.name;
-				script.poolBlock.size = size;
-				script.poolBlock.maxSize = maxSize;
-				script.poolBlock.emptyBehavior = emptyBehavior;
-				script.poolBlock.maxEmptyBehavior = maxEmptyBehavior;
-				script.poolBlock.prefab = prefab;
+				script.PoolBlock.Size = size;
+				script.PoolBlock.MaxSize = maxSize;
+				script.PoolBlock.EmptyBehavior = emptyBehavior;
+				script.PoolBlock.MaxEmptyBehavior = maxEmptyBehavior;
+				script.PoolBlock.Prefab = prefab;
 				if (prefab)
 				{ MakePoolRef(prefab); }
 			}
@@ -310,7 +264,7 @@ namespace Fralle.Core.Pooling
 
 		void OnApplicationQuit()
 		{
-			if (printAllLogsOnQuit)
+			if (PrintAllLogsOnQuit)
 			{
 				PrintAllLogs();
 			}
@@ -318,7 +272,7 @@ namespace Fralle.Core.Pooling
 
 		public void PrintAllLogs()
 		{
-			foreach (Pool script in poolRef.Values)
+			foreach (Pool script in PoolRef.Values)
 			{
 				script.PrintLog();
 			}

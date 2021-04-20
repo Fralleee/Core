@@ -12,9 +12,9 @@ namespace Fralle.Core.CameraControls
 			float timeRemaining;
 			readonly ShakeTransformEventData data;
 			Vector3 noiseOffset;
-			public Vector3 noise;
+			public Vector3 Noise;
 
-			public ShakeTransformEventData.Target Target => data.target;
+			public ShakeTransformEventData.TargetTransform Target => data.Target;
 
 			public bool IsAlive()
 			{
@@ -26,7 +26,7 @@ namespace Fralle.Core.CameraControls
 			{
 				this.data = data;
 
-				duration = data.duration;
+				duration = data.Duration;
 				timeRemaining = duration;
 
 				const float rand = 32.0f;
@@ -42,22 +42,22 @@ namespace Fralle.Core.CameraControls
 
 				timeRemaining -= deltaTime;
 
-				var noiseOffsetDelta = deltaTime * data.frequency;
+				var noiseOffsetDelta = deltaTime * data.Frequency;
 
 				noiseOffset.x += noiseOffsetDelta;
 				noiseOffset.y += noiseOffsetDelta;
 				noiseOffset.z += noiseOffsetDelta;
 
-				noise.x = Mathf.PerlinNoise(noiseOffset.x, 0.0f);
-				noise.y = Mathf.PerlinNoise(noiseOffset.y, 1.0f);
-				noise.z = Mathf.PerlinNoise(noiseOffset.z, 2.0f);
+				Noise.x = Mathf.PerlinNoise(noiseOffset.x, 0.0f);
+				Noise.y = Mathf.PerlinNoise(noiseOffset.y, 1.0f);
+				Noise.z = Mathf.PerlinNoise(noiseOffset.z, 2.0f);
 
-				noise -= Vector3.one * 0.5f;
+				Noise -= Vector3.one * 0.5f;
 
-				noise *= data.amplitude;
+				Noise *= data.Amplitude;
 
 				var agePercent = 1.0f - (timeRemaining / duration);
-				noise *= data.blendOverLifetime.Evaluate(agePercent);
+				Noise *= data.BlendOverLifetime.Evaluate(agePercent);
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace Fralle.Core.CameraControls
 		}
 
 		public void AddShakeEvent(float amplitude, float frequency, float duration, AnimationCurve blendOverLifetime,
-			ShakeTransformEventData.Target target)
+			ShakeTransformEventData.TargetTransform target)
 		{
 			var data = ScriptableObject.CreateInstance<ShakeTransformEventData>();
 			data.Init(amplitude, frequency, duration, blendOverLifetime, target);
@@ -87,13 +87,13 @@ namespace Fralle.Core.CameraControls
 				var se = shakeEvents[i];
 				se.Update();
 
-				if (se.Target == ShakeTransformEventData.Target.Position)
+				if (se.Target == ShakeTransformEventData.TargetTransform.Position)
 				{
-					positionOffset += se.noise;
+					positionOffset += se.Noise;
 				}
 				else
 				{
-					rotationOffset += se.noise;
+					rotationOffset += se.Noise;
 				}
 
 				if (!se.IsAlive())

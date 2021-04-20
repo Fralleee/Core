@@ -51,7 +51,7 @@ namespace Fralle.Core.Audio
 
 		public void Play(AudioEvent audioEvent)
 		{
-			if (audioEvent.playCount > 1)
+			if (audioEvent.PlayCount > 1)
 			{
 				StartCoroutine(PlayIEnumerator(audioEvent));
 			}
@@ -63,10 +63,10 @@ namespace Fralle.Core.Audio
 
 		IEnumerator PlayIEnumerator(AudioEvent audioEvent)
 		{
-			for (var i = 0; i < audioEvent.playCount; i++)
+			for (int i = 0; i < audioEvent.PlayCount; i++)
 			{
 				audioEvent.Play(audioSourcePool.GetSource());
-				yield return new WaitForSeconds(audioEvent.playDelay);
+				yield return new WaitForSeconds(audioEvent.PlayDelay);
 			}
 		}
 

@@ -6,15 +6,15 @@ namespace Fralle.Core.Audio
 {
 	public class SpawnSounds : MonoBehaviour
 	{
-		public GameObject prefabSound;
+		public GameObject PrefabSound;
 
-		public int spawnCount = 1;
+		public int SpawnCount = 1;
 
-		public float spawnDelay = 1f;
+		public float SpawnDelay = 1f;
 
-		public bool destroyWhenDone = true;
+		public bool DestroyWhenDone = true;
 
-		[Range(0.01f, 10f)] public float pitchRandomMultiplier = 1f;
+		[Range(0.01f, 10f)] public float PitchRandomMultiplier = 1f;
 
 		void Awake()
 		{
@@ -23,15 +23,15 @@ namespace Fralle.Core.Audio
 
 		public void Spawn()
 		{
-			if (spawnDelay > 0)
-				StartCoroutine(SpawnSingle(spawnDelay));
+			if (SpawnDelay > 0)
+				StartCoroutine(SpawnSingle(SpawnDelay));
 			else
 				SpawnSingle();
 		}
 
 		IEnumerator SpawnSingle(float time)
 		{
-			for (var i = 0; i < spawnCount; i++)
+			for (var i = 0; i < SpawnCount; i++)
 			{
 				SpawnSingle();
 				yield return new WaitForSeconds(time);
@@ -40,21 +40,21 @@ namespace Fralle.Core.Audio
 
 		void SpawnSingle()
 		{
-			var sound = Instantiate(prefabSound, transform.position, Quaternion.identity);
+			var sound = Instantiate(PrefabSound, transform.position, Quaternion.identity);
 			var source = sound.GetComponent<AudioSource>();
 
 			Debug.Log($"Playing sound: {sound}");
 			source.volume = 0.25f;
 
-			if (!pitchRandomMultiplier.EqualsWithTolerance(1f))
+			if (!PitchRandomMultiplier.EqualsWithTolerance(1f))
 			{
 				if (Random.value < .5)
-					source.pitch *= Random.Range(1 / pitchRandomMultiplier, 1);
+					source.pitch *= Random.Range(1 / PitchRandomMultiplier, 1);
 				else
-					source.pitch *= Random.Range(1, pitchRandomMultiplier);
+					source.pitch *= Random.Range(1, PitchRandomMultiplier);
 			}
 
-			if (!destroyWhenDone)
+			if (!DestroyWhenDone)
 				return;
 
 			var life = source.clip.length / source.pitch;

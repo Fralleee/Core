@@ -7,7 +7,7 @@ namespace Fralle.Core.Infrastructure
 {
 	public class StateMachine
 	{
-		public IState currentState;
+		public IState CurrentState;
 
 		readonly Dictionary<Type, List<Transition>> transitions = new Dictionary<Type, List<Transition>>();
 		List<Transition> currentTransitions = new List<Transition>();
@@ -21,27 +21,27 @@ namespace Fralle.Core.Infrastructure
 			if (transition != null)
 				SetState(transition.To);
 
-			currentState?.Tick();
+			CurrentState?.Tick();
 		}
 
 		public void SetState(IState state)
 		{
-			if (state == currentState)
+			if (state == CurrentState)
 				return;
 
-			currentState?.OnExit();
-			currentState = state;
+			CurrentState?.OnExit();
+			CurrentState = state;
 
-			transitions.TryGetValue(currentState.GetType(), out currentTransitions);
+			transitions.TryGetValue(CurrentState.GetType(), out currentTransitions);
 			if (currentTransitions == null)
 				currentTransitions = EmptyTransitions;
 
-			currentState.OnEnter();
+			CurrentState.OnEnter();
 		}
 
 		public void AddTransition(IState from, IState to, Func<bool> predicate)
 		{
-			if (!this.transitions.TryGetValue(from.GetType(), out var transitions))
+			if (!this.transitions.TryGetValue(from.GetType(), out List<Transition> transitions))
 			{
 				transitions = new List<Transition>();
 				this.transitions[from.GetType()] = transitions;
@@ -69,11 +69,8 @@ namespace Fralle.Core.Infrastructure
 
 		Transition GetTransition()
 		{
-			Transition transition = anyTransitions.FirstOrDefault(transition => transition.Condition());
-			if (transition != null)
-				return transition;
-
-			return currentTransitions.FirstOrDefault(transition => transition.Condition());
+			Transition transition = anyTransitions.FirstOrDefault(t => t.Condition());
+			return transition ?? currentTransitions.FirstOrDefault(t => t.Condition());
 		}
 	}
 }

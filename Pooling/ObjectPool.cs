@@ -110,7 +110,7 @@ namespace Fralle.Core.Pooling
 			{
 				bool result = poolManager.RemovePool(obj);
 				if (result)
-				{ poolManager.poolRef.Remove(obj); }
+				{ poolManager.PoolRef.Remove(obj); }
 				return result;
 			}
 		}

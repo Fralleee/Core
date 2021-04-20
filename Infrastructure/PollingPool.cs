@@ -17,29 +17,27 @@ namespace Fralle.Core.Infrastructure
 		protected PollingPool(T prefab, int preWarm = 0)
 		{
 			this.prefab = prefab;
-			if (preWarm > 0)
-				foreach (var item in Enumerable.Range(0, preWarm).Select((i, index) => Object.Instantiate(prefab)))
-				{
-					item.gameObject.SetActive(true);
-					pool.Enqueue(item);
-				}
+			if (preWarm <= 0) return;
+			foreach (var item in Enumerable.Range(0, preWarm).Select((i, index) => Object.Instantiate(prefab)))
+			{
+				item.gameObject.SetActive(true);
+				pool.Enqueue(item);
+			}
 		}
 
 		private void CheckInUse()
 		{
-			var node = inuse.First;
+			LinkedListNode<T> node = inuse.First;
 			while (node != null)
 			{
-				var current = node;
+				LinkedListNode<T> current = node;
 				node = node.Next;
 
-				if (!IsActive(current.Value))
-				{
-					current.Value.gameObject.SetActive(false);
-					pool.Enqueue(current.Value);
-					inuse.Remove(current);
-					nodePool.Enqueue(current);
-				}
+				if (IsActive(current.Value)) continue;
+				current.Value.gameObject.SetActive(false);
+				pool.Enqueue(current.Value);
+				inuse.Remove(current);
+				nodePool.Enqueue(current);
 			}
 		}
 
@@ -53,16 +51,13 @@ namespace Fralle.Core.Infrastructure
 				CheckInUse();
 			}
 
-			if (pool.Count == 0)
-				item = Object.Instantiate(prefab);
-			else
-				item = pool.Dequeue();
+			item = pool.Count == 0 ? Object.Instantiate(prefab) : pool.Dequeue();
 
 			if (nodePool.Count == 0)
 				inuse.AddLast(item);
 			else
 			{
-				var node = nodePool.Dequeue();
+				LinkedListNode<T> node = nodePool.Dequeue();
 				node.Value = item;
 				inuse.AddLast(node);
 			}
