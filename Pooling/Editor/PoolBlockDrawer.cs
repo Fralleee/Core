@@ -12,7 +12,7 @@ namespace Fralle.Core.Pooling
     public override float GetPropertyHeight(SerializedProperty prop, GUIContent label)
     {
       float height = 4f;
-      SerializedProperty emptyBehavior = prop.FindPropertyRelative("emptyBehavior");
+      SerializedProperty emptyBehavior = prop.FindPropertyRelative("EmptyBehavior");
       if (emptyBehavior.enumValueIndex == (int)EmptyBehavior.Grow)
       {
         height += 1f;
@@ -27,12 +27,12 @@ namespace Fralle.Core.Pooling
 
       int indent = EditorGUI.indentLevel;
 
-      SerializedProperty size = prop.FindPropertyRelative("size");
-      SerializedProperty emptyBehavior = prop.FindPropertyRelative("emptyBehavior");
-      SerializedProperty maxSize = prop.FindPropertyRelative("maxSize");
-      SerializedProperty maxEmptyBehavior = prop.FindPropertyRelative("maxEmptyBehavior");
-      SerializedProperty prefab = prop.FindPropertyRelative("prefab");
-      SerializedProperty printLogOnQuit = prop.FindPropertyRelative("printLogOnQuit");
+      SerializedProperty size = prop.FindPropertyRelative("Size");
+      SerializedProperty emptyBehavior = prop.FindPropertyRelative("EmptyBehavior");
+      SerializedProperty maxSize = prop.FindPropertyRelative("MaxSize");
+      SerializedProperty maxEmptyBehavior = prop.FindPropertyRelative("MaxEmptyBehavior");
+      SerializedProperty prefab = prop.FindPropertyRelative("Prefab");
+      SerializedProperty printLogOnQuit = prop.FindPropertyRelative("PrintLogOnQuit");
 
       float height = 0f;
 
