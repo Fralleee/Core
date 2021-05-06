@@ -53,6 +53,7 @@ namespace Fralle.Core.Infrastructure
 
 		protected virtual void OnDestroy()
 		{
+			Debug.Log($"{name}_SingleTon:OnDestroy");
 			shuttingDown = true;
 		}
 	}
