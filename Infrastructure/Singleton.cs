@@ -5,13 +5,13 @@ namespace Fralle.Core.Infrastructure
 	public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	{
 		static T _instance;
-		static bool shuttingDown;
+		public static bool Destroyed;
 
 		public static T Instance
 		{
 			get
 			{
-				if (shuttingDown)
+				if (Destroyed)
 				{
 					Debug.LogWarning($"[Singleton] Instance '{typeof(T)}' already destroyed. Returning null.");
 					return null;
@@ -48,13 +48,12 @@ namespace Fralle.Core.Infrastructure
 
 		void OnApplicationQuit()
 		{
-			shuttingDown = true;
+			Destroyed = true;
 		}
 
 		protected virtual void OnDestroy()
 		{
-			Debug.Log($"{name}_SingleTon:OnDestroy");
-			shuttingDown = true;
+			Destroyed = true;
 		}
 	}
 }
