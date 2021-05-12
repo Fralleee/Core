@@ -41,7 +41,11 @@ namespace Fralle.Core.Pooling
 
 			var instance = poolManager.Spawn(prefab, child, pos, rot, usePosRot, parent);
 			if (instance == null)
+			{
 				Debug.LogWarning($"Could not find pool for muzzle {prefab.gameObject.name}");
+				instance = Object.Instantiate(prefab, pos, rot, parent);
+			}
+
 			return instance;
 		}
 
