@@ -5,19 +5,6 @@ namespace Fralle.Core.Pooling
 {
 	public class PoolManager : MonoBehaviour
 	{
-		public bool AllowCreate = true;
-		public bool AllowModify = true;
-
-		[Tooltip("When the scene is stopped, creates a report showing pool usage:\n\n" +
-			"Start Size - Size of pool when beginning the scene.\n\n" +
-			"Init Added - Number of objects added by InitializeSpawn() at runtime.\n\n" +
-			"Grow Objects - Number of objects added with EmptyBehavior.Grow.\n\n" +
-			"End Size - Total objects of this pool, active and inactive, at the time of the log report.\n\n" +
-			"Failed Spawns - Number of Spawn() requests that didn't return a spawn.\n\n" +
-			"Reused Objects - Number of times an object was reused before despawning normally.\n\n" +
-			"Most Objects Active - The most items for this pool active at once.")]
-		public bool PrintAllLogsOnQuit;
-
 		[HideInInspector] public Dictionary<GameObject, Pool> PoolRef;
 
 		void Awake()
@@ -25,17 +12,36 @@ namespace Fralle.Core.Pooling
 			CheckDict();
 		}
 
+		void Start()
+		{
+			PopulateDict();
+		}
+
 		void CheckDict()
 		{
 			PoolRef ??= new Dictionary<GameObject, Pool>();
 		}
 
+		void PopulateDict()
+		{
+			var pools = gameObject.GetComponentsInChildren<Pool>();
+			foreach (var pool in pools)
+			{
+				if (pool.PoolBlock.Prefab == null)
+					continue;
+				else if (PoolRef.ContainsKey(pool.PoolBlock.Prefab))
+					Debug.LogWarning($"Already found pool for {pool.PoolBlock.Prefab}.");
+				else
+					PoolRef.Add(pool.PoolBlock.Prefab, pool);
+			}
+		}
+
 		public bool InitializeSpawn(GameObject obj, float addPool, int minPool, EmptyBehavior emptyBehavior, MaxEmptyBehavior maxEmptyBehavior, bool modBehavior)
 		{
 			if (obj == null)
-			{ return false; }
+				return false;
+
 			CheckDict();
-			bool tempModify = false;
 
 			if (PoolRef.ContainsKey(obj) && PoolRef[obj] == null)
 			{ // check for broken reference
@@ -43,31 +49,12 @@ namespace Fralle.Core.Pooling
 			}
 			bool result;
 			if (PoolRef.ContainsKey(obj))
-			{
 				result = true; // already have refrence
-			}
 			else
-			{
-				if (MakePoolRef(obj) == null)
-				{ // ref not found
-					if (AllowCreate)
-					{
-						CreatePool(obj, 0, 0, emptyBehavior, maxEmptyBehavior);
-						tempModify = true; // may modify a newly created pool
-						result = true;
-					}
-					else
-					{
-						result = false;
-					}
-				}
-				else
-				{
-					result = true; // ref was created
-				}
-			}
+				result = false;
 
-			if (!result || (!AllowModify && !tempModify) || (!(addPool > 0) && minPool <= 0)) return result;
+			if (!result || (!(addPool > 0) && minPool <= 0))
+				return result;
 			int size = PoolRef[obj].PoolBlock.Size;
 			int l1 = 0;
 			int l2 = 0;
@@ -92,7 +79,8 @@ namespace Fralle.Core.Pooling
 				PoolRef[obj].CreateObject(true);
 			}
 			PoolRef[obj].PoolBlock.MaxSize = PoolRef[obj].PoolBlock.Size * 2;
-			if (!modBehavior) return true;
+			if (!modBehavior)
+				return true;
 			PoolRef[obj].PoolBlock.EmptyBehavior = emptyBehavior;
 			PoolRef[obj].PoolBlock.MaxEmptyBehavior = maxEmptyBehavior;
 
@@ -118,20 +106,6 @@ namespace Fralle.Core.Pooling
 				return null;
 			}
 
-			// ref not yet created
-			Pool childScript = MakePoolRef(obj); // create ref
-			return childScript == null ? null : childScript.Spawn(child, pos, rot, usePosRot, parent);
-		}
-
-		Pool MakePoolRef(GameObject obj)
-		{ // attempt to create and return script reference
-			for (int i = 0; i < transform.childCount; i++)
-			{
-				Pool childScript = transform.GetChild(i).GetComponent<Pool>();
-				if (!childScript || obj != childScript.PoolBlock.Prefab) continue;
-				PoolRef.Add(obj, childScript);
-				return childScript;
-			}
 			return null;
 		}
 
@@ -140,7 +114,7 @@ namespace Fralle.Core.Pooling
 			if (prefab == null)
 			{ return 0; } // object wasn't defined
 
-			var childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : MakePoolRef(prefab);
+			var childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : null;
 			if (childScript == null)
 			{ // pool not found
 				return 0;
@@ -154,7 +128,7 @@ namespace Fralle.Core.Pooling
 			if (prefab == null)
 			{ return 0; } // object wasn't defined
 
-			var childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : MakePoolRef(prefab);
+			var childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : null;
 			return childScript == null ? 0 : childScript.PoolStack.Count;
 		}
 
@@ -165,7 +139,8 @@ namespace Fralle.Core.Pooling
 			int i = 0;
 			foreach (GameObject obj in PoolRef.Keys)
 			{
-				if (PoolRef[obj] == null) continue;
+				if (PoolRef[obj] == null)
+					continue;
 				tempObj[i] = obj;
 				i++;
 			}
@@ -193,15 +168,12 @@ namespace Fralle.Core.Pooling
 			if (prefab == null)
 			{ return false; } // object wasn't defined
 
-			Pool childScript;
+			Pool childScript = null;
 			if (PoolRef.ContainsKey(prefab))
 			{ // reference already created
 				childScript = PoolRef[prefab];
 			}
-			else
-			{ // ref not yet created
-				childScript = MakePoolRef(prefab); // create ref
-			}
+
 			if (childScript == null)
 			{ // pool not found
 				return false;
@@ -217,14 +189,10 @@ namespace Fralle.Core.Pooling
 		{
 			if (prefab == null)
 			{ return false; } // object wasn't defined
-			Pool childScript;
+			Pool childScript = null;
 			if (PoolRef.ContainsKey(prefab))
 			{ // reference already created
 				childScript = PoolRef[prefab];
-			}
-			else
-			{ // ref not yet created
-				childScript = MakePoolRef(prefab); // create ref
 			}
 			if (childScript == null)
 			{ // pool not found
@@ -236,46 +204,6 @@ namespace Fralle.Core.Pooling
 				childScript.Despawn(childScript.MasterPool[i].Obj, childScript.MasterPool[i].RefScript);
 			}
 			return true;
-		}
-
-		public void CreatePool()
-		{
-			CreatePool(null, 32, 64, EmptyBehavior.Grow, MaxEmptyBehavior.Fail);
-		}
-		public void CreatePool(GameObject prefab, int size, int maxSize, EmptyBehavior emptyBehavior, MaxEmptyBehavior maxEmptyBehavior)
-		{
-			GameObject obj = new GameObject("Object Pool");
-			obj.transform.parent = transform;
-			obj.transform.localPosition = Vector3.zero;
-			obj.transform.localRotation = Quaternion.identity;
-			Pool script = obj.AddComponent<Pool>();
-			if (Application.isPlaying)
-			{
-				obj.name = prefab.name;
-				script.PoolBlock.Size = size;
-				script.PoolBlock.MaxSize = maxSize;
-				script.PoolBlock.EmptyBehavior = emptyBehavior;
-				script.PoolBlock.MaxEmptyBehavior = maxEmptyBehavior;
-				script.PoolBlock.Prefab = prefab;
-				if (prefab)
-				{ MakePoolRef(prefab); }
-			}
-		}
-
-		void OnApplicationQuit()
-		{
-			if (PrintAllLogsOnQuit)
-			{
-				PrintAllLogs();
-			}
-		}
-
-		public void PrintAllLogs()
-		{
-			foreach (Pool script in PoolRef.Values)
-			{
-				script.PrintLog();
-			}
 		}
 
 	}
