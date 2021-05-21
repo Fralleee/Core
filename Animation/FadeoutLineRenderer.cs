@@ -26,7 +26,7 @@ namespace Fralle.Core.Animation
 		{
 			fadeTimer -= Time.deltaTime;
 
-			var newColor = Color.Lerp(currentColor, new Color(1f, 1f, 1f, 0f), 1 - (fadeTimer / FadeoutTime));
+			Color newColor = Color.Lerp(currentColor, new Color(1f, 1f, 1f, 0f), 1 - (fadeTimer / FadeoutTime));
 			lineRenderer.material.color = newColor;
 		}
 	}

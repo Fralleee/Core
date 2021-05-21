@@ -1,57 +1,60 @@
 ﻿using Fralle.Core.CameraControls;
 using UnityEngine;
 
-[System.Serializable]
-public class ShakeEvent
+namespace Fralle.Core
 {
-	readonly float duration;
-	float timeRemaining;
-	readonly ShakeTransformEventData data;
-	Vector3 noiseOffset;
-	public Vector3 Noise;
-
-	public ShakeTransformEventData.TargetTransform Target => data.Target;
-
-	public bool IsAlive()
+	[System.Serializable]
+	public class ShakeEvent
 	{
-		return timeRemaining > 0.0f;
-	}
+		readonly float duration;
+		float timeRemaining;
+		readonly ShakeTransformEventData data;
+		Vector3 noiseOffset;
+		public Vector3 Noise;
 
-	public ShakeEvent(ShakeTransformEventData data)
-	{
-		this.data = data;
+		public ShakeTransformEventData.TargetTransform Target => data.Target;
 
-		duration = data.Duration;
-		timeRemaining = duration;
+		public bool IsAlive()
+		{
+			return timeRemaining > 0.0f;
+		}
 
-		const float rand = 32.0f;
+		public ShakeEvent(ShakeTransformEventData data)
+		{
+			this.data = data;
 
-		noiseOffset.x = Random.Range(0.0f, rand);
-		noiseOffset.y = Random.Range(0.0f, rand);
-		noiseOffset.z = Random.Range(0.0f, rand);
-	}
+			duration = data.Duration;
+			timeRemaining = duration;
 
-	public void Update()
-	{
-		var deltaTime = Time.deltaTime;
+			const float rand = 32.0f;
 
-		timeRemaining -= deltaTime;
+			noiseOffset.x = Random.Range(0.0f, rand);
+			noiseOffset.y = Random.Range(0.0f, rand);
+			noiseOffset.z = Random.Range(0.0f, rand);
+		}
 
-		var noiseOffsetDelta = deltaTime * data.Frequency;
+		public void Update()
+		{
+			float deltaTime = Time.deltaTime;
 
-		noiseOffset.x += noiseOffsetDelta;
-		noiseOffset.y += noiseOffsetDelta;
-		noiseOffset.z += noiseOffsetDelta;
+			timeRemaining -= deltaTime;
 
-		Noise.x = Mathf.PerlinNoise(noiseOffset.x, 0.0f);
-		Noise.y = Mathf.PerlinNoise(noiseOffset.y, 1.0f);
-		Noise.z = Mathf.PerlinNoise(noiseOffset.z, 2.0f);
+			float noiseOffsetDelta = deltaTime * data.Frequency;
 
-		Noise -= Vector3.one * 0.5f;
+			noiseOffset.x += noiseOffsetDelta;
+			noiseOffset.y += noiseOffsetDelta;
+			noiseOffset.z += noiseOffsetDelta;
 
-		Noise *= data.Amplitude;
+			Noise.x = Mathf.PerlinNoise(noiseOffset.x, 0.0f);
+			Noise.y = Mathf.PerlinNoise(noiseOffset.y, 1.0f);
+			Noise.z = Mathf.PerlinNoise(noiseOffset.z, 2.0f);
 
-		var agePercent = 1.0f - (timeRemaining / duration);
-		Noise *= data.BlendOverLifetime.Evaluate(agePercent);
+			Noise -= Vector3.one * 0.5f;
+
+			Noise *= data.Amplitude;
+
+			float agePercent = 1.0f - (timeRemaining / duration);
+			Noise *= data.BlendOverLifetime.Evaluate(agePercent);
+		}
 	}
 }

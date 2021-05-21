@@ -19,14 +19,14 @@ namespace Fralle.Core.Profiling
 
 		static double GetRecorderFrameAverage(ProfilerRecorder recorder)
 		{
-			var samplesCount = recorder.Capacity;
+			int samplesCount = recorder.Capacity;
 			if (samplesCount == 0)
 				return 0;
 
 			double r = 0;
-			var samples = new List<ProfilerRecorderSample>(samplesCount);
+			List<ProfilerRecorderSample> samples = new List<ProfilerRecorderSample>(samplesCount);
 			recorder.CopyTo(samples);
-			for (var i = 0; i < samples.Count; ++i)
+			for (int i = 0; i < samples.Count; ++i)
 				r += samples[i].Value;
 			r /= samplesCount;
 

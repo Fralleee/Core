@@ -35,9 +35,9 @@ namespace Fralle.Core.Gameplay
 
 		private void DrawScenePicker()
 		{
-			var sceneName = gameSceneInspected.SceneName;
+			string sceneName = gameSceneInspected.SceneName;
 			EditorGUI.BeginChangeCheck();
-			var selectedScene = sceneList.ToList().IndexOf(sceneName);
+			int selectedScene = sceneList.ToList().IndexOf(sceneName);
 
 			if (selectedScene < 0)
 			{
@@ -68,7 +68,7 @@ namespace Fralle.Core.Gameplay
 		/// </summary>
 		private void PopulateScenePicker()
 		{
-			var sceneCount = SceneManager.sceneCountInBuildSettings;
+			int sceneCount = SceneManager.sceneCountInBuildSettings;
 			sceneList = new string[sceneCount];
 			for (int i = 0; i < sceneCount; i++)
 			{

@@ -1,13 +1,16 @@
 using UnityEngine;
 
-public class DebugDrawLine : MonoBehaviour
+namespace Fralle.Core
 {
-	[SerializeField] Color color = Color.red;
-	[SerializeField] float distance = 50f;
-
-	void OnDrawGizmos()
+	public class DebugDrawLine : MonoBehaviour
 	{
-		Gizmos.color = color;
-		Gizmos.DrawLine(transform.position, transform.forward * distance);
+		[SerializeField] Color color = Color.red;
+		[SerializeField] float distance = 50f;
+
+		void OnDrawGizmos()
+		{
+			Gizmos.color = color;
+			Gizmos.DrawLine(transform.position, transform.forward * distance);
+		}
 	}
 }

@@ -22,8 +22,8 @@ namespace Fralle.Core.Attributes
 
 		public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 		{
-			var scenes = GetScenes();
-			var sceneOptions = GetSceneOptions(scenes);
+			string[] scenes = GetScenes();
+			string[] sceneOptions = GetSceneOptions(scenes);
 			switch (property.propertyType)
 			{
 				case SerializedPropertyType.String:
@@ -50,21 +50,21 @@ namespace Fralle.Core.Attributes
 
 		static void DrawPropertyForString(Rect rect, SerializedProperty property, GUIContent label, string[] scenes, string[] sceneOptions)
 		{
-			var index = IndexOf(scenes, property.stringValue);
-			var newIndex = EditorGUI.Popup(rect, label.text, index, sceneOptions);
+			int index = IndexOf(scenes, property.stringValue);
+			int newIndex = EditorGUI.Popup(rect, label.text, index, sceneOptions);
 			property.stringValue = scenes[newIndex];
 		}
 
 		static void DrawPropertyForInt(Rect rect, SerializedProperty property, GUIContent label, string[] sceneOptions)
 		{
-			var index = property.intValue;
-			var newIndex = EditorGUI.Popup(rect, label.text, index, sceneOptions);
+			int index = property.intValue;
+			int newIndex = EditorGUI.Popup(rect, label.text, index, sceneOptions);
 			property.intValue = newIndex;
 		}
 
 		static int IndexOf(string[] scenes, string scene)
 		{
-			var index = Array.IndexOf(scenes, scene);
+			int index = Array.IndexOf(scenes, scene);
 			return Mathf.Clamp(index, 0, scenes.Length - 1);
 		}
 	}

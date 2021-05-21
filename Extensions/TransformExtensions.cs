@@ -24,7 +24,7 @@ namespace Fralle.Core.Extensions
 
 		public static void LookAtFlat(this Transform source, Transform target)
 		{
-			var position = new Vector3(target.position.x, source.position.y, target.position.z);
+			Vector3 position = new Vector3(target.position.x, source.position.y, target.position.z);
 			source.LookAt(position);
 		}
 
@@ -34,7 +34,7 @@ namespace Fralle.Core.Extensions
 			{
 				if (child.name == aName)
 					return child;
-				var result = child.FindRecursively(aName);
+				Transform result = child.FindRecursively(aName);
 				if (result != null)
 					return result;
 			}

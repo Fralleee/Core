@@ -24,8 +24,8 @@ namespace Fralle.Core.Pooling
 
 		void PopulateDict()
 		{
-			var pools = gameObject.GetComponentsInChildren<Pool>();
-			foreach (var pool in pools)
+			Pool[] pools = gameObject.GetComponentsInChildren<Pool>();
+			foreach (Pool pool in pools)
 			{
 				if (pool.PoolBlock.Prefab == null)
 					continue;
@@ -114,7 +114,7 @@ namespace Fralle.Core.Pooling
 			if (prefab == null)
 			{ return 0; } // object wasn't defined
 
-			var childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : null;
+			Pool childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : null;
 			if (childScript == null)
 			{ // pool not found
 				return 0;
@@ -128,7 +128,7 @@ namespace Fralle.Core.Pooling
 			if (prefab == null)
 			{ return 0; } // object wasn't defined
 
-			var childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : null;
+			Pool childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : null;
 			return childScript == null ? 0 : childScript.PoolStack.Count;
 		}
 

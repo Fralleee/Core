@@ -26,9 +26,9 @@ namespace Fralle.Core.Basics
 			Color.RGBToHSV(CurrentColor, out currentHSV.r, out currentHSV.g, out currentHSV.b);
 			Color.RGBToHSV(NewColor, out newHSV.r, out newHSV.g, out newHSV.b);
 
-			foreach (var system in systems)
+			foreach (ParticleSystem system in systems)
 			{
-				var main = system.main;
+				ParticleSystem.MainModule main = system.main;
 				main.startColor = main.startColor.mode switch
 				{
 					ParticleSystemGradientMode.Color => new ParticleSystem.MinMaxGradient(

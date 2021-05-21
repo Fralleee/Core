@@ -2,52 +2,55 @@ using Fralle.PingTap;
 using System.Linq;
 using UnityEngine;
 
-public class TransformAggregator : MonoBehaviour
+namespace Fralle.Core
 {
-	Transformer masterTransformer;
-	Transformer[] transformers;
-
-	Vector3 initPosition;
-	Quaternion initRotation;
-
-	void Awake()
+	public class TransformAggregator : MonoBehaviour
 	{
-		initPosition = transform.localPosition;
-		initRotation = transform.localRotation;
+		Transformer masterTransformer;
+		Transformer[] transformers;
 
-		Transformer[] tempTransformers = GetComponents<Transformer>();
-		transformers = tempTransformers.Where(x => !x.master).ToArray();
-		masterTransformer = tempTransformers.FirstOrDefault(x => x.master);
-	}
+		Vector3 initPosition;
+		Quaternion initRotation;
 
-	void Update()
-	{
-		Calculate();
-	}
-
-	void Calculate()
-	{
-		Vector3 combinedPosition = Vector3.zero;
-		Quaternion combinedRotation = Quaternion.identity;
-
-		foreach (Transformer transformer in transformers)
+		void Awake()
 		{
-			transformer.Calculate();
-			combinedPosition += transformer.GetPosition();
-			combinedRotation *= transformer.GetRotation();
+			initPosition = transform.localPosition;
+			initRotation = transform.localRotation;
+
+			Transformer[] tempTransformers = GetComponents<Transformer>();
+			transformers = tempTransformers.Where(x => !x.master).ToArray();
+			masterTransformer = tempTransformers.FirstOrDefault(x => x.master);
 		}
 
-		if (masterTransformer)
+		void Update()
 		{
-			masterTransformer.Calculate();
-			transform.position = masterTransformer.GetPosition();
-			transform.localPosition += combinedPosition;
-			transform.localRotation *= combinedRotation;
+			Calculate();
 		}
-		else
+
+		void Calculate()
 		{
-			transform.localPosition = initPosition + combinedPosition;
-			transform.localRotation = initRotation * combinedRotation;
+			Vector3 combinedPosition = Vector3.zero;
+			Quaternion combinedRotation = Quaternion.identity;
+
+			foreach (Transformer transformer in transformers)
+			{
+				transformer.Calculate();
+				combinedPosition += transformer.GetPosition();
+				combinedRotation *= transformer.GetRotation();
+			}
+
+			if (masterTransformer)
+			{
+				masterTransformer.Calculate();
+				transform.position = masterTransformer.GetPosition();
+				transform.localPosition += combinedPosition;
+				transform.localRotation *= combinedRotation;
+			}
+			else
+			{
+				transform.localPosition = initPosition + combinedPosition;
+				transform.localRotation = initRotation * combinedRotation;
+			}
 		}
 	}
 }

@@ -19,14 +19,14 @@ namespace Fralle.Core.Extensions
 
 		public static void ReplaceItem<T>(this List<T> list, T oldElement, T newElement)
 		{
-			var index = list.IndexOf(oldElement);
+			int index = list.IndexOf(oldElement);
 			if (index != -1)
 				list[index] = newElement;
 		}
 
 		public static void Upsert<T>(this List<T> list, T oldElement, T newElement)
 		{
-			var index = list.IndexOf(oldElement);
+			int index = list.IndexOf(oldElement);
 			if (index != -1)
 				list[index] = newElement;
 			else
@@ -35,8 +35,8 @@ namespace Fralle.Core.Extensions
 
 		public static T GetRandomElement<T>(this List<T> list)
 		{
-			var random = new Random();
-			var rnd = random.Next(0, list.Count);
+			Random random = new Random();
+			int rnd = random.Next(0, list.Count);
 			return list[rnd];
 		}
 	}

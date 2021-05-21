@@ -25,7 +25,7 @@ namespace Fralle.Core.Infrastructure
 				if (_instance != null)
 					return _instance;
 
-				var singletonObject = new GameObject();
+				GameObject singletonObject = new GameObject();
 				_instance = singletonObject.AddComponent<T>();
 				singletonObject.name = typeof(T).ToString() + " (Singleton)";
 

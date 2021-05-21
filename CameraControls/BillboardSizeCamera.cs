@@ -26,11 +26,11 @@ namespace Fralle.Core.CameraControls
 
 		void UpdateSize()
 		{
-			var distance = Vector3.Distance(mainCamera.transform.position, transform.position);
-			var yPositionOffset = Mathf.Lerp(yOffsetLimits.x, yOffsetLimits.y, distance / maxDistance);
+			float distance = Vector3.Distance(mainCamera.transform.position, transform.position);
+			float yPositionOffset = Mathf.Lerp(yOffsetLimits.x, yOffsetLimits.y, distance / maxDistance);
 			transform.position = transform.position.With(y: yPositionOffset);
 
-			var scale = Mathf.Lerp(scaleLimits.x, scaleLimits.y, distance / maxDistance);
+			float scale = Mathf.Lerp(scaleLimits.x, scaleLimits.y, distance / maxDistance);
 			transform.localScale = Vector3.one * scale;
 		}
 	}

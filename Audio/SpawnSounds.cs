@@ -31,7 +31,7 @@ namespace Fralle.Core.Audio
 
 		IEnumerator SpawnSingle(float time)
 		{
-			for (var i = 0; i < SpawnCount; i++)
+			for (int i = 0; i < SpawnCount; i++)
 			{
 				SpawnSingle();
 				yield return new WaitForSeconds(time);
@@ -40,8 +40,8 @@ namespace Fralle.Core.Audio
 
 		void SpawnSingle()
 		{
-			var sound = Instantiate(PrefabSound, transform.position, Quaternion.identity);
-			var source = sound.GetComponent<AudioSource>();
+			GameObject sound = Instantiate(PrefabSound, transform.position, Quaternion.identity);
+			AudioSource source = sound.GetComponent<AudioSource>();
 
 			Debug.Log($"Playing sound: {sound}");
 			source.volume = 0.25f;
@@ -57,7 +57,7 @@ namespace Fralle.Core.Audio
 			if (!DestroyWhenDone)
 				return;
 
-			var life = source.clip.length / source.pitch;
+			float life = source.clip.length / source.pitch;
 			Destroy(sound, life);
 		}
 	}

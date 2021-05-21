@@ -19,7 +19,7 @@ namespace Fralle.Core.Infrastructure
 			this.prefab = prefab;
 			if (preWarm <= 0)
 				return;
-			foreach (var item in Enumerable.Range(0, preWarm).Select((i, index) => Object.Instantiate(prefab)))
+			foreach (T item in Enumerable.Range(0, preWarm).Select((i, index) => Object.Instantiate(prefab)))
 			{
 				item.gameObject.SetActive(true);
 				pool.Enqueue(item);

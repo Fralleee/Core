@@ -1,13 +1,16 @@
 using UnityEngine;
 
-public class DebugDrawSphere : MonoBehaviour
+namespace Fralle.Core
 {
-	[SerializeField] Color color = Color.red;
-	[SerializeField] float radius = 0.05f;
-
-	void OnDrawGizmos()
+	public class DebugDrawSphere : MonoBehaviour
 	{
-		Gizmos.color = color;
-		Gizmos.DrawSphere(transform.position, radius);
+		[SerializeField] Color color = Color.red;
+		[SerializeField] float radius = 0.05f;
+
+		void OnDrawGizmos()
+		{
+			Gizmos.color = color;
+			Gizmos.DrawSphere(transform.position, radius);
+		}
 	}
 }

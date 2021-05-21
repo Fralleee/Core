@@ -18,7 +18,7 @@ namespace Fralle.Core.Audio
 
 		public void PlayAtPoint(AudioClip clip, Vector3 point)
 		{
-			var source = Get();
+			AudioSource source = Get();
 
 			source.transform.position = point;
 			source.clip = clip;

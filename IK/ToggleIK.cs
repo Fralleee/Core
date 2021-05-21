@@ -1,17 +1,20 @@
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class ToggleIK : MonoBehaviour
+namespace Fralle.Core
 {
-	ChainIKConstraint chainIKConstraint;
-
-	void Awake()
+	public class ToggleIK : MonoBehaviour
 	{
-		chainIKConstraint = GetComponentInParent<ChainIKConstraint>();
-	}
+		ChainIKConstraint chainIKConstraint;
 
-	public void Toggle(bool enabled = true)
-	{
-		chainIKConstraint.weight = enabled ? 1 : 0;
+		void Awake()
+		{
+			chainIKConstraint = GetComponentInParent<ChainIKConstraint>();
+		}
+
+		public void Toggle(bool enabled = true)
+		{
+			chainIKConstraint.weight = enabled ? 1 : 0;
+		}
 	}
 }

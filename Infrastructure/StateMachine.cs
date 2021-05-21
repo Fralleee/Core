@@ -17,7 +17,7 @@ namespace Fralle.Core.Infrastructure
 
 		public void Tick()
 		{
-			var transition = GetTransition();
+			Transition transition = GetTransition();
 			if (transition != null)
 				SetState(transition.To);
 
