@@ -34,7 +34,8 @@ namespace Fralle.Core
 		{
 			string masterScene = EditorUtility.OpenFilePanel("Select Master Scene", Application.dataPath, "unity");
 			masterScene = masterScene.Replace(Application.dataPath, "Assets");  //project relative instead of absolute path
-			if (string.IsNullOrEmpty(masterScene)) return;
+			if (string.IsNullOrEmpty(masterScene))
+				return;
 			MasterScene = masterScene;
 			LoadMasterOnPlay = true;
 		}
@@ -84,7 +85,8 @@ namespace Fralle.Core
 			}
 
 			// Stopped Playing
-			if (EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode || keepMasterSceneOpen) return;
+			if (EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode || keepMasterSceneOpen)
+				return;
 			try
 			{
 				EditorSceneManager.CloseScene(SceneManager.GetSceneByPath(MasterScene), true);

@@ -17,7 +17,8 @@ namespace Fralle.Core.Infrastructure
 		protected PollingPool(T prefab, int preWarm = 0)
 		{
 			this.prefab = prefab;
-			if (preWarm <= 0) return;
+			if (preWarm <= 0)
+				return;
 			foreach (var item in Enumerable.Range(0, preWarm).Select((i, index) => Object.Instantiate(prefab)))
 			{
 				item.gameObject.SetActive(true);
@@ -33,7 +34,8 @@ namespace Fralle.Core.Infrastructure
 				LinkedListNode<T> current = node;
 				node = node.Next;
 
-				if (IsActive(current.Value)) continue;
+				if (IsActive(current.Value))
+					continue;
 				current.Value.gameObject.SetActive(false);
 				pool.Enqueue(current.Value);
 				inuse.Remove(current);

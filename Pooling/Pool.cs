@@ -123,7 +123,8 @@ namespace Fralle.Core.Pooling
 				switch (PoolBlock.EmptyBehavior)
 				{
 					case EmptyBehavior.Fail:
-						failedSpawns++; return null;
+						failedSpawns++;
+						return null;
 					case EmptyBehavior.ReuseOldest:
 					{
 						result = FindOldest();
@@ -134,13 +135,15 @@ namespace Fralle.Core.Pooling
 					}
 				}
 
-				if (PoolBlock.EmptyBehavior != EmptyBehavior.Grow) return result;
+				if (PoolBlock.EmptyBehavior != EmptyBehavior.Grow)
+					return result;
 				if (PoolBlock.Size >= PoolBlock.MaxSize)
 				{
 					switch (PoolBlock.MaxEmptyBehavior)
 					{
 						case MaxEmptyBehavior.Fail:
-							failedSpawns++; return null;
+							failedSpawns++;
+							return null;
 						case MaxEmptyBehavior.ReuseOldest:
 						{
 							result = FindOldest();
@@ -170,13 +173,15 @@ namespace Fralle.Core.Pooling
 			GameObject result = null;
 			int oldestIndex = 0;
 			float oldestTime = Mathf.Infinity;
-			if (MasterPool.Count <= 0) return null;
+			if (MasterPool.Count <= 0)
+				return null;
 			for (int i = 0; i < MasterPool.Count; i++)
 			{
 				if (MasterPool[i] == null || MasterPool[i].Obj == null)
 				{ continue; } // make sure object still exsists
 
-				if (!(MasterPool[i].RefScript.TimeSpawned < oldestTime)) continue;
+				if (!(MasterPool[i].RefScript.TimeSpawned < oldestTime))
+					continue;
 				oldestTime = MasterPool[i].RefScript.TimeSpawned;
 				result = MasterPool[i].Obj;
 				oldestIndex = i;
@@ -192,7 +197,8 @@ namespace Fralle.Core.Pooling
 		public GameObject CreateObject(bool createInPool)
 		{ // true when creating an item in the pool without spawing it
 			GameObject obj = null;
-			if (!PoolBlock.Prefab) return obj;
+			if (!PoolBlock.Prefab)
+				return obj;
 			obj = Instantiate(PoolBlock.Prefab, transform.position, transform.rotation);
 			PooledObject oprScript = obj.GetComponent<PooledObject>();
 			if (oprScript == null)

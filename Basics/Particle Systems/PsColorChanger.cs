@@ -54,7 +54,7 @@ namespace Fralle.Core.Basics
 
 		public Gradient ConvertCurrentToNew(Gradient gradient)
 		{
-			Gradient g = new Gradient {mode = gradient.mode};
+			Gradient g = new Gradient { mode = gradient.mode };
 
 			GradientAlphaKey[] alphaKeys = new GradientAlphaKey[gradient.alphaKeys.Length];
 			GradientColorKey[] colorKeys = new GradientColorKey[gradient.colorKeys.Length];
