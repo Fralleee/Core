@@ -1,9 +1,9 @@
-﻿namespace Fralle.Core.Interfaces
+﻿namespace Fralle.Core.HFSM
 {
 	public interface IState
 	{
-		void Tick();
 		void OnEnter();
+		void OnLogic();
 		void OnExit();
 	}
 }

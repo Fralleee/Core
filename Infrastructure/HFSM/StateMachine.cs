@@ -1,9 +1,8 @@
-﻿using Fralle.Core.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Fralle.Core.Infrastructure
+namespace Fralle.Core.HFSM
 {
 	public class StateMachine
 	{
@@ -21,7 +20,7 @@ namespace Fralle.Core.Infrastructure
 			if (transition != null)
 				SetState(transition.To);
 
-			CurrentState?.Tick();
+			CurrentState?.OnLogic();
 		}
 
 		public void SetState(IState state)
@@ -53,18 +52,6 @@ namespace Fralle.Core.Infrastructure
 		public void AddAnyTransition(IState state, Func<bool> predicate)
 		{
 			anyTransitions.Add(new Transition(state, predicate));
-		}
-
-		class Transition
-		{
-			public Func<bool> Condition { get; }
-			public IState To { get; }
-
-			public Transition(IState to, Func<bool> condition)
-			{
-				To = to;
-				Condition = condition;
-			}
 		}
 
 		Transition GetTransition()
