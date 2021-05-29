@@ -4,13 +4,13 @@ namespace Fralle.Core.AI
 {
 	public class StateController : MonoBehaviour, IStateController
 	{
+		[HideInInspector] public float stateTimeElapsed;
+
 		public State currentState;
 		public State remainState;
 
-		[HideInInspector] public float stateTimeElapsed;
-
 		void Update()
-		{			
+		{
 			currentState.UpdateState(this);
 		}
 
@@ -19,7 +19,7 @@ namespace Fralle.Core.AI
 			if (currentState != null)
 			{
 				Gizmos.color = currentState.sceneGizmoColor;
-				Gizmos.DrawWireSphere(transform.position, 2f);
+				Gizmos.DrawWireSphere(transform.position, 10f);
 			}
 		}
 
@@ -27,7 +27,9 @@ namespace Fralle.Core.AI
 		{
 			if (nextState != remainState)
 			{
+				currentState.ExitState(this);
 				currentState = nextState;
+				currentState.EnterState(this);
 				OnExitState();
 			}
 		}
@@ -38,7 +40,7 @@ namespace Fralle.Core.AI
 			return (stateTimeElapsed >= duration);
 		}
 
-		private void OnExitState()
+		void OnExitState()
 		{
 			stateTimeElapsed = 0;
 		}

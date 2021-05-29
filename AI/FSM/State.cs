@@ -9,33 +9,48 @@ namespace Fralle.Core.AI
 		public Transition[] transitions;
 		public Color sceneGizmoColor = Color.grey;
 
-		public void UpdateState(IStateController controller)
+		public void EnterState(IStateController controller)
 		{
-			DoActions(controller);
-			CheckTransitions(controller);
-		}
-
-		private void DoActions(IStateController controller)
-		{
-			for (int i = 0; i < actions.Length; i++)
-			{
-				actions[i].Act(controller);
+			for (int i = 0; i < actions.Length; i++) {
+				actions[i] = Instantiate(actions[i]);
+				actions[i].OnEnter(controller);
 			}
 		}
 
-		private void CheckTransitions(IStateController controller)
+		public void UpdateState(IStateController controller)
+		{
+			for (int i = 0; i < actions.Length; i++)
+				actions[i].Tick(controller);
+
+			CheckTransitions(controller);
+		}
+
+		public void ExitState(IStateController controller)
+		{
+			for (int i = 0; i < actions.Length; i++)
+				actions[i].OnExit(controller);
+		}
+
+		void CheckTransitions(IStateController controller)
 		{
 			for (int i = 0; i < transitions.Length; i++)
 			{
 				bool decisionSucceeded = transitions[i].decision.Decide(controller);
-
 				if (decisionSucceeded)
 				{
-					controller.TransitionToState(transitions[i].trueState);
+					if (!transitions[i].changeIfFalse)
+					{
+						controller.TransitionToState(transitions[i].state);
+						break;
+					}
 				}
 				else
 				{
-					controller.TransitionToState(transitions[i].falseState);
+					if (transitions[i].changeIfFalse)
+					{
+						controller.TransitionToState(transitions[i].state);
+						break;
+					}
 				}
 			}
 		}
