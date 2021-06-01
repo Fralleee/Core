@@ -13,7 +13,7 @@ namespace Fralle.Core
 		public float Height = 2f;
 
 		[Header("Sensor configuration")]
-		public int scanFrequency = 30;
+		public int scanFrequency = 10;
 		public LayerMask layers;
 		public LayerMask occlusionLayers;
 

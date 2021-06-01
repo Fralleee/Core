@@ -39,5 +39,11 @@ namespace Fralle.Core
 
 			return memory;
 		}
+
+		public void ForgetMemories(float olderThan)
+		{
+			memories.RemoveAll(m => m.Age > olderThan);
+			memories.RemoveAll(m => !m.gameObject);
+		}
 	}
 }

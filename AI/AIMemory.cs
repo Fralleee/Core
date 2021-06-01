@@ -4,6 +4,7 @@ namespace Fralle.Core
 {
 	public class AIMemory
 	{
+		public float Age => Time.time - lastSeen;
 		public GameObject gameObject;
 		public Vector3 position;
 		public Vector3 direction;
