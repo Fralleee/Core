@@ -4,25 +4,33 @@ using UnityEngine;
 
 namespace Fralle.Core
 {
+	[ExecuteInEditMode]
 	public class AISensor : MonoBehaviour
 	{
+		[Header("Sensor size")]
 		public float Distance = 5f;
 		[Range(0, 180)] public float Angle = 45f;
 		public float Height = 2f;
 
-		public Color sensorColor = Color.yellow;
-		public Color inSightColor = Color.green;
-
+		[Header("Sensor configuration")]
 		public int scanFrequency = 30;
 		public LayerMask layers;
 		public LayerMask occlusionLayers;
+
 		public List<GameObject> Objects
 		{
-			get {
+			get
+			{
 				objects.RemoveAll(obj => !obj);
 				return objects;
 			}
 		}
+
+		[Header("Debug")]
+		public Color sensorColor = Color.yellow;
+		public Color inSightColor = Color.green;
+		public bool DebugSensor;
+		public bool DebugTargets;
 
 		List<GameObject> objects = new List<GameObject>();
 		Collider[] colliders = new Collider[50];
@@ -169,15 +177,21 @@ namespace Fralle.Core
 			mesh = CreateWedgeMesh();
 		}
 
-		void OnDrawGizmosSelected()
+		void OnDrawGizmos()
 		{
-			Gizmos.color = sensorColor;
-			Gizmos.DrawMesh(mesh, transform.position, transform.rotation);
-			Gizmos.DrawWireSphere(transform.position, Distance);
+			if (DebugSensor)
+			{
+				Gizmos.color = sensorColor;
+				Gizmos.DrawMesh(mesh, transform.position, transform.rotation);
+				Gizmos.DrawWireSphere(transform.position, Distance);
+			}
 
-			Gizmos.color = inSightColor;
-			foreach (var obj in Objects)
-				Gizmos.DrawSphere(obj.transform.position, 0.5f);
+			if (DebugTargets)
+			{
+				Gizmos.color = inSightColor;
+				foreach (var obj in Objects)
+					Gizmos.DrawSphere(obj.transform.position, 0.5f);
+			}
 		}
 	}
 }
