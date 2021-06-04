@@ -1,29 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Fralle.Core.HFSM
 {
-	public class StateMachine
+	public class StateMachine<T>
 	{
-		public IState CurrentState;
+		public event Action<IState<T>> OnTransition = delegate { };
 
-		readonly Dictionary<Type, List<Transition>> transitions = new Dictionary<Type, List<Transition>>();
-		List<Transition> currentTransitions = new List<Transition>();
-		readonly List<Transition> anyTransitions = new List<Transition>();
+		public IState<T> CurrentState;
+		public float currentStateTime;
 
-		static readonly List<Transition> EmptyTransitions = new List<Transition>(0);
+		readonly Dictionary<T, List<Transition<T>>> transitions = new Dictionary<T, List<Transition<T>>>();
+		List<Transition<T>> currentTransitions = new List<Transition<T>>();
+		readonly List<Transition<T>> anyTransitions = new List<Transition<T>>();
 
-		public void Tick()
+		static readonly List<Transition<T>> EmptyTransitions = new List<Transition<T>>(0);
+
+		public void OnLogic()
 		{
-			Transition transition = GetTransition();
+			currentStateTime += Time.deltaTime;
+			Transition<T> transition = GetTransition;
 			if (transition != null)
 				SetState(transition.To);
 
 			CurrentState?.OnLogic();
 		}
 
-		public void SetState(IState state)
+		public void SetState(IState<T> state)
 		{
 			if (state == CurrentState)
 				return;
@@ -31,33 +36,31 @@ namespace Fralle.Core.HFSM
 			CurrentState?.OnExit();
 			CurrentState = state;
 
-			transitions.TryGetValue(CurrentState.GetType(), out currentTransitions);
+			transitions.TryGetValue(CurrentState.identifier, out currentTransitions);
 			if (currentTransitions == null)
 				currentTransitions = EmptyTransitions;
 
 			CurrentState.OnEnter();
+			currentStateTime = 0f;
+			OnTransition(CurrentState);
 		}
 
-		public void AddTransition(IState from, IState to, Func<bool> predicate)
+		public void AddTransition(IState<T> from, IState<T> to, Func<bool> predicate)
 		{
-			if (!this.transitions.TryGetValue(from.GetType(), out List<Transition> transitions))
+			if (!this.transitions.TryGetValue(from.identifier, out List<Transition<T>> transitions))
 			{
-				transitions = new List<Transition>();
-				this.transitions[from.GetType()] = transitions;
+				transitions = new List<Transition<T>>();
+				this.transitions[from.identifier] = transitions;
 			}
 
-			transitions.Add(new Transition(to, predicate));
+			transitions.Add(new Transition<T>(to, predicate));
 		}
 
-		public void AddAnyTransition(IState state, Func<bool> predicate)
+		public void AddAnyTransition(IState<T> state, Func<bool> predicate)
 		{
-			anyTransitions.Add(new Transition(state, predicate));
+			anyTransitions.Add(new Transition<T>(state, predicate));
 		}
 
-		Transition GetTransition()
-		{
-			Transition transition = anyTransitions.FirstOrDefault(t => t.Condition());
-			return transition ?? currentTransitions.FirstOrDefault(t => t.Condition());
-		}
+		Transition<T> GetTransition => anyTransitions.FirstOrDefault(t => t.Condition()) ?? currentTransitions.FirstOrDefault(t => t.Condition());
 	}
 }
