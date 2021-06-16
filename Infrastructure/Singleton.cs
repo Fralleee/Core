@@ -12,10 +12,7 @@ namespace Fralle.Core.Infrastructure
 			get
 			{
 				if (Destroyed)
-				{
-					Debug.LogWarning($"[Singleton] Instance '{typeof(T)}' already destroyed. Returning null.");
 					return null;
-				}
 
 				if (_instance != null)
 					return _instance;

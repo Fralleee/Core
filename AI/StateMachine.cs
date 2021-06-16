@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Fralle.Core.HFSM
+namespace Fralle.Core.AI
 {
 	public class StateMachine<T>
 	{
@@ -55,6 +55,9 @@ namespace Fralle.Core.HFSM
 
 			transitions.Add(new Transition<T>(to, predicate));
 		}
+
+
+		public void At(IState<T> to, IState<T> from, Func<bool> condition) => AddTransition(to, from, condition);
 
 		public void AddAnyTransition(IState<T> state, Func<bool> predicate)
 		{

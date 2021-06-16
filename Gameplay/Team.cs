@@ -1,8 +1,9 @@
 ﻿namespace Fralle.Core
 {
-	public enum Team {
+	public enum Team
+	{
+		NPC,
 		Team1,
-		Team2,
-		Neutrals
+		Team2
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fralle.Core.HFSM
+namespace Fralle.Core.AI
 {
 	public interface IState<T>
 	{
