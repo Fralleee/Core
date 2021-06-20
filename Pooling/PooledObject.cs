@@ -7,6 +7,18 @@ namespace Fralle.Core.Pooling
 		[HideInInspector] public Pool PoolScript; // stores the location of the object pool script for this object
 		[HideInInspector] public float TimeSpawned;
 
+		bool isQuitting;
+
+		void Awake()
+		{
+			Application.quitting += Application_quitting;
+		}
+
+		void Application_quitting()
+		{
+			isQuitting = true;
+		}
+
 		public bool Despawn(float del)
 		{ // -1 will use delay specified in this script
 			if (del >= 0)
@@ -36,6 +48,12 @@ namespace Fralle.Core.Pooling
 				return true;
 			}
 			return false;
+		}
+
+		void OnDestroy()
+		{
+			if (!isQuitting)
+				Debug.LogWarning($"{name} was Destroyed instead of despawned");
 		}
 	}
 }

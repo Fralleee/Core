@@ -1,5 +1,6 @@
-using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine;
 
 namespace Fralle.Core
 {
@@ -61,3 +62,4 @@ namespace Fralle.Core
 		}
 	}
 }
+#endif

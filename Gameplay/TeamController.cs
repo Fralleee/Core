@@ -39,12 +39,15 @@ namespace Fralle.Core
 		[ContextMenu("Setup")]
 		public void Setup()
 		{
+			if (team == Team.Team1)
+				SetupTeam1();
+			else if (team == Team.Team2)
+				SetupTeam2();
+
 			foreach (var col in hitboxParent.GetComponentsInChildren<Collider>())
 				col.gameObject.layer = Hitbox;
 
 			targetCollider.gameObject.layer = Self;
-
-			Debug.Log($"TeamController: Configured layer setup for {gameObject.name}");
 		}
 
 		void SetupTeam1()
@@ -69,16 +72,6 @@ namespace Fralle.Core
 			Neutrals = 1 << LayerMask.NameToLayer(NPC);
 			Hitboxes = (1 << LayerMask.NameToLayer(TEAM1HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES));
 			AttackLayerMask = (1 << LayerMask.NameToLayer(DEFAULT)) | (1 << LayerMask.NameToLayer(TEAM1HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES));
-		}
-
-		void OnValidate()
-		{
-			if (team == Team.Team1)
-				SetupTeam1();
-			else if (team == Team.Team2)
-				SetupTeam2();
-			else
-				Debug.LogWarning($"{gameObject.name}::TeamController has invalid team selection");
 		}
 	}
 }

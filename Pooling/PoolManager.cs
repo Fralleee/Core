@@ -90,7 +90,9 @@ namespace Fralle.Core.Pooling
 		public GameObject Spawn(GameObject obj, int? child, Vector3 pos, Quaternion rot, bool usePosRot, Transform parent)
 		{
 			if (obj == null)
-			{ return null; } // object wasn't defined
+			{
+				return null;
+			} // object wasn't defined
 			CheckDict();
 
 			if (PoolRef.ContainsKey(obj))
@@ -187,6 +189,7 @@ namespace Fralle.Core.Pooling
 
 		public bool DespawnPool(GameObject prefab)
 		{
+			Debug.LogWarning($"Despawning Pool {prefab}");
 			if (prefab == null)
 			{ return false; } // object wasn't defined
 			Pool childScript = null;

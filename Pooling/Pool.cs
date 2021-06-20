@@ -178,7 +178,7 @@ namespace Fralle.Core.Pooling
 			for (int i = 0; i < MasterPool.Count; i++)
 			{
 				if (MasterPool[i] == null || MasterPool[i].Obj == null)
-				{ continue; } // make sure object still exsists
+					continue;
 
 				if (!(MasterPool[i].RefScript.TimeSpawned < oldestTime))
 					continue;
@@ -194,17 +194,24 @@ namespace Fralle.Core.Pooling
 		{
 			return CreateObject(false);
 		}
+
 		public GameObject CreateObject(bool createInPool)
 		{ // true when creating an item in the pool without spawing it
 			GameObject obj = null;
 			if (!PoolBlock.Prefab)
+			{
+				Debug.LogWarning("SOMETHING WENT VERY WRONG");
 				return obj;
+			}
+
 			obj = Instantiate(PoolBlock.Prefab, transform.position, transform.rotation);
 			PooledObject oprScript = obj.GetComponent<PooledObject>();
 			if (oprScript == null)
 			{ oprScript = obj.AddComponent<PooledObject>(); }
 			oprScript.PoolScript = this;
 			oprScript.TimeSpawned = Time.time;
+			if (obj == null || oprScript == null)
+				Debug.LogWarning($"Found nulls in {PoolBlock.Prefab}");
 			MasterPool.Add(new PoolItem(obj, oprScript));
 
 			if (createInPool)
@@ -217,15 +224,9 @@ namespace Fralle.Core.Pooling
 			return obj;
 		}
 
-		public int GetActiveCount()
-		{
-			return PoolBlock.Size - PoolStack.Count;
-		}
+		public int GetActiveCount => PoolBlock.Size - PoolStack.Count;
 
-		public int GetAvailableCount()
-		{
-			return PoolStack.Count;
-		}
+		public int GetAvailableCount => PoolStack.Count;
 
 		void OnApplicationQuit()
 		{
