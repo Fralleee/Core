@@ -28,4 +28,9 @@ public class BulletTraceController : MonoBehaviour
 
 		fadeoutTimer -= Time.deltaTime;
 	}
+
+	void OnDisable()
+	{
+		lineRenderer.enabled = false;
+	}
 }

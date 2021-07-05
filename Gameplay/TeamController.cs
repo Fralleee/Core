@@ -6,7 +6,7 @@ namespace Fralle.Core
 	public class TeamController : MonoBehaviour
 	{
 		#region STATICS
-		static string DEFAULT = "DEFAULT";
+		static string DEFAULT = "Default";
 
 		static string TEAM1 = "Team1";
 		static string TEAM1HITBOXES = "Team1 Hitboxes";
@@ -29,9 +29,9 @@ namespace Fralle.Core
 		[Header("Layer map")]
 		[Readonly] public int Self;
 		[Readonly] public int Hitbox;
+		[Readonly] public int AllyProjectiles;
 		public LayerMask Hostiles;
 		public LayerMask Neutrals;
-		public LayerMask AllyProjectiles;
 		public LayerMask HostileProjectiles;
 		public LayerMask Hitboxes;
 		public LayerMask AttackLayerMask;
@@ -54,7 +54,7 @@ namespace Fralle.Core
 		{
 			Self = LayerMask.NameToLayer(TEAM1);
 			Hitbox = LayerMask.NameToLayer(TEAM1HITBOXES);
-			AllyProjectiles = 1 << LayerMask.NameToLayer(TEAM1PROJECTILES);
+			AllyProjectiles = LayerMask.NameToLayer(TEAM1PROJECTILES);
 			Hostiles = 1 << LayerMask.NameToLayer(TEAM2);
 			HostileProjectiles = (1 << LayerMask.NameToLayer(TEAM2PROJECTILES)) | (1 << LayerMask.NameToLayer(NPCPROJECTILES));
 			Neutrals = 1 << LayerMask.NameToLayer(NPC);
@@ -66,7 +66,7 @@ namespace Fralle.Core
 		{
 			Self = LayerMask.NameToLayer(TEAM2);
 			Hitbox = LayerMask.NameToLayer(TEAM2HITBOXES);
-			AllyProjectiles = 1 << LayerMask.NameToLayer(TEAM2PROJECTILES);
+			AllyProjectiles = LayerMask.NameToLayer(TEAM2PROJECTILES);
 			Hostiles = 1 << LayerMask.NameToLayer(TEAM1);
 			HostileProjectiles = (1 << LayerMask.NameToLayer(TEAM1PROJECTILES)) | (1 << LayerMask.NameToLayer(NPCPROJECTILES));
 			Neutrals = 1 << LayerMask.NameToLayer(NPC);
