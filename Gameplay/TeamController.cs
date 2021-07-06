@@ -57,7 +57,7 @@ namespace Fralle.Core
 			targetCollider.gameObject.layer = Self;
 		}
 
-		void Awake()
+		void SetupRenderer()
 		{
 			propBlock = new MaterialPropertyBlock();
 			renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -67,6 +67,8 @@ namespace Fralle.Core
 
 		void SetupTeam1()
 		{
+			SetupRenderer();
+
 			Self = LayerMask.NameToLayer(TEAM1);
 			Hitbox = LayerMask.NameToLayer(TEAM1HITBOXES);
 			AllyProjectiles = LayerMask.NameToLayer(TEAM1PROJECTILES);
@@ -83,6 +85,8 @@ namespace Fralle.Core
 
 		void SetupTeam2()
 		{
+			SetupRenderer();
+
 			Self = LayerMask.NameToLayer(TEAM2);
 			Hitbox = LayerMask.NameToLayer(TEAM2HITBOXES);
 			AllyProjectiles = LayerMask.NameToLayer(TEAM2PROJECTILES);
