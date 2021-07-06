@@ -6,6 +6,8 @@ namespace Fralle.Core
 	public class TeamController : MonoBehaviour
 	{
 		#region STATICS
+		static readonly int RendererColor = Shader.PropertyToID("_BaseColor");
+
 		static string DEFAULT = "Default";
 
 		static string TEAM1 = "Team1";
@@ -25,6 +27,8 @@ namespace Fralle.Core
 		public Team team;
 		[SerializeField] Collider targetCollider;
 		[SerializeField] Transform hitboxParent;
+		[SerializeField] Color team1Color = new Color(1, 0.5f, 0.5f);
+		[SerializeField] Color team2Color = new Color(0.5f, 0.5f, 1);
 
 		[Header("Layer map")]
 		[Readonly] public int Self;
@@ -35,6 +39,9 @@ namespace Fralle.Core
 		public LayerMask HostileProjectiles;
 		public LayerMask Hitboxes;
 		public LayerMask AttackLayerMask;
+
+		SkinnedMeshRenderer[] renderers;
+		MaterialPropertyBlock propBlock;
 
 		[ContextMenu("Setup")]
 		public void Setup()
@@ -50,6 +57,14 @@ namespace Fralle.Core
 			targetCollider.gameObject.layer = Self;
 		}
 
+		void Awake()
+		{
+			propBlock = new MaterialPropertyBlock();
+			renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+			foreach (var r in renderers)
+				r.GetPropertyBlock(propBlock);
+		}
+
 		void SetupTeam1()
 		{
 			Self = LayerMask.NameToLayer(TEAM1);
@@ -60,6 +75,10 @@ namespace Fralle.Core
 			Neutrals = 1 << LayerMask.NameToLayer(NPC);
 			Hitboxes = (1 << LayerMask.NameToLayer(TEAM2HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES));
 			AttackLayerMask = (1 << LayerMask.NameToLayer(DEFAULT)) | (1 << LayerMask.NameToLayer(TEAM2HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES));
+
+			propBlock.SetColor(RendererColor, team1Color);
+			foreach (var r in renderers)
+				r.SetPropertyBlock(propBlock);
 		}
 
 		void SetupTeam2()
@@ -72,6 +91,10 @@ namespace Fralle.Core
 			Neutrals = 1 << LayerMask.NameToLayer(NPC);
 			Hitboxes = (1 << LayerMask.NameToLayer(TEAM1HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES));
 			AttackLayerMask = (1 << LayerMask.NameToLayer(DEFAULT)) | (1 << LayerMask.NameToLayer(TEAM1HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES));
+
+			propBlock.SetColor(RendererColor, team2Color);
+			foreach (var r in renderers)
+				r.SetPropertyBlock(propBlock);
 		}
 	}
 }
