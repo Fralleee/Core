@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Fralle.Core.Extensions;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Fralle.Core.Audio
@@ -20,8 +21,8 @@ namespace Fralle.Core.Audio
 				return;
 
 			source.clip = Clips[Random.Range(0, Clips.Length)];
-			source.volume = Random.Range(VolumeRange.x, VolumeRange.y);
-			source.pitch = Random.Range(PitchRange.x, PitchRange.y);
+			source.volume = VolumeRange.GetValueBetween();
+			source.pitch = PitchRange.GetValueBetween();
 			source.Play();
 		}
 	}
