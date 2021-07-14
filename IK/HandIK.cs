@@ -3,8 +3,9 @@ using UnityEngine.Animations.Rigging;
 
 namespace Fralle.Core
 {
-	public class ToggleIK : MonoBehaviour
+	public class HandIK : MonoBehaviour
 	{
+		public Hand hand;
 		ChainIKConstraint chainIKConstraint;
 
 		void Awake()
