@@ -15,7 +15,8 @@ namespace Fralle.Core
 
 		public void Toggle(bool enabled = true)
 		{
-			chainIKConstraint.weight = enabled ? 1 : 0;
+			if (chainIKConstraint)
+				chainIKConstraint.weight = enabled ? 1 : 0;
 		}
 	}
 }
