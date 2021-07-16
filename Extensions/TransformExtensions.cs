@@ -40,5 +40,17 @@ namespace Fralle.Core.Extensions
 			}
 			return null;
 		}
+
+		public static Transform FindChildWithTag(this Transform parent, string tag)
+		{
+			Transform t = parent.transform;
+			foreach (Transform tr in t)
+			{
+				if (tr.CompareTag(tag))
+					return tr;
+			}
+			return null;
+		}
+
 	}
 }

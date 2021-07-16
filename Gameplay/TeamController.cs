@@ -1,4 +1,5 @@
 using Fralle.Core.Attributes;
+using Fralle.Core.Extensions;
 using UnityEngine;
 
 namespace Fralle.Core
@@ -11,14 +12,17 @@ namespace Fralle.Core
 		static string DEFAULT = "Default";
 
 		static string TEAM1 = "Team1";
+		static string TEAM1SENSOR = "Team1 Sensor";
 		static string TEAM1HITBOXES = "Team1 Hitboxes";
 		static string TEAM1PROJECTILES = "Team1 Projectiles";
 
 		static string TEAM2 = "Team2";
+		static string TEAM2SENSOR = "Team2 Sensor";
 		static string TEAM2HITBOXES = "Team2 Hitboxes";
 		static string TEAM2PROJECTILES = "Team2 Projectiles";
 
 		static string NPC = "NPC";
+		static string NPCSENSOR = "NPC Sensor";
 		static string NPCHITBOXES = "NPC Hitboxes";
 		static string NPCPROJECTILES = "NPC Projectiles";
 		#endregion
@@ -31,7 +35,8 @@ namespace Fralle.Core
 		[SerializeField] Color team2Color = new Color(0.5f, 0.5f, 1);
 
 		[Header("Layer map")]
-		[Readonly] public int Self;
+		[Readonly] public int AllyTeam;
+		[Readonly] public int AllySensor;
 		[Readonly] public int Hitbox;
 		[Readonly] public int AllyProjectiles;
 		public LayerMask Hostiles;
@@ -54,7 +59,11 @@ namespace Fralle.Core
 			foreach (var col in hitboxParent.GetComponentsInChildren<Collider>())
 				col.gameObject.layer = Hitbox;
 
-			targetCollider.gameObject.layer = Self;
+			targetCollider.gameObject.layer = AllyTeam;
+
+			var eyes = transform.FindChildWithTag("Eyes");
+			if (eyes)
+				eyes.gameObject.layer = AllySensor;
 		}
 
 		void SetupRenderer()
@@ -69,7 +78,8 @@ namespace Fralle.Core
 		{
 			SetupRenderer();
 
-			Self = LayerMask.NameToLayer(TEAM1);
+			AllyTeam = LayerMask.NameToLayer(TEAM1);
+			AllySensor = LayerMask.NameToLayer(TEAM1SENSOR);
 			Hitbox = LayerMask.NameToLayer(TEAM1HITBOXES);
 			AllyProjectiles = LayerMask.NameToLayer(TEAM1PROJECTILES);
 			Hostiles = 1 << LayerMask.NameToLayer(TEAM2);
@@ -87,7 +97,8 @@ namespace Fralle.Core
 		{
 			SetupRenderer();
 
-			Self = LayerMask.NameToLayer(TEAM2);
+			AllyTeam = LayerMask.NameToLayer(TEAM2);
+			AllySensor = LayerMask.NameToLayer(TEAM2SENSOR);
 			Hitbox = LayerMask.NameToLayer(TEAM2HITBOXES);
 			AllyProjectiles = LayerMask.NameToLayer(TEAM2PROJECTILES);
 			Hostiles = 1 << LayerMask.NameToLayer(TEAM1);
