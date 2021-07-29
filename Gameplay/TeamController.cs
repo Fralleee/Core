@@ -23,8 +23,6 @@ namespace Fralle.Core
 		static string NPC = "NPC";
 		static string NPCHITBOXES = "NPC Hitboxes";
 		static string NPCPROJECTILES = "NPC Projectiles";
-
-		public static LayerMask DEFAULT_LAYER = 1 << LayerMask.NameToLayer("Default");
 		#endregion
 
 		[Header("Setup")]
