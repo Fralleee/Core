@@ -8,7 +8,7 @@ namespace Fralle.Core
 {
   [CanEditMultipleObjects]
   [CustomEditor(typeof(Object), true)]
-  public class NaughtyInspector : UnityEditor.Editor
+  public class NaughtyInspector : Editor
   {
     private List<SerializedProperty> _serializedProperties = new List<SerializedProperty>();
     private IEnumerable<FieldInfo> _nonSerializedFields;
