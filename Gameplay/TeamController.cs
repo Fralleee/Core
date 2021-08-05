@@ -76,11 +76,12 @@ namespace Fralle.Core
 			AllyTeam = LayerMask.NameToLayer(TEAM1);
 			Hitbox = LayerMask.NameToLayer(TEAM1HITBOXES);
 			AllyProjectiles = LayerMask.NameToLayer(TEAM1PROJECTILES);
-			Hostiles = 1 << LayerMask.NameToLayer(TEAM2);
-			HostileProjectiles = (1 << LayerMask.NameToLayer(TEAM2PROJECTILES)) | (1 << LayerMask.NameToLayer(NPCPROJECTILES));
-			Neutrals = 1 << LayerMask.NameToLayer(NPC);
-			Hitboxes = (1 << LayerMask.NameToLayer(TEAM2HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES));
-			AttackLayerMask = (1 << LayerMask.NameToLayer(DEFAULT)) | (1 << LayerMask.NameToLayer(TEAM2HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES)) | (1 << LayerMask.NameToLayer(CORPSE));
+
+			Hostiles = LayerMask.GetMask(TEAM2);
+			HostileProjectiles = LayerMask.GetMask(TEAM2PROJECTILES, NPCPROJECTILES);
+			Neutrals = LayerMask.GetMask(NPC);
+			Hitboxes = LayerMask.GetMask(TEAM2HITBOXES, NPCHITBOXES);
+			AttackLayerMask = LayerMask.GetMask(DEFAULT, TEAM2HITBOXES, NPCHITBOXES, CORPSE);
 
 			propBlock.SetColor(RendererColor, team1Color);
 			foreach (var r in renderers)
@@ -94,11 +95,12 @@ namespace Fralle.Core
 			AllyTeam = LayerMask.NameToLayer(TEAM2);
 			Hitbox = LayerMask.NameToLayer(TEAM2HITBOXES);
 			AllyProjectiles = LayerMask.NameToLayer(TEAM2PROJECTILES);
-			Hostiles = 1 << LayerMask.NameToLayer(TEAM1);
-			HostileProjectiles = (1 << LayerMask.NameToLayer(TEAM1PROJECTILES)) | (1 << LayerMask.NameToLayer(NPCPROJECTILES));
-			Neutrals = 1 << LayerMask.NameToLayer(NPC);
-			Hitboxes = (1 << LayerMask.NameToLayer(TEAM1HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES));
-			AttackLayerMask = (1 << LayerMask.NameToLayer(DEFAULT)) | (1 << LayerMask.NameToLayer(TEAM1HITBOXES)) | (1 << LayerMask.NameToLayer(NPCHITBOXES)) | (1 << LayerMask.NameToLayer(CORPSE));
+			
+			Hostiles = LayerMask.GetMask(TEAM1);
+			HostileProjectiles = LayerMask.GetMask(TEAM1PROJECTILES, NPCPROJECTILES);
+			Neutrals = LayerMask.GetMask(NPC);
+			Hitboxes = LayerMask.GetMask(TEAM1HITBOXES, NPCHITBOXES);
+			AttackLayerMask = LayerMask.GetMask(DEFAULT, TEAM1HITBOXES, NPCHITBOXES, CORPSE);
 
 			propBlock.SetColor(RendererColor, team2Color);
 			foreach (var r in renderers)
