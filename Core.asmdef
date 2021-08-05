@@ -2,7 +2,8 @@
     "name": "Fralle.Core",
     "rootNamespace": "Fralle.Core",
     "references": [
-        "Unity.Animation.Rigging"
+        "Unity.Animation.Rigging",
+        "Unity.RenderPipelines.Core.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
