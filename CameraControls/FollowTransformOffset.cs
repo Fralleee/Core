@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Fralle.Core.CameraControls
 {
-	public class PositionInFront : MonoBehaviour
+	public class FollowTransformOffset : MonoBehaviour
 	{
 		[SerializeField] Transform transformToFollow;
 		[SerializeField] float offset;
