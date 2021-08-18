@@ -1,8 +1,8 @@
 ﻿namespace Fralle.Core
 {
-	public enum Hand
-	{
-		Left,
-		Right
-	}
+  public enum Hand
+  {
+    Left,
+    Right
+  }
 }

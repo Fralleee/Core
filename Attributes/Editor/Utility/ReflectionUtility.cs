@@ -25,7 +25,7 @@ namespace Fralle.Core
           .GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
           .Where(predicate);
 
-        foreach (var fieldInfo in fieldInfos)
+        foreach (FieldInfo fieldInfo in fieldInfos)
         {
           yield return fieldInfo;
         }
@@ -48,7 +48,7 @@ namespace Fralle.Core
           .GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
           .Where(predicate);
 
-        foreach (var propertyInfo in propertyInfos)
+        foreach (PropertyInfo propertyInfo in propertyInfos)
         {
           yield return propertyInfo;
         }
@@ -71,7 +71,7 @@ namespace Fralle.Core
           .GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
           .Where(predicate);
 
-        foreach (var methodInfo in methodInfos)
+        foreach (MethodInfo methodInfo in methodInfos)
         {
           yield return methodInfo;
         }

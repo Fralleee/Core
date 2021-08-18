@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace Fralle.Core.AI
+﻿namespace Fralle.Core.AI
 {
-	public interface IState<T>
-	{
-		T identifier { get; }
-		void OnEnter();
-		void OnLogic();
-		void OnExit();
-	}
+  public interface IState<T>
+  {
+    T identifier { get; }
+    void OnEnter();
+    void OnLogic();
+    void OnExit();
+  }
 }

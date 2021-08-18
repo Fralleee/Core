@@ -7,7 +7,7 @@ namespace Fralle.Core
   {
     public Volume AddProfile(VolumeProfile profile)
     {
-      var go = new GameObject(profile.name);
+      GameObject go = new GameObject(profile.name);
       go.transform.SetParent(transform);
       go.layer = gameObject.layer;
 

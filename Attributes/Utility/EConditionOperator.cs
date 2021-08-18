@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Fralle.Core
+﻿namespace Fralle.Core
 {
-	public enum EConditionOperator
-	{
-		And,
-		Or
-	}
+  public enum EConditionOperator
+  {
+    And,
+    Or
+  }
 }

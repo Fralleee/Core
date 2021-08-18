@@ -82,7 +82,7 @@ namespace Fralle.Core
 
     private static int IndexOf(string[] layers, string layer)
     {
-      var index = Array.IndexOf(layers, layer);
+      int index = Array.IndexOf(layers, layer);
       return Mathf.Clamp(index, 0, layers.Length - 1);
     }
   }

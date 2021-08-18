@@ -29,7 +29,7 @@ namespace Fralle.Core
           {
             float totalHeight = EditorGUIUtility.singleLineHeight;
 
-            using (var iterator = serializedObject.GetIterator())
+            using (SerializedProperty iterator = serializedObject.GetIterator())
             {
               if (iterator.NextVisible(true))
               {
@@ -152,7 +152,7 @@ namespace Fralle.Core
       {
         SerializedObject serializedObject = new SerializedObject(scriptableObject);
 
-        using (var iterator = serializedObject.GetIterator())
+        using (SerializedProperty iterator = serializedObject.GetIterator())
         {
           float yOffset = EditorGUIUtility.singleLineHeight;
 

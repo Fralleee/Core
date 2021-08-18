@@ -19,7 +19,7 @@ namespace Fralle.Core
 
       // Validate
       ValidatorAttribute[] validatorAttributes = PropertyUtility.GetAttributes<ValidatorAttribute>(property);
-      foreach (var validatorAttribute in validatorAttributes)
+      foreach (ValidatorAttribute validatorAttribute in validatorAttributes)
       {
         validatorAttribute.GetValidator().ValidateProperty(property);
       }

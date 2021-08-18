@@ -2,7 +2,7 @@
 
 namespace Fralle.Core
 {
-	public class ValidatorAttribute : Attribute, ICustomAttribute
-	{
-	}
+  public class ValidatorAttribute : Attribute, ICustomAttribute
+  {
+  }
 }

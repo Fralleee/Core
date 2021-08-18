@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Fralle.Core
+﻿namespace Fralle.Core
 {
-	public interface IGroupAttribute
-	{
-	}
+  public interface IGroupAttribute
+  {
+  }
 }

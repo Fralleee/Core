@@ -1,8 +1,8 @@
 namespace Fralle.Core
 {
-	public interface IDisableOnDeath
-	{
-		string name { get; set; }
-		bool enabled { get; set; }
-	}
+  public interface IDisableOnDeath
+  {
+    string name { get; set; }
+    bool enabled { get; set; }
+  }
 }

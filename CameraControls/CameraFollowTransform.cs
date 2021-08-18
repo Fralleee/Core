@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Fralle.Core.CameraControls
 {
-	public class CameraFollowTransform : Transformer
-	{
-		public Transform TransformToFollow;
+  public class CameraFollowTransform : Transformer
+  {
+    public Transform TransformToFollow;
 
-		public override void Calculate() { }
-		public override Vector3 GetPosition() => TransformToFollow.position;
-		public override Quaternion GetRotation() => Quaternion.identity;
-	}
+    public override void Calculate() { }
+    public override Vector3 GetPosition() => TransformToFollow.position;
+    public override Quaternion GetRotation() => Quaternion.identity;
+  }
 }

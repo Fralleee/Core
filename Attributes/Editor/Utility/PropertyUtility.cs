@@ -49,7 +49,7 @@ namespace Fralle.Core
       object target = GetTargetObjectWithProperty(property);
       property.serializedObject.ApplyModifiedProperties(); // We must apply modifications so that the new value is updated in the serialized object
 
-      foreach (var onValueChangedAttribute in onValueChangedAttributes)
+      foreach (OnValueChangedAttribute onValueChangedAttribute in onValueChangedAttributes)
       {
         MethodInfo callbackMethod = ReflectionUtility.GetMethod(target, onValueChangedAttribute.CallbackName);
         if (callbackMethod != null &&
@@ -197,7 +197,7 @@ namespace Fralle.Core
     internal static List<bool> GetConditionValues(object target, string[] conditions)
     {
       List<bool> conditionValues = new List<bool>();
-      foreach (var condition in conditions)
+      foreach (string condition in conditions)
       {
         FieldInfo conditionField = ReflectionUtility.GetField(target, condition);
         if (conditionField != null &&
@@ -231,7 +231,7 @@ namespace Fralle.Core
       if (conditionOperator == EConditionOperator.And)
       {
         flag = true;
-        foreach (var value in conditionValues)
+        foreach (bool value in conditionValues)
         {
           flag = flag && value;
         }
@@ -239,7 +239,7 @@ namespace Fralle.Core
       else
       {
         flag = false;
-        foreach (var value in conditionValues)
+        foreach (bool value in conditionValues)
         {
           flag = flag || value;
         }
@@ -277,7 +277,7 @@ namespace Fralle.Core
       object obj = property.serializedObject.targetObject;
       string[] elements = path.Split('.');
 
-      foreach (var element in elements)
+      foreach (string element in elements)
       {
         if (element.Contains("["))
         {

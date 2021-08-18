@@ -55,7 +55,7 @@ namespace Fralle.Core
     protected void GetSerializedProperties(ref List<SerializedProperty> outSerializedProperties)
     {
       outSerializedProperties.Clear();
-      using (var iterator = serializedObject.GetIterator())
+      using (SerializedProperty iterator = serializedObject.GetIterator())
       {
         if (iterator.NextVisible(true))
         {
@@ -73,7 +73,7 @@ namespace Fralle.Core
       serializedObject.Update();
 
       // Draw non-grouped serialized properties
-      foreach (var property in GetNonGroupedProperties(_serializedProperties))
+      foreach (SerializedProperty property in GetNonGroupedProperties(_serializedProperties))
       {
         if (property.name.Equals("m_Script", System.StringComparison.Ordinal))
         {
@@ -89,7 +89,7 @@ namespace Fralle.Core
       }
 
       // Draw grouped serialized properties
-      foreach (var group in GetGroupedProperties(_serializedProperties))
+      foreach (IGrouping<string, SerializedProperty> group in GetGroupedProperties(_serializedProperties))
       {
         IEnumerable<SerializedProperty> visibleProperties = group.Where(p => PropertyUtility.IsVisible(p));
         if (!visibleProperties.Any())
@@ -98,7 +98,7 @@ namespace Fralle.Core
         }
 
         NaughtyEditorGUI.BeginBoxGroup_Layout(group.Key);
-        foreach (var property in visibleProperties)
+        foreach (SerializedProperty property in visibleProperties)
         {
           NaughtyEditorGUI.PropertyField_Layout(property, includeChildren: true);
         }
@@ -107,7 +107,7 @@ namespace Fralle.Core
       }
 
       // Draw foldout serialized properties
-      foreach (var group in GetFoldoutProperties(_serializedProperties))
+      foreach (IGrouping<string, SerializedProperty> group in GetFoldoutProperties(_serializedProperties))
       {
         IEnumerable<SerializedProperty> visibleProperties = group.Where(p => PropertyUtility.IsVisible(p));
         if (!visibleProperties.Any())
@@ -123,7 +123,7 @@ namespace Fralle.Core
         _foldouts[group.Key].Value = EditorGUILayout.Foldout(_foldouts[group.Key].Value, group.Key, true);
         if (_foldouts[group.Key].Value)
         {
-          foreach (var property in visibleProperties)
+          foreach (SerializedProperty property in visibleProperties)
           {
             NaughtyEditorGUI.PropertyField_Layout(property, true);
           }
@@ -145,7 +145,7 @@ namespace Fralle.Core
             EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
         }
 
-        foreach (var field in _nonSerializedFields)
+        foreach (FieldInfo field in _nonSerializedFields)
         {
           NaughtyEditorGUI.NonSerializedField_Layout(serializedObject.targetObject, field);
         }
@@ -164,7 +164,7 @@ namespace Fralle.Core
             EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
         }
 
-        foreach (var property in _nativeProperties)
+        foreach (PropertyInfo property in _nativeProperties)
         {
           NaughtyEditorGUI.NativeProperty_Layout(serializedObject.targetObject, property);
         }
@@ -183,7 +183,7 @@ namespace Fralle.Core
             EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
         }
 
-        foreach (var method in _methods)
+        foreach (MethodInfo method in _methods)
         {
           NaughtyEditorGUI.Button(serializedObject.targetObject, method);
         }

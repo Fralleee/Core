@@ -11,7 +11,7 @@ namespace Fralle.Core
     protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label)
     {
       ProgressBarAttribute progressBarAttribute = PropertyUtility.GetAttribute<ProgressBarAttribute>(property);
-      var maxValue = GetMaxValue(property, progressBarAttribute);
+      object maxValue = GetMaxValue(property, progressBarAttribute);
 
       return IsNumber(property) && IsNumber(maxValue)
         ? GetPropertyHeight(property)
@@ -30,18 +30,18 @@ namespace Fralle.Core
       }
 
       ProgressBarAttribute progressBarAttribute = PropertyUtility.GetAttribute<ProgressBarAttribute>(property);
-      var value = property.propertyType == SerializedPropertyType.Integer ? property.intValue : property.floatValue;
-      var valueFormatted = property.propertyType == SerializedPropertyType.Integer ? value.ToString() : string.Format("{0:0.00}", value);
-      var maxValue = GetMaxValue(property, progressBarAttribute);
+      float value = property.propertyType == SerializedPropertyType.Integer ? property.intValue : property.floatValue;
+      string valueFormatted = property.propertyType == SerializedPropertyType.Integer ? value.ToString() : string.Format("{0:0.00}", value);
+      object maxValue = GetMaxValue(property, progressBarAttribute);
 
       if (maxValue != null && IsNumber(maxValue))
       {
-        var fillPercentage = value / CastToFloat(maxValue);
-        var barLabel = (!string.IsNullOrEmpty(progressBarAttribute.Name) ? "[" + progressBarAttribute.Name + "] " : "") + valueFormatted + "/" + maxValue;
-        var barColor = progressBarAttribute.Color.GetColor();
-        var labelColor = Color.white;
+        float fillPercentage = value / CastToFloat(maxValue);
+        string barLabel = (!string.IsNullOrEmpty(progressBarAttribute.Name) ? "[" + progressBarAttribute.Name + "] " : "") + valueFormatted + "/" + maxValue;
+        Color barColor = progressBarAttribute.Color.GetColor();
+        Color labelColor = Color.white;
 
-        var indentLength = NaughtyEditorGUI.GetIndentLength(rect);
+        float indentLength = NaughtyEditorGUI.GetIndentLength(rect);
         Rect barRect = new Rect()
         {
           x = rect.x + indentLength,
@@ -105,21 +105,21 @@ namespace Fralle.Core
         return;
       }
 
-      var fillRect = new Rect(rect.x, rect.y, rect.width * fillPercent, rect.height);
+      Rect fillRect = new Rect(rect.x, rect.y, rect.width * fillPercent, rect.height);
 
       EditorGUI.DrawRect(rect, new Color(0.13f, 0.13f, 0.13f));
       EditorGUI.DrawRect(fillRect, barColor);
 
       // set alignment and cache the default
-      var align = GUI.skin.label.alignment;
+      TextAnchor align = GUI.skin.label.alignment;
       GUI.skin.label.alignment = TextAnchor.UpperCenter;
 
       // set the color and cache the default
-      var c = GUI.contentColor;
+      Color c = GUI.contentColor;
       GUI.contentColor = labelColor;
 
       // calculate the position
-      var labelRect = new Rect(rect.x, rect.y - 2, rect.width, rect.height);
+      Rect labelRect = new Rect(rect.x, rect.y - 2, rect.width, rect.height);
 
       // draw~
       EditorGUI.DropShadowLabel(labelRect, label);

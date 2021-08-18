@@ -1,4 +1,3 @@
-using Fralle.Core.Extensions;
 using UnityEngine;
 
 namespace Fralle.Core
@@ -52,7 +51,7 @@ namespace Fralle.Core
       else if (team == Team.Team2)
         SetupTeam2();
 
-      foreach (var col in hitboxParent.GetComponentsInChildren<Collider>())
+      foreach (Collider col in hitboxParent.GetComponentsInChildren<Collider>())
         col.gameObject.layer = Hitbox;
 
       targetCollider.gameObject.layer = AllyTeam;
@@ -64,7 +63,7 @@ namespace Fralle.Core
     {
       propBlock = new MaterialPropertyBlock();
       renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
-      foreach (var r in renderers)
+      foreach (SkinnedMeshRenderer r in renderers)
         r.GetPropertyBlock(propBlock);
     }
 
@@ -83,7 +82,7 @@ namespace Fralle.Core
       AttackLayerMask = LayerMask.GetMask(DEFAULT, TEAM2HITBOXES, NPCHITBOXES, CORPSE);
 
       propBlock.SetColor(RendererColor, team1Color);
-      foreach (var r in renderers)
+      foreach (SkinnedMeshRenderer r in renderers)
         r.SetPropertyBlock(propBlock);
     }
 
@@ -102,7 +101,7 @@ namespace Fralle.Core
       AttackLayerMask = LayerMask.GetMask(DEFAULT, TEAM1HITBOXES, NPCHITBOXES, CORPSE);
 
       propBlock.SetColor(RendererColor, team2Color);
-      foreach (var r in renderers)
+      foreach (SkinnedMeshRenderer r in renderers)
         r.SetPropertyBlock(propBlock);
     }
   }

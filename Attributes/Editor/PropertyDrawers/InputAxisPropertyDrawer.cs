@@ -27,20 +27,20 @@ namespace Fralle.Core
 
       if (property.propertyType == SerializedPropertyType.String)
       {
-        var inputManagerAsset = AssetDatabase.LoadAssetAtPath(AssetPath, typeof(object));
-        var inputManager = new SerializedObject(inputManagerAsset);
+        Object inputManagerAsset = AssetDatabase.LoadAssetAtPath(AssetPath, typeof(object));
+        SerializedObject inputManager = new SerializedObject(inputManagerAsset);
 
-        var axesProperty = inputManager.FindProperty(AxesPropertyPath);
-        var axesSet = new HashSet<string>();
+        SerializedProperty axesProperty = inputManager.FindProperty(AxesPropertyPath);
+        HashSet<string> axesSet = new HashSet<string>();
         axesSet.Add("(None)");
 
-        for (var i = 0; i < axesProperty.arraySize; i++)
+        for (int i = 0; i < axesProperty.arraySize; i++)
         {
-          var axis = axesProperty.GetArrayElementAtIndex(i).FindPropertyRelative(NamePropertyPath).stringValue;
+          string axis = axesProperty.GetArrayElementAtIndex(i).FindPropertyRelative(NamePropertyPath).stringValue;
           axesSet.Add(axis);
         }
 
-        var axes = axesSet.ToArray();
+        string[] axes = axesSet.ToArray();
 
         string propertyString = property.stringValue;
         int index = 0;

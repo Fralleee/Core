@@ -28,7 +28,7 @@ namespace Fralle.Core
         return;
       }
 
-      var attribute = PropertyUtility.GetAttribute<CurveRangeAttribute>(property);
+      CurveRangeAttribute attribute = PropertyUtility.GetAttribute<CurveRangeAttribute>(property);
 
       EditorGUI.CurveField(
         rect,

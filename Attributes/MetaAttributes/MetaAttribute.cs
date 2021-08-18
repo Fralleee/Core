@@ -2,7 +2,7 @@
 
 namespace Fralle.Core
 {
-	public class MetaAttribute : Attribute, ICustomAttribute
-	{
-	}
+  public class MetaAttribute : Attribute, ICustomAttribute
+  {
+  }
 }

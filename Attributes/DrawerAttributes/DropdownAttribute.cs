@@ -46,7 +46,7 @@ namespace Fralle.Core
     public static explicit operator DropdownList<object>(DropdownList<T> target)
     {
       DropdownList<object> result = new DropdownList<object>();
-      foreach (var kvp in target)
+      foreach (KeyValuePair<string, object> kvp in target)
       {
         result.Add(kvp.Key, kvp.Value);
       }

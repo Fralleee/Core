@@ -8,8 +8,8 @@ namespace Fralle.Core
   {
     public static int DrawBitMaskField(Rect aPosition, int aMask, System.Type aType, GUIContent aLabel)
     {
-      var itemNames = System.Enum.GetNames(aType);
-      var itemValues = System.Enum.GetValues(aType) as int[];
+      string[] itemNames = System.Enum.GetNames(aType);
+      int[] itemValues = System.Enum.GetValues(aType) as int[];
 
       int val = aMask;
       int maskVal = 0;
@@ -55,7 +55,7 @@ namespace Fralle.Core
   {
     public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label)
     {
-      var typeAttr = attribute as BitMaskAttribute;
+      BitMaskAttribute typeAttr = attribute as BitMaskAttribute;
       // Add the actual int value behind the field name
       label.text = label.text + " (" + prop.intValue + ")";
       prop.intValue = EditorExtension.DrawBitMaskField(position, prop.intValue, typeAttr.propType, label);

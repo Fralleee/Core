@@ -1,9 +1,9 @@
 ﻿namespace Fralle.Core.Audio
 {
-	public enum RepeatMode
-	{
-		Playlist,
-		Track,
-		None
-	}
+  public enum RepeatMode
+  {
+    Playlist,
+    Track,
+    None
+  }
 }
