@@ -1,19 +1,18 @@
 ﻿using Fralle.Core.CameraControls;
-using Fralle.PingTap;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fralle.Core
 {
-  public class ShakeTransform : Transformer
+  public class ShakeTransformer : LocalTransformer, IRotator, IPositioner
   {
     readonly List<ShakeEvent> shakeEvents = new List<ShakeEvent>();
 
     Vector3 currentPosition = Vector3.zero;
     Quaternion currentRotation = Quaternion.identity;
 
-    public override Vector3 GetPosition() => currentPosition;
-    public override Quaternion GetRotation() => currentRotation;
+    public Vector3 GetPosition() => currentPosition;
+    public Quaternion GetRotation() => currentRotation;
     public override void Calculate()
     {
       Vector3 positionOffset = Vector3.zero;
