@@ -200,7 +200,7 @@ namespace Fralle.Core.Pooling
       GameObject obj = null;
       if (!PoolBlock.Prefab)
       {
-        Debug.LogWarning("SOMETHING WENT VERY WRONG");
+        Debug.LogWarning($"SOMETHING WENT VERY WRONG: {name}");
         return obj;
       }
 
