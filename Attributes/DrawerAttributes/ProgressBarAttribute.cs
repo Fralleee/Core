@@ -2,13 +2,13 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class ProgressBarAttribute : DrawerAttribute
   {
-    public string Name { get; private set; }
+    public string Name { get; }
     public float MaxValue { get; set; }
-    public string MaxValueName { get; private set; }
-    public EColor Color { get; private set; }
+    public string MaxValueName { get; }
+    public EColor Color { get; }
 
     public ProgressBarAttribute(string name, float maxValue, EColor color = EColor.Blue)
     {

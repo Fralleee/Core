@@ -37,8 +37,7 @@ namespace Fralle.Core.AI
       CurrentState = state;
 
       transitions.TryGetValue(CurrentState.Identifier, out currentTransitions);
-      if (currentTransitions == null)
-        currentTransitions = EmptyTransitions;
+      currentTransitions ??= EmptyTransitions;
 
       CurrentState.OnEnter();
       CurrentStateTime = 0f;
@@ -47,22 +46,17 @@ namespace Fralle.Core.AI
 
     public void AddTransition(IState<T> from, IState<T> to, Func<bool> predicate)
     {
-      if (!this.transitions.TryGetValue(from.Identifier, out List<Transition<T>> transitions))
+      if (!transitions.TryGetValue(from.Identifier, out List<Transition<T>> outTransitions))
       {
-        transitions = new List<Transition<T>>();
-        this.transitions[from.Identifier] = transitions;
+        outTransitions = new List<Transition<T>>();
+        transitions[from.Identifier] = outTransitions;
       }
 
-      transitions.Add(new Transition<T>(to, predicate));
+      outTransitions.Add(new Transition<T>(to, predicate));
     }
 
 
     public void At(IState<T> to, IState<T> from, Func<bool> condition) => AddTransition(to, from, condition);
-
-    public void AddAnyTransition(IState<T> state, Func<bool> predicate)
-    {
-      anyTransitions.Add(new Transition<T>(state, predicate));
-    }
 
     Transition<T> GetTransition => anyTransitions.FirstOrDefault(t => t.Condition()) ?? currentTransitions.FirstOrDefault(t => t.Condition());
   }

@@ -43,7 +43,7 @@ namespace Fralle.Core
 
           if (fieldType == parameterType)
           {
-            if (!(bool)validationCallback.Invoke(target, new object[] { fieldInfo.GetValue(target) }))
+            if (!(bool)validationCallback.Invoke(target, new[] { fieldInfo.GetValue(target) }))
             {
               if (string.IsNullOrEmpty(validateInputAttribute.Message))
               {

@@ -40,15 +40,10 @@ namespace Fralle.Core
 
     protected abstract void OnGUI_Internal(Rect rect, SerializedProperty property, GUIContent label);
 
-    sealed override public float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    public sealed override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
       bool visible = PropertyUtility.IsVisible(property);
-      if (!visible)
-      {
-        return 0.0f;
-      }
-
-      return GetPropertyHeight_Internal(property, label);
+      return !visible ? 0.0f : GetPropertyHeight_Internal(property, label);
     }
 
     protected virtual float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label)
@@ -59,12 +54,7 @@ namespace Fralle.Core
     protected float GetPropertyHeight(SerializedProperty property)
     {
       SpecialCaseDrawerAttribute specialCaseAttribute = PropertyUtility.GetAttribute<SpecialCaseDrawerAttribute>(property);
-      if (specialCaseAttribute != null)
-      {
-        return specialCaseAttribute.GetDrawer().GetPropertyHeight(property);
-      }
-
-      return EditorGUI.GetPropertyHeight(property, includeChildren: true);
+      return specialCaseAttribute?.GetDrawer().GetPropertyHeight(property) ?? EditorGUI.GetPropertyHeight(property, includeChildren: true);
     }
 
     public virtual float GetHelpBoxHeight()

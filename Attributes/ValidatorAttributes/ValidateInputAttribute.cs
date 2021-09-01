@@ -2,11 +2,11 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class ValidateInputAttribute : ValidatorAttribute
   {
-    public string CallbackName { get; private set; }
-    public string Message { get; private set; }
+    public string CallbackName { get; }
+    public string Message { get; }
 
     public ValidateInputAttribute(string callbackName, string message = null)
     {

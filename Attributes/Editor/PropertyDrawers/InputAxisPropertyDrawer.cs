@@ -31,8 +31,7 @@ namespace Fralle.Core
         SerializedObject inputManager = new SerializedObject(inputManagerAsset);
 
         SerializedProperty axesProperty = inputManager.FindProperty(AxesPropertyPath);
-        HashSet<string> axesSet = new HashSet<string>();
-        axesSet.Add("(None)");
+        HashSet<string> axesSet = new HashSet<string> { "(None)" };
 
         for (int i = 0; i < axesProperty.arraySize; i++)
         {
@@ -68,7 +67,7 @@ namespace Fralle.Core
       }
       else
       {
-        string message = string.Format("{0} supports only string fields", typeof(InputAxisAttribute).Name);
+        string message = $"{nameof(InputAxisAttribute)} supports only string fields";
         DrawDefaultPropertyAndHelpBox(rect, property, message, MessageType.Warning);
       }
 

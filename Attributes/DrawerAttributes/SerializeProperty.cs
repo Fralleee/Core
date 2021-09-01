@@ -57,7 +57,7 @@ namespace Fralle.Core
       }
     }
 
-    object DrawProperty(Rect position, SerializedPropertyType propertyType, Type type, object value, GUIContent label)
+    static object DrawProperty(Rect position, SerializedPropertyType propertyType, Type type, object value, GUIContent label)
     {
       switch (propertyType)
       {

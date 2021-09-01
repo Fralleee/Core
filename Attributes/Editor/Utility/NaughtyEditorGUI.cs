@@ -156,7 +156,7 @@ namespace Fralle.Core
         bool methodIsCoroutine = methodInfo.ReturnType == typeof(IEnumerator);
         if (methodIsCoroutine)
         {
-          buttonEnabled &= (Application.isPlaying ? true : false);
+          buttonEnabled &= (Application.isPlaying);
         }
 
         EditorGUI.BeginDisabledGroup(!buttonEnabled);
@@ -164,7 +164,6 @@ namespace Fralle.Core
         if (GUILayout.Button(buttonText, ButtonStyle))
         {
           object[] defaultParams = methodInfo.GetParameters().Select(p => p.DefaultValue).ToArray();
-          IEnumerator methodResult = methodInfo.Invoke(target, defaultParams) as IEnumerator;
 
           if (!Application.isPlaying)
           {
@@ -183,7 +182,7 @@ namespace Fralle.Core
               EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             }
           }
-          else if (methodResult != null && target is MonoBehaviour behaviour)
+          else if (methodInfo.Invoke(target, defaultParams) is IEnumerator methodResult && target is MonoBehaviour behaviour)
           {
             behaviour.StartCoroutine(methodResult);
           }
@@ -193,7 +192,7 @@ namespace Fralle.Core
       }
       else
       {
-        string warning = typeof(ButtonAttribute).Name + " works only on methods with no parameters";
+        string warning = nameof(ButtonAttribute) + " works only on methods with no parameters";
         HelpBox_Layout(warning, MessageType.Warning, context: target, logToConsole: true);
       }
     }
@@ -204,12 +203,14 @@ namespace Fralle.Core
 
       if (value == null)
       {
-        string warning = string.Format("{0} is null. {1} doesn't support reference types with null value", property.Name, typeof(ShowNativePropertyAttribute).Name);
+        string warning =
+          $"{property.Name} is null. {nameof(ShowNativePropertyAttribute)} doesn't support reference types with null value";
         HelpBox_Layout(warning, MessageType.Warning, context: target);
       }
       else if (!Field_Layout(value, property.Name))
       {
-        string warning = string.Format("{0} doesn't support {1} types", typeof(ShowNativePropertyAttribute).Name, property.PropertyType.Name);
+        string warning =
+          $"{nameof(ShowNativePropertyAttribute)} doesn't support {property.PropertyType.Name} types";
         HelpBox_Layout(warning, MessageType.Warning, context: target);
       }
     }
@@ -220,12 +221,13 @@ namespace Fralle.Core
 
       if (value == null)
       {
-        string warning = string.Format("{0} is null. {1} doesn't support reference types with null value", field.Name, typeof(ShowNonSerializedFieldAttribute).Name);
+        string warning =
+          $"{field.Name} is null. {nameof(ShowNonSerializedFieldAttribute)} doesn't support reference types with null value";
         HelpBox_Layout(warning, MessageType.Warning, context: target);
       }
       else if (!Field_Layout(value, field.Name))
       {
-        string warning = string.Format("{0} doesn't support {1} types", typeof(ShowNonSerializedFieldAttribute).Name, field.FieldType.Name);
+        string warning = $"{nameof(ShowNonSerializedFieldAttribute)} doesn't support {field.FieldType.Name} types";
         HelpBox_Layout(warning, MessageType.Warning, context: target);
       }
     }
@@ -347,7 +349,7 @@ namespace Fralle.Core
         {
           EditorGUILayout.EnumPopup(label, (Enum)value);
         }
-        else if (valueType.BaseType == typeof(System.Reflection.TypeInfo))
+        else if (valueType.BaseType == typeof(TypeInfo))
         {
           EditorGUILayout.TextField(label, value.ToString());
         }

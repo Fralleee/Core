@@ -2,10 +2,10 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class RequiredAttribute : ValidatorAttribute
   {
-    public string Message { get; private set; }
+    public string Message { get; }
 
     public RequiredAttribute(string message = null)
     {

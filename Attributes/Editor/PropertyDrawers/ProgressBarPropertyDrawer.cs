@@ -24,14 +24,14 @@ namespace Fralle.Core
 
       if (!IsNumber(property))
       {
-        string message = string.Format("Field {0} is not a number", property.name);
+        string message = $"Field {property.name} is not a number";
         DrawDefaultPropertyAndHelpBox(rect, property, message, MessageType.Warning);
         return;
       }
 
       ProgressBarAttribute progressBarAttribute = PropertyUtility.GetAttribute<ProgressBarAttribute>(property);
       float value = property.propertyType == SerializedPropertyType.Integer ? property.intValue : property.floatValue;
-      string valueFormatted = property.propertyType == SerializedPropertyType.Integer ? value.ToString() : string.Format("{0:0.00}", value);
+      string valueFormatted = property.propertyType == SerializedPropertyType.Integer ? value.ToString() : $"{value:0.00}";
       object maxValue = GetMaxValue(property, progressBarAttribute);
 
       if (maxValue != null && IsNumber(maxValue))
@@ -54,9 +54,8 @@ namespace Fralle.Core
       }
       else
       {
-        string message = string.Format(
-          "The provided dynamic max value for the progress bar is not correct. Please check if the '{0}' is correct, or the return type is float/int",
-          nameof(progressBarAttribute.MaxValueName));
+        string message =
+          $"The provided dynamic max value for the progress bar is not correct. Please check if the '{nameof(progressBarAttribute.MaxValueName)}' is correct, or the return type is float/int";
 
         DrawDefaultPropertyAndHelpBox(rect, property, message, MessageType.Warning);
       }
@@ -142,9 +141,9 @@ namespace Fralle.Core
 
     private float CastToFloat(object obj)
     {
-      if (obj is int)
+      if (obj is int i)
       {
-        return (int)obj;
+        return i;
       }
       else
       {

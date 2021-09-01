@@ -8,7 +8,7 @@ namespace Fralle.Core.Pooling
   {
     [FormerlySerializedAs("PoolBlock")] public PoolBlock poolBlock;
 
-    [HideInInspector] public Stack<PoolItem> PoolStack;
+    public Stack<PoolItem> PoolStack;
     [FormerlySerializedAs("MasterPool")] [HideInInspector] public List<PoolItem> masterPool; // only used when using EmptyBehavior.ReuseOldest
 
     int addedObjects;
@@ -198,14 +198,13 @@ namespace Fralle.Core.Pooling
 
     public GameObject CreateObject(bool createInPool)
     { // true when creating an item in the pool without spawing it
-      GameObject obj = null;
       if (!poolBlock.prefab)
       {
         Debug.LogWarning($"SOMETHING WENT VERY WRONG: {name}");
-        return obj;
+        return null;
       }
 
-      obj = Instantiate(poolBlock.prefab, transform.position, transform.rotation);
+      var obj = Instantiate(poolBlock.prefab, transform.position, transform.rotation);
       PooledObject oprScript = obj.GetComponent<PooledObject>();
       if (oprScript == null)
       { oprScript = obj.AddComponent<PooledObject>(); }

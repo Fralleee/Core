@@ -2,10 +2,10 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
   public class ValueChangedAttribute : MetaAttribute
   {
-    public string CallbackName { get; private set; }
+    public string CallbackName { get; }
 
     public ValueChangedAttribute(string callbackName)
     {

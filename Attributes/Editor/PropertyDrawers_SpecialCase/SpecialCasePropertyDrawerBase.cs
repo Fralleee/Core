@@ -55,14 +55,15 @@ namespace Fralle.Core
 
     static SpecialCaseDrawerAttributeExtensions()
     {
-      DrawersByAttributeType = new Dictionary<Type, SpecialCasePropertyDrawerBase>();
-      DrawersByAttributeType[typeof(ReorderableListAttribute)] = ReorderableListPropertyDrawer.Instance;
+      DrawersByAttributeType = new Dictionary<Type, SpecialCasePropertyDrawerBase>
+      {
+        [typeof(ReorderableListAttribute)] = ReorderableListPropertyDrawer.Instance
+      };
     }
 
     public static SpecialCasePropertyDrawerBase GetDrawer(this SpecialCaseDrawerAttribute attr)
     {
-      SpecialCasePropertyDrawerBase drawer;
-      if (DrawersByAttributeType.TryGetValue(attr.GetType(), out drawer))
+      if (DrawersByAttributeType.TryGetValue(attr.GetType(), out var drawer))
       {
         return drawer;
       }

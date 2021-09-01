@@ -16,17 +16,18 @@ namespace Fralle.Core
 
     static ValidatorAttributeExtensions()
     {
-      ValidatorsByAttributeType = new Dictionary<Type, PropertyValidatorBase>();
-      ValidatorsByAttributeType[typeof(MinValueAttribute)] = new MinValuePropertyValidator();
-      ValidatorsByAttributeType[typeof(MaxValueAttribute)] = new MaxValuePropertyValidator();
-      ValidatorsByAttributeType[typeof(RequiredAttribute)] = new RequiredPropertyValidator();
-      ValidatorsByAttributeType[typeof(ValidateInputAttribute)] = new ValidateInputPropertyValidator();
+      ValidatorsByAttributeType = new Dictionary<Type, PropertyValidatorBase>
+      {
+        [typeof(MinValueAttribute)] = new MinValuePropertyValidator(),
+        [typeof(MaxValueAttribute)] = new MaxValuePropertyValidator(),
+        [typeof(RequiredAttribute)] = new RequiredPropertyValidator(),
+        [typeof(ValidateInputAttribute)] = new ValidateInputPropertyValidator()
+      };
     }
 
     public static PropertyValidatorBase GetValidator(this ValidatorAttribute attr)
     {
-      PropertyValidatorBase validator;
-      if (ValidatorsByAttributeType.TryGetValue(attr.GetType(), out validator))
+      if (ValidatorsByAttributeType.TryGetValue(attr.GetType(), out var validator))
       {
         return validator;
       }

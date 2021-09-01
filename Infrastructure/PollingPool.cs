@@ -19,7 +19,7 @@ namespace Fralle.Core.Infrastructure
       this.prefab = prefab;
       if (preWarm <= 0)
         return;
-      foreach (T item in Enumerable.Range(0, preWarm).Select((i, index) => Object.Instantiate(prefab)))
+      foreach (T item in Enumerable.Range(0, preWarm).Select((a, b) => Object.Instantiate(prefab)))
       {
         item.gameObject.SetActive(true);
         pool.Enqueue(item);
@@ -45,15 +45,13 @@ namespace Fralle.Core.Infrastructure
 
     protected T Get()
     {
-      T item;
-
       if (lastCheckFrame != Time.frameCount)
       {
         lastCheckFrame = Time.frameCount;
         CheckInUse();
       }
 
-      item = pool.Count == 0 ? Object.Instantiate(prefab) : pool.Dequeue();
+      var item = pool.Count == 0 ? Object.Instantiate(prefab) : pool.Dequeue();
 
       if (nodePool.Count == 0)
         inuse.AddLast(item);

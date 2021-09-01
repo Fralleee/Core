@@ -29,7 +29,7 @@ namespace Fralle.Core.Pooling
       {
         if (pool.poolBlock.prefab == null)
           continue;
-        else if (PoolRef.ContainsKey(pool.poolBlock.prefab))
+        if (PoolRef.ContainsKey(pool.poolBlock.prefab))
           Debug.LogWarning($"Already found pool for {pool.poolBlock.prefab}.");
         else
           PoolRef.Add(pool.poolBlock.prefab, pool);
@@ -81,10 +81,11 @@ namespace Fralle.Core.Pooling
       PoolRef[obj].poolBlock.maxSize = PoolRef[obj].poolBlock.size * 2;
       if (!modBehavior)
         return true;
+
       PoolRef[obj].poolBlock.emptyBehavior = emptyBehavior;
       PoolRef[obj].poolBlock.maxEmptyBehavior = maxEmptyBehavior;
 
-      return result;
+      return true;
     }
 
     public GameObject Spawn(GameObject obj, int? child, Vector3 pos, Quaternion rot, bool usePosRot, Transform parent)
@@ -136,7 +137,6 @@ namespace Fralle.Core.Pooling
 
     public bool RemoveAll()
     {
-      bool result = true;
       GameObject[] tempObj = new GameObject[PoolRef.Count];
       int i = 0;
       foreach (GameObject obj in PoolRef.Keys)
@@ -151,7 +151,7 @@ namespace Fralle.Core.Pooling
         if (tempObj[t] != null && !RemovePool(tempObj[t]))
           return false;
       }
-      return result;
+      return true;
     }
 
     public bool DespawnAll()

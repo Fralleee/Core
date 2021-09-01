@@ -4,36 +4,31 @@ namespace Fralle.Core
 {
   public abstract class EnableIfAttributeBase : MetaAttribute
   {
-    public string[] Conditions { get; private set; }
-    public EConditionOperator ConditionOperator { get; private set; }
+    public string[] Conditions { get; }
+    public EConditionOperator ConditionOperator { get; }
     public bool Inverted { get; protected set; }
 
     /// <summary>
     ///		If this not null, <see cref="Conditions"/>[0] is name of an enum variable.
     /// </summary>
-    public Enum EnumValue { get; private set; }
+    public Enum EnumValue { get; }
 
-    public EnableIfAttributeBase(string condition)
+    protected EnableIfAttributeBase(string condition)
     {
       ConditionOperator = EConditionOperator.And;
-      Conditions = new string[1] { condition };
+      Conditions = new[] { condition };
     }
 
-    public EnableIfAttributeBase(EConditionOperator conditionOperator, params string[] conditions)
+    protected EnableIfAttributeBase(EConditionOperator conditionOperator, params string[] conditions)
     {
       ConditionOperator = conditionOperator;
       Conditions = conditions;
     }
 
-    public EnableIfAttributeBase(string enumName, Enum enumValue)
+    protected EnableIfAttributeBase(string enumName, Enum enumValue)
       : this(enumName)
     {
-      if (enumValue == null)
-      {
-        throw new ArgumentNullException(nameof(enumValue), "This parameter must be an enum value.");
-      }
-
-      EnumValue = enumValue;
+      EnumValue = enumValue ?? throw new ArgumentNullException(nameof(enumValue), "This parameter must be an enum value.");
     }
   }
 }

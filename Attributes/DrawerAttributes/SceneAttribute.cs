@@ -2,7 +2,7 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class SceneAttribute : DrawerAttribute
   {
   }

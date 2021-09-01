@@ -24,7 +24,7 @@ namespace Fralle.Core.Infrastructure
 
         GameObject singletonObject = new GameObject();
         LocalInstance = singletonObject.AddComponent<T>();
-        singletonObject.name = typeof(T).ToString() + " (Singleton)";
+        singletonObject.name = typeof(T) + " (Singleton)";
 
         DontDestroyOnLoad(singletonObject);
 

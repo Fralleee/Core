@@ -55,17 +55,15 @@ namespace Fralle.Core
     protected void GetSerializedProperties(ref List<SerializedProperty> outSerializedProperties)
     {
       outSerializedProperties.Clear();
-      using (SerializedProperty iterator = serializedObject.GetIterator())
+      using SerializedProperty iterator = serializedObject.GetIterator();
+      if (!iterator.NextVisible(true))
+        return;
+
+      do
       {
-        if (iterator.NextVisible(true))
-        {
-          do
-          {
-            outSerializedProperties.Add(serializedObject.FindProperty(iterator.name));
-          }
-          while (iterator.NextVisible(false));
-        }
+        outSerializedProperties.Add(serializedObject.FindProperty(iterator.name));
       }
+      while (iterator.NextVisible(false));
     }
 
     protected void DrawSerializedProperties()
@@ -91,14 +89,15 @@ namespace Fralle.Core
       // Draw grouped serialized properties
       foreach (IGrouping<string, SerializedProperty> group in GetGroupedProperties(serializedProperties))
       {
-        IEnumerable<SerializedProperty> visibleProperties = group.Where(p => PropertyUtility.IsVisible(p));
-        if (!visibleProperties.Any())
+        IEnumerable<SerializedProperty> visibleProperties = group.Where(PropertyUtility.IsVisible);
+        IEnumerable<SerializedProperty> properties = visibleProperties as SerializedProperty[] ?? visibleProperties.ToArray();
+        if (!properties.Any())
         {
           continue;
         }
 
         NaughtyEditorGui.BeginBoxGroup_Layout(group.Key);
-        foreach (SerializedProperty property in visibleProperties)
+        foreach (SerializedProperty property in properties)
         {
           NaughtyEditorGui.PropertyField_Layout(property, includeChildren: true);
         }
@@ -109,8 +108,9 @@ namespace Fralle.Core
       // Draw foldout serialized properties
       foreach (IGrouping<string, SerializedProperty> group in GetFoldoutProperties(serializedProperties))
       {
-        IEnumerable<SerializedProperty> visibleProperties = group.Where(p => PropertyUtility.IsVisible(p));
-        if (!visibleProperties.Any())
+        IEnumerable<SerializedProperty> visibleProperties = group.Where(PropertyUtility.IsVisible);
+        IEnumerable<SerializedProperty> properties = visibleProperties as SerializedProperty[] ?? visibleProperties.ToArray();
+        if (!properties.Any())
         {
           continue;
         }
@@ -123,7 +123,7 @@ namespace Fralle.Core
         foldouts[group.Key].Value = EditorGUILayout.Foldout(foldouts[group.Key].Value, group.Key, true);
         if (foldouts[group.Key].Value)
         {
-          foreach (SerializedProperty property in visibleProperties)
+          foreach (SerializedProperty property in properties)
           {
             NaughtyEditorGui.PropertyField_Layout(property, true);
           }
@@ -154,20 +154,19 @@ namespace Fralle.Core
 
     protected void DrawNativeProperties(bool drawHeader = false)
     {
-      if (nativeProperties.Any())
+      if (!nativeProperties.Any())
+        return;
+      if (drawHeader)
       {
-        if (drawHeader)
-        {
-          EditorGUILayout.Space();
-          EditorGUILayout.LabelField("Native Properties", GetHeaderGuiStyle());
-          NaughtyEditorGui.HorizontalLine(
-            EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
-        }
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Native Properties", GetHeaderGuiStyle());
+        NaughtyEditorGui.HorizontalLine(
+          EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
+      }
 
-        foreach (PropertyInfo property in nativeProperties)
-        {
-          NaughtyEditorGui.NativeProperty_Layout(serializedObject.targetObject, property);
-        }
+      foreach (PropertyInfo property in nativeProperties)
+      {
+        NaughtyEditorGui.NativeProperty_Layout(serializedObject.targetObject, property);
       }
     }
 
@@ -211,10 +210,7 @@ namespace Fralle.Core
 
     private static GUIStyle GetHeaderGuiStyle()
     {
-      GUIStyle style = new GUIStyle(EditorStyles.centeredGreyMiniLabel);
-      style.fontStyle = FontStyle.Bold;
-      style.alignment = TextAnchor.UpperCenter;
-
+      GUIStyle style = new GUIStyle(EditorStyles.centeredGreyMiniLabel) { fontStyle = FontStyle.Bold, alignment = TextAnchor.UpperCenter };
       return style;
     }
   }

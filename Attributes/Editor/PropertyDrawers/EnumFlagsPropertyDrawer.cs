@@ -10,9 +10,7 @@ namespace Fralle.Core
   {
     protected override float GetPropertyHeight_Internal(SerializedProperty property, GUIContent label)
     {
-      Enum targetEnum = PropertyUtility.GetTargetObjectOfProperty(property) as Enum;
-
-      return (targetEnum != null)
+      return (PropertyUtility.GetTargetObjectOfProperty(property) is Enum)
         ? GetPropertyHeight(property)
         : GetPropertyHeight(property) + GetHelpBoxHeight();
     }
@@ -21,8 +19,7 @@ namespace Fralle.Core
     {
       EditorGUI.BeginProperty(rect, label, property);
 
-      Enum targetEnum = PropertyUtility.GetTargetObjectOfProperty(property) as Enum;
-      if (targetEnum != null)
+      if (PropertyUtility.GetTargetObjectOfProperty(property) is Enum targetEnum)
       {
         Enum enumNew = EditorGUI.EnumFlagsField(rect, label.text, targetEnum);
         property.intValue = (int)Convert.ChangeType(enumNew, targetEnum.GetType());

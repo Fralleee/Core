@@ -25,38 +25,36 @@ namespace Fralle.Core
 
         if (property.isExpanded)
         {
-          using (SerializedObject serializedObject = new SerializedObject(scriptableObject))
+          using SerializedObject serializedObject = new SerializedObject(scriptableObject);
+          float totalHeight = EditorGUIUtility.singleLineHeight;
+
+          using (SerializedProperty iterator = serializedObject.GetIterator())
           {
-            float totalHeight = EditorGUIUtility.singleLineHeight;
-
-            using (SerializedProperty iterator = serializedObject.GetIterator())
+            if (iterator.NextVisible(true))
             {
-              if (iterator.NextVisible(true))
+              do
               {
-                do
+                SerializedProperty childProperty = serializedObject.FindProperty(iterator.name);
+                if (childProperty.name.Equals("m_Script", System.StringComparison.Ordinal))
                 {
-                  SerializedProperty childProperty = serializedObject.FindProperty(iterator.name);
-                  if (childProperty.name.Equals("m_Script", System.StringComparison.Ordinal))
-                  {
-                    continue;
-                  }
-
-                  bool visible = PropertyUtility.IsVisible(childProperty);
-                  if (!visible)
-                  {
-                    continue;
-                  }
-
-                  float height = GetPropertyHeight(childProperty);
-                  totalHeight += height;
+                  continue;
                 }
-                while (iterator.NextVisible(false));
-              }
-            }
 
-            totalHeight += EditorGUIUtility.standardVerticalSpacing;
-            return totalHeight;
+                bool visible = PropertyUtility.IsVisible(childProperty);
+                if (!visible)
+                {
+                  continue;
+                }
+
+                float height = GetPropertyHeight(childProperty);
+                totalHeight += height;
+              }
+              while (iterator.NextVisible(false));
+            }
           }
+
+          totalHeight += EditorGUIUtility.standardVerticalSpacing;
+          return totalHeight;
         }
         else
         {
@@ -122,7 +120,7 @@ namespace Fralle.Core
         }
         else
         {
-          string message = $"{typeof(ExpandableAttribute).Name} can only be used on scriptable objects";
+          string message = $"{nameof(ExpandableAttribute)} can only be used on scriptable objects";
           DrawDefaultPropertyAndHelpBox(rect, property, message, MessageType.Warning);
         }
       }

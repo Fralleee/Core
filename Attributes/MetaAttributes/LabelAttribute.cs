@@ -2,10 +2,10 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class LabelAttribute : MetaAttribute
   {
-    public string Label { get; private set; }
+    public string Label { get; }
 
     public LabelAttribute(string label)
     {

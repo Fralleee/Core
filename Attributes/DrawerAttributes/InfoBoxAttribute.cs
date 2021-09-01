@@ -9,11 +9,11 @@ namespace Fralle.Core
     Error
   }
 
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
   public class InfoBoxAttribute : DrawerAttribute
   {
-    public string Text { get; private set; }
-    public EInfoBoxType Type { get; private set; }
+    public string Text { get; }
+    public EInfoBoxType Type { get; }
 
     public InfoBoxAttribute(string text, EInfoBoxType type = EInfoBoxType.Normal)
     {

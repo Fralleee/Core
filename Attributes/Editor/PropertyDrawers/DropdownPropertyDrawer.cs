@@ -15,9 +15,9 @@ namespace Fralle.Core
     {
       DropdownAttribute dropdownAttribute = (DropdownAttribute)attribute;
       object values = GetValues(property, dropdownAttribute.ValuesName);
-      FieldInfo fieldInfo = ReflectionUtility.GetField(PropertyUtility.GetTargetObjectWithProperty(property), property.name);
+      FieldInfo fi = ReflectionUtility.GetField(PropertyUtility.GetTargetObjectWithProperty(property), property.name);
 
-      float propertyHeight = AreValuesValid(values, fieldInfo)
+      float propertyHeight = AreValuesValid(values, fi)
         ? GetPropertyHeight(property)
         : GetPropertyHeight(property) + GetHelpBoxHeight();
 
@@ -36,13 +36,12 @@ namespace Fralle.Core
 
       if (AreValuesValid(valuesObject, dropdownField))
       {
-        if (valuesObject is IList && dropdownField.FieldType == GetElementType(valuesObject))
+        if (valuesObject is IList valuesList && dropdownField.FieldType == GetElementType(valuesList))
         {
           // Selected value
           object selectedValue = dropdownField.GetValue(target);
 
           // Values and display options
-          IList valuesList = (IList)valuesObject;
           object[] values = new object[valuesList.Count];
           string[] displayOptions = new string[valuesList.Count];
 
@@ -63,7 +62,7 @@ namespace Fralle.Core
           NaughtyEditorGui.Dropdown(
             rect, property.serializedObject, target, dropdownField, label.text, selectedValueIndex, values, displayOptions);
         }
-        else if (valuesObject is IDropdownList)
+        else if (valuesObject is IDropdownList dropdown)
         {
           // Current value
           object selectedValue = dropdownField.GetValue(target);
@@ -73,7 +72,6 @@ namespace Fralle.Core
           int selectedValueIndex = -1;
           List<object> values = new List<object>();
           List<string> displayOptions = new List<string>();
-          IDropdownList dropdown = (IDropdownList)valuesObject;
 
           using (IEnumerator<KeyValuePair<string, object>> dropdownEnumerator = dropdown.GetEnumerator())
           {
@@ -115,8 +113,8 @@ namespace Fralle.Core
       }
       else
       {
-        string message = string.Format("Invalid values with name '{0}' provided to '{1}'. Either the values name is incorrect or the types of the target field and the values field/property/method don't match",
-          dropdownAttribute.ValuesName, dropdownAttribute.GetType().Name);
+        string message =
+          $"Invalid values with name '{dropdownAttribute.ValuesName}' provided to '{dropdownAttribute.GetType().Name}'. Either the values name is incorrect or the types of the target field and the values field/property/method don't match";
 
         DrawDefaultPropertyAndHelpBox(rect, property, message, MessageType.Warning);
       }

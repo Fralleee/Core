@@ -58,7 +58,7 @@ namespace Fralle.Core
       }
       else
       {
-        string message = typeof(ResizableTextAreaAttribute).Name + " can only be used on string fields";
+        string message = nameof(ResizableTextAreaAttribute) + " can only be used on string fields";
         DrawDefaultPropertyAndHelpBox(rect, property, message, MessageType.Warning);
       }
 
@@ -68,7 +68,7 @@ namespace Fralle.Core
     private int GetNumberOfLines(string text)
     {
       string content = Regex.Replace(text, @"\r\n|\n\r|\r|\n", Environment.NewLine);
-      string[] lines = content.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
+      string[] lines = content.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
       return lines.Length;
     }
 

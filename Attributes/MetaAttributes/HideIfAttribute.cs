@@ -2,7 +2,7 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method)]
   public class HideIfAttribute : ShowIfAttributeBase
   {
     public HideIfAttribute(string condition)

@@ -16,17 +16,21 @@ namespace Fralle.Core
     Vector3 initPosition;
     Quaternion initRotation;
 
+    Transform aggTransform;
+
     void Awake()
     {
-      initPosition = transform.localPosition;
-      initRotation = transform.localRotation;
+      aggTransform = transform;
+
+      initPosition = aggTransform.localPosition;
+      initRotation = aggTransform.localRotation;
 
       masterPositioner = GetComponent<MasterPositioner>();
       masterRotator = GetComponent<MasterRotator>();
       localTransformers = GetComponents<LocalTransformer>();
 
-      rotators = localTransformers.Where(x => x is IRotator).Select(x => (IRotator)x).ToArray();
-      positioners = localTransformers.Where(x => x is IPositioner).Select(x => (IPositioner)x).ToArray();
+      rotators = localTransformers.OfType<IRotator>().ToArray();
+      positioners = localTransformers.OfType<IPositioner>().ToArray();
     }
 
     void Update()
@@ -50,19 +54,19 @@ namespace Fralle.Core
 
       if (masterPositioner)
       {
-        transform.position = masterPositioner.GetPosition();
-        transform.localPosition += combinedPosition;
+        aggTransform.position = masterPositioner.GetPosition();
+        aggTransform.localPosition += combinedPosition;
       }
       else
-        transform.localPosition = initPosition + combinedPosition;
+        aggTransform.localPosition = initPosition + combinedPosition;
 
       if (masterRotator)
       {
-        transform.rotation = masterRotator.GetRotation();
-        transform.localRotation *= combinedRotation;
+        aggTransform.rotation = masterRotator.GetRotation();
+        aggTransform.localRotation *= combinedRotation;
       }
       else
-        transform.localRotation = initRotation * combinedRotation;
+        aggTransform.localRotation = initRotation * combinedRotation;
     }
   }
 }

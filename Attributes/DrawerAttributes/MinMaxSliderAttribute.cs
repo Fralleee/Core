@@ -2,11 +2,11 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class MinMaxSliderAttribute : DrawerAttribute
   {
-    public float MinValue { get; private set; }
-    public float MaxValue { get; private set; }
+    public float MinValue { get; }
+    public float MaxValue { get; }
 
     public MinMaxSliderAttribute(float minValue, float maxValue)
     {

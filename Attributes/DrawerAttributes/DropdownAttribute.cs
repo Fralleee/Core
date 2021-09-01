@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class DropdownAttribute : DrawerAttribute
   {
-    public string ValuesName { get; private set; }
+    public string ValuesName { get; }
 
     public DropdownAttribute(string valuesName)
     {

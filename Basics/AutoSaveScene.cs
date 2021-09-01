@@ -15,7 +15,7 @@ namespace Fralle.Core
     {
 
 #if UNITY_2017_2_OR_NEWER
-      EditorApplication.playModeStateChanged += (PlayModeStateChange stateChange) =>
+      EditorApplication.playModeStateChanged += stateChange =>
       {
         if (stateChange == PlayModeStateChange.ExitingEditMode)
         {

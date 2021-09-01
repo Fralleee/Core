@@ -7,10 +7,7 @@ namespace Fralle.Core
   {
     [SerializeField]
     private int layerIndex = 0;
-    public int LayerIndex
-    {
-      get { return layerIndex; }
-    }
+    public int LayerIndex => layerIndex;
 
     public void Set(int index)
     {

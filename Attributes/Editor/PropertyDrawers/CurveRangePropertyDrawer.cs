@@ -23,18 +23,18 @@ namespace Fralle.Core
       // Check user error
       if (property.propertyType != SerializedPropertyType.AnimationCurve)
       {
-        string message = string.Format("Field {0} is not an AnimationCurve", property.name);
+        string message = $"Field {property.name} is not an AnimationCurve";
         DrawDefaultPropertyAndHelpBox(rect, property, message, MessageType.Warning);
         return;
       }
 
-      CurveRangeAttribute attribute = PropertyUtility.GetAttribute<CurveRangeAttribute>(property);
+      CurveRangeAttribute curveRangeAttribute = PropertyUtility.GetAttribute<CurveRangeAttribute>(property);
 
       EditorGUI.CurveField(
         rect,
         property,
-        attribute.Color == EColor.Clear ? Color.green : attribute.Color.GetColor(),
-        new Rect(attribute.Min.x, attribute.Min.y, attribute.Max.x - attribute.Min.x, attribute.Max.y - attribute.Min.y),
+        curveRangeAttribute.Color == EColor.Clear ? Color.green : curveRangeAttribute.Color.GetColor(),
+        new Rect(curveRangeAttribute.Min.x, curveRangeAttribute.Min.y, curveRangeAttribute.Max.x - curveRangeAttribute.Min.x, curveRangeAttribute.Max.y - curveRangeAttribute.Min.y),
         label);
 
       EditorGUI.EndProperty();

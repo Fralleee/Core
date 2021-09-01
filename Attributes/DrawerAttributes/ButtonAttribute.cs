@@ -9,11 +9,11 @@ namespace Fralle.Core
     Playmode
   }
 
-  [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Method)]
   public class ButtonAttribute : SpecialCaseDrawerAttribute
   {
-    public string Text { get; private set; }
-    public EButtonEnableMode SelectedEnableMode { get; private set; }
+    public string Text { get; }
+    public EButtonEnableMode SelectedEnableMode { get; }
 
     public ButtonAttribute(string text = null, EButtonEnableMode enabledMode = EButtonEnableMode.Always)
     {

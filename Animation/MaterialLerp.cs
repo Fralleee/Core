@@ -34,25 +34,22 @@ namespace Fralle.Core.Animation
         rend.material.Lerp(mat1, mat2, q);
         q += Time.deltaTime / lerptime;
       }
-
       if (Input.GetKey(KeyCode.W))
       {
         rend.material.Lerp(mat2, mat3, w);
         w += Time.deltaTime / lerptime;
       }
-
       if (Input.GetKey(KeyCode.E))
       {
         rend.material.Lerp(mat3, mat4, e);
         e += Time.deltaTime / lerptime;
       }
-
+      // ReSharper disable once InvertIf
       if (Input.GetKey(KeyCode.R))
       {
         rend.material.Lerp(mat4, mat5, r);
         r += Time.deltaTime / lerptime;
       }
-
     }
   }
 }

@@ -22,9 +22,7 @@ namespace Fralle.Core
       if (property.propertyType == SerializedPropertyType.String)
       {
         // generate the taglist + custom tags
-        List<string> tagList = new List<string>();
-        tagList.Add("(None)");
-        tagList.Add("Untagged");
+        List<string> tagList = new List<string> { "(None)", "Untagged" };
         tagList.AddRange(UnityEditorInternal.InternalEditorUtility.tags);
 
         string propertyString = property.stringValue;
@@ -53,7 +51,7 @@ namespace Fralle.Core
       }
       else
       {
-        string message = string.Format("{0} supports only string fields", typeof(TagAttribute).Name);
+        string message = $"{nameof(TagAttribute)} supports only string fields";
         DrawDefaultPropertyAndHelpBox(rect, property, message, MessageType.Warning);
       }
 

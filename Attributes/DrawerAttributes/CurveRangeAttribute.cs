@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class CurveRangeAttribute : DrawerAttribute
   {
-    public Vector2 Min { get; private set; }
-    public Vector2 Max { get; private set; }
-    public EColor Color { get; private set; }
+    public Vector2 Min { get; }
+    public Vector2 Max { get; }
+    public EColor Color { get; }
 
     public CurveRangeAttribute(Vector2 min, Vector2 max, EColor color = EColor.Clear)
     {

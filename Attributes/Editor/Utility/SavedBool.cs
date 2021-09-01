@@ -10,10 +10,7 @@ namespace Fralle.Core
 
     public bool Value
     {
-      get
-      {
-        return value;
-      }
+      get => value;
       set
       {
         if (this.value == value)

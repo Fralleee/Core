@@ -16,16 +16,10 @@ namespace Fralle.Core
 
     private GUIStyle GetLabelStyle()
     {
-      if (labelStyle == null)
-      {
-        labelStyle = new GUIStyle(EditorStyles.boldLabel);
-        labelStyle.richText = true;
-      }
-
-      return labelStyle;
+      return labelStyle ??= new GUIStyle(EditorStyles.boldLabel) { richText = true };
     }
 
-    private string GetPropertyKeyName(SerializedProperty property)
+    private static string GetPropertyKeyName(SerializedProperty property)
     {
       return property.serializedObject.targetObject.GetInstanceID() + "." + property.name;
     }
@@ -53,18 +47,18 @@ namespace Fralle.Core
       {
         string key = GetPropertyKeyName(property);
 
-        ReorderableList reorderableList = null;
+        ReorderableList reorderableList;
         if (!reorderableListsByPropertyName.ContainsKey(key))
         {
           reorderableList = new ReorderableList(property.serializedObject, property, true, true, true, true)
           {
-            drawHeaderCallback = (Rect r) =>
+            drawHeaderCallback = r =>
             {
-              EditorGUI.LabelField(r, string.Format("{0}: {1}", label.text, property.arraySize), GetLabelStyle());
-              HandleDragAndDrop(r, reorderableList);
+              EditorGUI.LabelField(r, $"{label.text}: {property.arraySize}", GetLabelStyle());
+              HandleDragAndDrop(r, null);
             },
 
-            drawElementCallback = (Rect r, int index, bool isActive, bool isFocused) =>
+            drawElementCallback = (r, index, b, i) =>
             {
               SerializedProperty element = property.GetArrayElementAtIndex(index);
               r.y += 1.0f;
@@ -74,10 +68,7 @@ namespace Fralle.Core
               EditorGUI.PropertyField(new Rect(r.x, r.y, r.width, EditorGUIUtility.singleLineHeight), element, true);
             },
 
-            elementHeightCallback = (int index) =>
-            {
-              return EditorGUI.GetPropertyHeight(property.GetArrayElementAtIndex(index)) + 4.0f;
-            }
+            elementHeightCallback = index => EditorGUI.GetPropertyHeight(property.GetArrayElementAtIndex(index)) + 4.0f
           };
 
           reorderableListsByPropertyName[key] = reorderableList;
@@ -96,7 +87,7 @@ namespace Fralle.Core
       }
       else
       {
-        string message = typeof(ReorderableListAttribute).Name + " can be used only on arrays or lists";
+        string message = nameof(ReorderableListAttribute) + " can be used only on arrays or lists";
         NaughtyEditorGui.HelpBox_Layout(message, MessageType.Warning, context: property.serializedObject.targetObject);
         EditorGUILayout.PropertyField(property, true);
       }

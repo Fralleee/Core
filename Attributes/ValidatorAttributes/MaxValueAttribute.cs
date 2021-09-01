@@ -2,10 +2,10 @@
 
 namespace Fralle.Core
 {
-  [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+  [AttributeUsage(AttributeTargets.Field)]
   public class MaxValueAttribute : ValidatorAttribute
   {
-    public float MaxValue { get; private set; }
+    public float MaxValue { get; }
 
     public MaxValueAttribute(float maxValue)
     {

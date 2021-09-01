@@ -1,4 +1,7 @@
 using System;
+// ReSharper disable ConvertToLocalFunction
+// ReSharper disable UnusedAnonymousMethodSignature
+// ReSharper disable UnusedParameter.Local
 
 namespace Fralle.Core
 {

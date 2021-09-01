@@ -60,9 +60,8 @@ namespace Fralle.Core
         }
         else
         {
-          string warning = string.Format(
-            "{0} can invoke only methods with 'void' return type and 0 parameters",
-            onValueChangedAttribute.GetType().Name);
+          string warning =
+            $"{onValueChangedAttribute.GetType().Name} can invoke only methods with 'void' return type and 0 parameters";
 
           Debug.LogWarning(warning, property.serializedObject.targetObject);
         }
@@ -281,8 +280,8 @@ namespace Fralle.Core
       {
         if (element.Contains("["))
         {
-          string elementName = element.Substring(0, element.IndexOf("["));
-          int index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
+          string elementName = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
+          int index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal)).Replace("[", "").Replace("]", ""));
           obj = GetValue_Imp(obj, elementName, index);
         }
         else
@@ -310,8 +309,8 @@ namespace Fralle.Core
         string element = elements[i];
         if (element.Contains("["))
         {
-          string elementName = element.Substring(0, element.IndexOf("["));
-          int index = Convert.ToInt32(element.Substring(element.IndexOf("[")).Replace("[", "").Replace("]", ""));
+          string elementName = element.Substring(0, element.IndexOf("[", StringComparison.Ordinal));
+          int index = Convert.ToInt32(element.Substring(element.IndexOf("[", StringComparison.Ordinal)).Replace("[", "").Replace("]", ""));
           obj = GetValue_Imp(obj, elementName, index);
         }
         else
@@ -354,8 +353,7 @@ namespace Fralle.Core
 
     private static object GetValue_Imp(object source, string name, int index)
     {
-      IEnumerable enumerable = GetValue_Imp(source, name) as IEnumerable;
-      if (enumerable == null)
+      if (!(GetValue_Imp(source, name) is IEnumerable enumerable))
       {
         return null;
       }
