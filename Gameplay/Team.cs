@@ -2,7 +2,7 @@
 {
   public enum Team
   {
-    NPC,
+    Npc,
     Team1,
     Team2
   }

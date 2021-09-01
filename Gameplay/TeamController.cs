@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fralle.Core
 {
@@ -7,20 +8,20 @@ namespace Fralle.Core
     #region STATICS
     static readonly int RendererColor = Shader.PropertyToID("_BaseColor");
 
-    static string DEFAULT = "Default";
-    static string CORPSE = "Corpse";
+    static string Default = "Default";
+    static string Corpse = "Corpse";
 
-    static string TEAM1 = "Team1";
-    static string TEAM1HITBOXES = "Team1 Hitboxes";
-    static string TEAM1PROJECTILES = "Team1 Projectiles";
+    static string Team1 = "Team1";
+    static string Team1Hitboxes = "Team1 Hitboxes";
+    static string Team1Projectiles = "Team1 Projectiles";
 
-    static string TEAM2 = "Team2";
-    static string TEAM2HITBOXES = "Team2 Hitboxes";
-    static string TEAM2PROJECTILES = "Team2 Projectiles";
+    static string Team2 = "Team2";
+    static string Team2Hitboxes = "Team2 Hitboxes";
+    static string Team2Projectiles = "Team2 Projectiles";
 
-    static string NPC = "NPC";
-    static string NPCHITBOXES = "NPC Hitboxes";
-    static string NPCPROJECTILES = "NPC Projectiles";
+    static string Npc = "NPC";
+    static string Npchitboxes = "NPC Hitboxes";
+    static string Npcprojectiles = "NPC Projectiles";
     #endregion
 
     [Header("Setup")]
@@ -30,15 +31,16 @@ namespace Fralle.Core
     [SerializeField] Color team1Color = new Color(1, 0.5f, 0.5f);
     [SerializeField] Color team2Color = new Color(0.5f, 0.5f, 1);
 
+    [FormerlySerializedAs("AllyTeam")]
     [Header("Layer map")]
-    [Readonly] public int AllyTeam;
-    [Readonly] public int Hitbox;
-    [Readonly] public int AllyProjectiles;
-    public LayerMask Hostiles;
-    public LayerMask Neutrals;
-    public LayerMask HostileProjectiles;
-    public LayerMask Hitboxes;
-    public LayerMask AttackLayerMask;
+    [Readonly] public int allyTeam;
+    [FormerlySerializedAs("Hitbox")] [Readonly] public int hitbox;
+    [FormerlySerializedAs("AllyProjectiles")] [Readonly] public int allyProjectiles;
+    [FormerlySerializedAs("Hostiles")] public LayerMask hostiles;
+    [FormerlySerializedAs("Neutrals")] public LayerMask neutrals;
+    [FormerlySerializedAs("HostileProjectiles")] public LayerMask hostileProjectiles;
+    [FormerlySerializedAs("Hitboxes")] public LayerMask hitboxes;
+    [FormerlySerializedAs("AttackLayerMask")] public LayerMask attackLayerMask;
 
     SkinnedMeshRenderer[] renderers;
     MaterialPropertyBlock propBlock;
@@ -52,12 +54,12 @@ namespace Fralle.Core
         SetupTeam2();
 
       foreach (Collider col in hitboxParent.GetComponentsInChildren<Collider>())
-        col.gameObject.layer = Hitbox;
+        col.gameObject.layer = hitbox;
 
-      targetCollider.gameObject.layer = AllyTeam;
+      targetCollider.gameObject.layer = allyTeam;
     }
 
-    public bool CheckIfHostile(GameObject target) => Hostiles.IsInLayerMask(target.layer);
+    public bool CheckIfHostile(GameObject target) => hostiles.IsInLayerMask(target.layer);
 
     void SetupRenderer()
     {
@@ -71,15 +73,15 @@ namespace Fralle.Core
     {
       SetupRenderer();
 
-      AllyTeam = LayerMask.NameToLayer(TEAM1);
-      Hitbox = LayerMask.NameToLayer(TEAM1HITBOXES);
-      AllyProjectiles = LayerMask.NameToLayer(TEAM1PROJECTILES);
+      allyTeam = LayerMask.NameToLayer(Team1);
+      hitbox = LayerMask.NameToLayer(Team1Hitboxes);
+      allyProjectiles = LayerMask.NameToLayer(Team1Projectiles);
 
-      Hostiles = LayerMask.GetMask(TEAM2);
-      HostileProjectiles = LayerMask.GetMask(TEAM2PROJECTILES, NPCPROJECTILES);
-      Neutrals = LayerMask.GetMask(NPC);
-      Hitboxes = LayerMask.GetMask(TEAM2HITBOXES, NPCHITBOXES);
-      AttackLayerMask = LayerMask.GetMask(DEFAULT, TEAM2HITBOXES, NPCHITBOXES, CORPSE);
+      hostiles = LayerMask.GetMask(Team2);
+      hostileProjectiles = LayerMask.GetMask(Team2Projectiles, Npcprojectiles);
+      neutrals = LayerMask.GetMask(Npc);
+      hitboxes = LayerMask.GetMask(Team2Hitboxes, Npchitboxes);
+      attackLayerMask = LayerMask.GetMask(Default, Team2Hitboxes, Npchitboxes, Corpse);
 
       propBlock.SetColor(RendererColor, team1Color);
       foreach (SkinnedMeshRenderer r in renderers)
@@ -90,15 +92,15 @@ namespace Fralle.Core
     {
       SetupRenderer();
 
-      AllyTeam = LayerMask.NameToLayer(TEAM2);
-      Hitbox = LayerMask.NameToLayer(TEAM2HITBOXES);
-      AllyProjectiles = LayerMask.NameToLayer(TEAM2PROJECTILES);
+      allyTeam = LayerMask.NameToLayer(Team2);
+      hitbox = LayerMask.NameToLayer(Team2Hitboxes);
+      allyProjectiles = LayerMask.NameToLayer(Team2Projectiles);
 
-      Hostiles = LayerMask.GetMask(TEAM1);
-      HostileProjectiles = LayerMask.GetMask(TEAM1PROJECTILES, NPCPROJECTILES);
-      Neutrals = LayerMask.GetMask(NPC);
-      Hitboxes = LayerMask.GetMask(TEAM1HITBOXES, NPCHITBOXES);
-      AttackLayerMask = LayerMask.GetMask(DEFAULT, TEAM1HITBOXES, NPCHITBOXES, CORPSE);
+      hostiles = LayerMask.GetMask(Team1);
+      hostileProjectiles = LayerMask.GetMask(Team1Projectiles, Npcprojectiles);
+      neutrals = LayerMask.GetMask(Npc);
+      hitboxes = LayerMask.GetMask(Team1Hitboxes, Npchitboxes);
+      attackLayerMask = LayerMask.GetMask(Default, Team1Hitboxes, Npchitboxes, Corpse);
 
       propBlock.SetColor(RendererColor, team2Color);
       foreach (SkinnedMeshRenderer r in renderers)

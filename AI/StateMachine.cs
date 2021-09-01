@@ -10,7 +10,7 @@ namespace Fralle.Core.AI
     public event Action<IState<T>> OnTransition = delegate { };
 
     public IState<T> CurrentState;
-    public float currentStateTime;
+    public float CurrentStateTime;
 
     readonly Dictionary<T, List<Transition<T>>> transitions = new Dictionary<T, List<Transition<T>>>();
     List<Transition<T>> currentTransitions = new List<Transition<T>>();
@@ -20,7 +20,7 @@ namespace Fralle.Core.AI
 
     public void OnLogic()
     {
-      currentStateTime += Time.deltaTime;
+      CurrentStateTime += Time.deltaTime;
       Transition<T> transition = GetTransition;
       if (transition != null)
         SetState(transition.To);
@@ -36,21 +36,21 @@ namespace Fralle.Core.AI
       CurrentState?.OnExit();
       CurrentState = state;
 
-      transitions.TryGetValue(CurrentState.identifier, out currentTransitions);
+      transitions.TryGetValue(CurrentState.Identifier, out currentTransitions);
       if (currentTransitions == null)
         currentTransitions = EmptyTransitions;
 
       CurrentState.OnEnter();
-      currentStateTime = 0f;
+      CurrentStateTime = 0f;
       OnTransition(CurrentState);
     }
 
     public void AddTransition(IState<T> from, IState<T> to, Func<bool> predicate)
     {
-      if (!this.transitions.TryGetValue(from.identifier, out List<Transition<T>> transitions))
+      if (!this.transitions.TryGetValue(from.Identifier, out List<Transition<T>> transitions))
       {
         transitions = new List<Transition<T>>();
-        this.transitions[from.identifier] = transitions;
+        this.transitions[from.Identifier] = transitions;
       }
 
       transitions.Add(new Transition<T>(to, predicate));

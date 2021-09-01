@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fralle.Core.Basics
 {
@@ -6,13 +7,13 @@ namespace Fralle.Core.Basics
   public class PsColorChanger : MonoBehaviour
   {
     #region Fields
-    [Tooltip("Current \"Main\" color of all particle systems")]
-    public Color CurrentColor;
-    [Tooltip("New \"Main\" color of all particle systems")]
-    public Color NewColor;
+    [FormerlySerializedAs("CurrentColor")] [Tooltip("Current \"Main\" color of all particle systems")]
+    public Color currentColor;
+    [FormerlySerializedAs("NewColor")] [Tooltip("New \"Main\" color of all particle systems")]
+    public Color newColor;
 
-    Color currentHSV; // r -> H; g -> S; b -> V (not a really correct way to do it :D)
-    Color newHSV; // r -> H; g -> S; b -> V (not a really correct way to do it :D)
+    Color currentHsv; // r -> H; g -> S; b -> V (not a really correct way to do it :D)
+    Color newHsv; // r -> H; g -> S; b -> V (not a really correct way to do it :D)
     #endregion
 
     #region Methods
@@ -23,8 +24,8 @@ namespace Fralle.Core.Basics
     {
       ParticleSystem[] systems = GetComponentsInChildren<ParticleSystem>();
 
-      Color.RGBToHSV(CurrentColor, out currentHSV.r, out currentHSV.g, out currentHSV.b);
-      Color.RGBToHSV(NewColor, out newHSV.r, out newHSV.g, out newHSV.b);
+      Color.RGBToHSV(currentColor, out currentHsv.r, out currentHsv.g, out currentHsv.b);
+      Color.RGBToHSV(newColor, out newHsv.r, out newHsv.g, out newHsv.b);
 
       foreach (ParticleSystem system in systems)
       {
@@ -47,9 +48,9 @@ namespace Fralle.Core.Basics
 
     public void SwapCurrentWithNewColors()
     {
-      Color temp = CurrentColor;
-      CurrentColor = NewColor;
-      NewColor = temp;
+      Color temp = currentColor;
+      currentColor = newColor;
+      newColor = temp;
     }
 
     public Gradient ConvertCurrentToNew(Gradient gradient)
@@ -76,7 +77,7 @@ namespace Fralle.Core.Basics
       Color hsv;
       Color.RGBToHSV(color, out hsv.r, out hsv.g, out hsv.b);
       Color endRes = Color.HSVToRGB(
-              Mathf.Clamp01(Mathf.Abs(newHSV.r + (currentHSV.r - hsv.r))),
+              Mathf.Clamp01(Mathf.Abs(newHsv.r + (currentHsv.r - hsv.r))),
               hsv.g,
               hsv.b
           );

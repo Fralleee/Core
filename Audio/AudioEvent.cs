@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Fralle.Core.Audio
@@ -6,22 +7,22 @@ namespace Fralle.Core.Audio
   [CreateAssetMenu(menuName = "Audio/Event")]
   public class AudioEvent : ScriptableObject
   {
-    public AudioClip[] Clips;
+    [FormerlySerializedAs("Clips")] public AudioClip[] clips;
 
-    public Vector2 VolumeRange;
-    public Vector2 PitchRange;
+    [FormerlySerializedAs("VolumeRange")] public Vector2 volumeRange;
+    [FormerlySerializedAs("PitchRange")] public Vector2 pitchRange;
 
-    public int PlayCount = 1;
-    public float PlayDelay = 1f;
+    [FormerlySerializedAs("PlayCount")] public int playCount = 1;
+    [FormerlySerializedAs("PlayDelay")] public float playDelay = 1f;
 
     public void Play(AudioSource source)
     {
-      if (Clips.Length == 0)
+      if (clips.Length == 0)
         return;
 
-      source.clip = Clips[Random.Range(0, Clips.Length)];
-      source.volume = VolumeRange.GetValueBetween();
-      source.pitch = PitchRange.GetValueBetween();
+      source.clip = clips[Random.Range(0, clips.Length)];
+      source.volume = volumeRange.GetValueBetween();
+      source.pitch = pitchRange.GetValueBetween();
       source.Play();
     }
   }

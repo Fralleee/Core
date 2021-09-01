@@ -3,11 +3,11 @@
 namespace Fralle.Core
 {
   [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
-  public class OnValueChangedAttribute : MetaAttribute
+  public class ValueChangedAttribute : MetaAttribute
   {
     public string CallbackName { get; private set; }
 
-    public OnValueChangedAttribute(string callbackName)
+    public ValueChangedAttribute(string callbackName)
     {
       CallbackName = callbackName;
     }

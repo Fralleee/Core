@@ -24,9 +24,9 @@ namespace Fralle.Core
         shakeEvent.Update();
 
         if (shakeEvent.Target == ShakeTransformEventData.TargetTransform.Position)
-          positionOffset += shakeEvent.Noise;
+          positionOffset += shakeEvent.noise;
         else
-          rotationOffset += shakeEvent.Noise;
+          rotationOffset += shakeEvent.noise;
 
         if (!shakeEvent.IsAlive())
           shakeEvents.RemoveAt(i);

@@ -36,13 +36,13 @@ namespace Fralle.Core
       string currSceneName = SceneManager.GetActiveScene().name;
       if (!string.IsNullOrEmpty(currSceneName) && !currSceneName.StartsWith("InitTestScene"))
       {
-        Debug.Log($"Auto-Saving scenes and assets before entering play mode: { string.Join(", ", openSceneNames.ToArray())}");
+        Debug.Log($"Auto-Saving scenes and assets before entering play mode: { string.Join(", ", OpenSceneNames.ToArray())}");
         EditorSceneManager.SaveOpenScenes();
       }
       AssetDatabase.SaveAssets();
     }
 
-    static IList<string> openSceneNames
+    static IList<string> OpenSceneNames
     {
       get
       {

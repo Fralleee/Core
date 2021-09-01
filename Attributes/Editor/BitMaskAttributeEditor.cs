@@ -58,7 +58,7 @@ namespace Fralle.Core
       BitMaskAttribute typeAttr = attribute as BitMaskAttribute;
       // Add the actual int value behind the field name
       label.text = label.text + " (" + prop.intValue + ")";
-      prop.intValue = EditorExtension.DrawBitMaskField(position, prop.intValue, typeAttr.propType, label);
+      prop.intValue = EditorExtension.DrawBitMaskField(position, prop.intValue, typeAttr.PropType, label);
     }
   }
 }

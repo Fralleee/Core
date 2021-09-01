@@ -40,7 +40,7 @@ namespace Fralle.Core
 
     public static void CallOnValueChangedCallbacks(SerializedProperty property)
     {
-      OnValueChangedAttribute[] onValueChangedAttributes = GetAttributes<OnValueChangedAttribute>(property);
+      ValueChangedAttribute[] onValueChangedAttributes = GetAttributes<ValueChangedAttribute>(property);
       if (onValueChangedAttributes.Length == 0)
       {
         return;
@@ -49,7 +49,7 @@ namespace Fralle.Core
       object target = GetTargetObjectWithProperty(property);
       property.serializedObject.ApplyModifiedProperties(); // We must apply modifications so that the new value is updated in the serialized object
 
-      foreach (OnValueChangedAttribute onValueChangedAttribute in onValueChangedAttributes)
+      foreach (ValueChangedAttribute onValueChangedAttribute in onValueChangedAttributes)
       {
         MethodInfo callbackMethod = ReflectionUtility.GetMethod(target, onValueChangedAttribute.CallbackName);
         if (callbackMethod != null &&

@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fralle.Core.Animation
 {
   public class FadeoutLineRenderer : MonoBehaviour
   {
-    public float FadeoutTime;
+    [FormerlySerializedAs("FadeoutTime")] public float fadeoutTime;
 
     float fadeTimer;
     LineRenderer lineRenderer;
@@ -14,19 +15,19 @@ namespace Fralle.Core.Animation
     {
       lineRenderer = GetComponent<LineRenderer>();
       currentColor = lineRenderer.material.color;
-      fadeTimer = FadeoutTime;
+      fadeTimer = fadeoutTime;
     }
 
     void OnEnable()
     {
-      fadeTimer = FadeoutTime;
+      fadeTimer = fadeoutTime;
     }
 
     void Update()
     {
       fadeTimer -= Time.deltaTime;
 
-      Color newColor = Color.Lerp(currentColor, new Color(1f, 1f, 1f, 0f), 1 - (fadeTimer / FadeoutTime));
+      Color newColor = Color.Lerp(currentColor, new Color(1f, 1f, 1f, 0f), 1 - (fadeTimer / fadeoutTime));
       lineRenderer.material.color = newColor;
     }
   }

@@ -60,7 +60,7 @@ namespace Fralle.Core
             selectedValueIndex = 0;
           }
 
-          NaughtyEditorGUI.Dropdown(
+          NaughtyEditorGui.Dropdown(
             rect, property.serializedObject, target, dropdownField, label.text, selectedValueIndex, values, displayOptions);
         }
         else if (valuesObject is IDropdownList)
@@ -109,7 +109,7 @@ namespace Fralle.Core
             selectedValueIndex = 0;
           }
 
-          NaughtyEditorGUI.Dropdown(
+          NaughtyEditorGui.Dropdown(
             rect, property.serializedObject, target, dropdownField, label.text, selectedValueIndex, values.ToArray(), displayOptions.ToArray());
         }
       }

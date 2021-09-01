@@ -10,21 +10,21 @@ namespace Fralle.Core
   [CustomEditor(typeof(Object), true)]
   public class NaughtyInspector : Editor
   {
-    private List<SerializedProperty> _serializedProperties = new List<SerializedProperty>();
-    private IEnumerable<FieldInfo> _nonSerializedFields;
-    private IEnumerable<PropertyInfo> _nativeProperties;
-    private IEnumerable<MethodInfo> _methods;
-    private Dictionary<string, SavedBool> _foldouts = new Dictionary<string, SavedBool>();
+    private List<SerializedProperty> serializedProperties = new List<SerializedProperty>();
+    private IEnumerable<FieldInfo> nonSerializedFields;
+    private IEnumerable<PropertyInfo> nativeProperties;
+    private IEnumerable<MethodInfo> methods;
+    private Dictionary<string, SavedBool> foldouts = new Dictionary<string, SavedBool>();
 
     protected virtual void OnEnable()
     {
-      _nonSerializedFields = ReflectionUtility.GetAllFields(
+      nonSerializedFields = ReflectionUtility.GetAllFields(
         target, f => f.GetCustomAttributes(typeof(ShowNonSerializedFieldAttribute), true).Length > 0);
 
-      _nativeProperties = ReflectionUtility.GetAllProperties(
+      nativeProperties = ReflectionUtility.GetAllProperties(
         target, p => p.GetCustomAttributes(typeof(ShowNativePropertyAttribute), true).Length > 0);
 
-      _methods = ReflectionUtility.GetAllMethods(
+      methods = ReflectionUtility.GetAllMethods(
         target, m => m.GetCustomAttributes(typeof(ButtonAttribute), true).Length > 0);
     }
 
@@ -35,9 +35,9 @@ namespace Fralle.Core
 
     public override void OnInspectorGUI()
     {
-      GetSerializedProperties(ref _serializedProperties);
+      GetSerializedProperties(ref serializedProperties);
 
-      bool anyNaughtyAttribute = _serializedProperties.Any(p => PropertyUtility.GetAttribute<ICustomAttribute>(p) != null);
+      bool anyNaughtyAttribute = serializedProperties.Any(p => PropertyUtility.GetAttribute<ICustomAttribute>(p) != null);
       if (!anyNaughtyAttribute)
       {
         DrawDefaultInspector();
@@ -73,7 +73,7 @@ namespace Fralle.Core
       serializedObject.Update();
 
       // Draw non-grouped serialized properties
-      foreach (SerializedProperty property in GetNonGroupedProperties(_serializedProperties))
+      foreach (SerializedProperty property in GetNonGroupedProperties(serializedProperties))
       {
         if (property.name.Equals("m_Script", System.StringComparison.Ordinal))
         {
@@ -84,12 +84,12 @@ namespace Fralle.Core
         }
         else
         {
-          NaughtyEditorGUI.PropertyField_Layout(property, includeChildren: true);
+          NaughtyEditorGui.PropertyField_Layout(property, includeChildren: true);
         }
       }
 
       // Draw grouped serialized properties
-      foreach (IGrouping<string, SerializedProperty> group in GetGroupedProperties(_serializedProperties))
+      foreach (IGrouping<string, SerializedProperty> group in GetGroupedProperties(serializedProperties))
       {
         IEnumerable<SerializedProperty> visibleProperties = group.Where(p => PropertyUtility.IsVisible(p));
         if (!visibleProperties.Any())
@@ -97,17 +97,17 @@ namespace Fralle.Core
           continue;
         }
 
-        NaughtyEditorGUI.BeginBoxGroup_Layout(group.Key);
+        NaughtyEditorGui.BeginBoxGroup_Layout(group.Key);
         foreach (SerializedProperty property in visibleProperties)
         {
-          NaughtyEditorGUI.PropertyField_Layout(property, includeChildren: true);
+          NaughtyEditorGui.PropertyField_Layout(property, includeChildren: true);
         }
 
-        NaughtyEditorGUI.EndBoxGroup_Layout();
+        NaughtyEditorGui.EndBoxGroup_Layout();
       }
 
       // Draw foldout serialized properties
-      foreach (IGrouping<string, SerializedProperty> group in GetFoldoutProperties(_serializedProperties))
+      foreach (IGrouping<string, SerializedProperty> group in GetFoldoutProperties(serializedProperties))
       {
         IEnumerable<SerializedProperty> visibleProperties = group.Where(p => PropertyUtility.IsVisible(p));
         if (!visibleProperties.Any())
@@ -115,17 +115,17 @@ namespace Fralle.Core
           continue;
         }
 
-        if (!_foldouts.ContainsKey(group.Key))
+        if (!foldouts.ContainsKey(group.Key))
         {
-          _foldouts[group.Key] = new SavedBool($"{target.GetInstanceID()}.{group.Key}", false);
+          foldouts[group.Key] = new SavedBool($"{target.GetInstanceID()}.{group.Key}", false);
         }
 
-        _foldouts[group.Key].Value = EditorGUILayout.Foldout(_foldouts[group.Key].Value, group.Key, true);
-        if (_foldouts[group.Key].Value)
+        foldouts[group.Key].Value = EditorGUILayout.Foldout(foldouts[group.Key].Value, group.Key, true);
+        if (foldouts[group.Key].Value)
         {
           foreach (SerializedProperty property in visibleProperties)
           {
-            NaughtyEditorGUI.PropertyField_Layout(property, true);
+            NaughtyEditorGui.PropertyField_Layout(property, true);
           }
         }
       }
@@ -135,57 +135,57 @@ namespace Fralle.Core
 
     protected void DrawNonSerializedFields(bool drawHeader = false)
     {
-      if (_nonSerializedFields.Any())
+      if (nonSerializedFields.Any())
       {
         if (drawHeader)
         {
           EditorGUILayout.Space();
-          EditorGUILayout.LabelField("Non-Serialized Fields", GetHeaderGUIStyle());
-          NaughtyEditorGUI.HorizontalLine(
+          EditorGUILayout.LabelField("Non-Serialized Fields", GetHeaderGuiStyle());
+          NaughtyEditorGui.HorizontalLine(
             EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
         }
 
-        foreach (FieldInfo field in _nonSerializedFields)
+        foreach (FieldInfo field in nonSerializedFields)
         {
-          NaughtyEditorGUI.NonSerializedField_Layout(serializedObject.targetObject, field);
+          NaughtyEditorGui.NonSerializedField_Layout(serializedObject.targetObject, field);
         }
       }
     }
 
     protected void DrawNativeProperties(bool drawHeader = false)
     {
-      if (_nativeProperties.Any())
+      if (nativeProperties.Any())
       {
         if (drawHeader)
         {
           EditorGUILayout.Space();
-          EditorGUILayout.LabelField("Native Properties", GetHeaderGUIStyle());
-          NaughtyEditorGUI.HorizontalLine(
+          EditorGUILayout.LabelField("Native Properties", GetHeaderGuiStyle());
+          NaughtyEditorGui.HorizontalLine(
             EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
         }
 
-        foreach (PropertyInfo property in _nativeProperties)
+        foreach (PropertyInfo property in nativeProperties)
         {
-          NaughtyEditorGUI.NativeProperty_Layout(serializedObject.targetObject, property);
+          NaughtyEditorGui.NativeProperty_Layout(serializedObject.targetObject, property);
         }
       }
     }
 
     protected void DrawButtons(bool drawHeader = false)
     {
-      if (_methods.Any())
+      if (methods.Any())
       {
         if (drawHeader)
         {
           EditorGUILayout.Space();
-          EditorGUILayout.LabelField("Buttons", GetHeaderGUIStyle());
-          NaughtyEditorGUI.HorizontalLine(
+          EditorGUILayout.LabelField("Buttons", GetHeaderGuiStyle());
+          NaughtyEditorGui.HorizontalLine(
             EditorGUILayout.GetControlRect(false), HorizontalLineAttribute.DefaultHeight, HorizontalLineAttribute.DefaultColor.GetColor());
         }
 
-        foreach (MethodInfo method in _methods)
+        foreach (MethodInfo method in methods)
         {
-          NaughtyEditorGUI.Button(serializedObject.targetObject, method);
+          NaughtyEditorGui.Button(serializedObject.targetObject, method);
         }
       }
     }
@@ -209,7 +209,7 @@ namespace Fralle.Core
         .GroupBy(p => PropertyUtility.GetAttribute<FoldoutAttribute>(p).Name);
     }
 
-    private static GUIStyle GetHeaderGUIStyle()
+    private static GUIStyle GetHeaderGuiStyle()
     {
       GUIStyle style = new GUIStyle(EditorStyles.centeredGreyMiniLabel);
       style.fontStyle = FontStyle.Bold;

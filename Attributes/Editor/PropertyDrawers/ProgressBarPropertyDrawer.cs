@@ -41,7 +41,7 @@ namespace Fralle.Core
         Color barColor = progressBarAttribute.Color.GetColor();
         Color labelColor = Color.white;
 
-        float indentLength = NaughtyEditorGUI.GetIndentLength(rect);
+        float indentLength = NaughtyEditorGui.GetIndentLength(rect);
         Rect barRect = new Rect()
         {
           x = rect.x + indentLength,

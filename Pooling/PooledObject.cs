@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fralle.Core.Pooling
 {
   public class PooledObject : MonoBehaviour
   {
-    [HideInInspector] public Pool PoolScript; // stores the location of the object pool script for this object
-    [HideInInspector] public float TimeSpawned;
+    [FormerlySerializedAs("PoolScript")] [HideInInspector] public Pool poolScript; // stores the location of the object pool script for this object
+    [FormerlySerializedAs("TimeSpawned")] [HideInInspector] public float timeSpawned;
 
     bool isQuitting;
 
@@ -23,7 +24,7 @@ namespace Fralle.Core.Pooling
     { // -1 will use delay specified in this script
       if (del >= 0)
       {
-        if (PoolScript)
+        if (poolScript)
         {
           Invoke("DoDespawn", del);
           gameObject.SetActive(false);
@@ -42,9 +43,9 @@ namespace Fralle.Core.Pooling
 
     bool DoDespawn()
     {
-      if (PoolScript)
+      if (poolScript)
       {
-        PoolScript.Despawn(gameObject, this);
+        poolScript.Despawn(gameObject, this);
         return true;
       }
       return false;

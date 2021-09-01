@@ -4,7 +4,7 @@ namespace Fralle.Core.Infrastructure
 {
   public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
   {
-    static T _instance;
+    static T LocalInstance;
     public static bool Destroyed;
 
     public static T Instance
@@ -14,33 +14,33 @@ namespace Fralle.Core.Infrastructure
         if (Destroyed)
           return null;
 
-        if (_instance != null)
-          return _instance;
+        if (LocalInstance != null)
+          return LocalInstance;
 
-        _instance = (T)FindObjectOfType(typeof(T));
+        LocalInstance = (T)FindObjectOfType(typeof(T));
 
-        if (_instance != null)
-          return _instance;
+        if (LocalInstance != null)
+          return LocalInstance;
 
         GameObject singletonObject = new GameObject();
-        _instance = singletonObject.AddComponent<T>();
+        LocalInstance = singletonObject.AddComponent<T>();
         singletonObject.name = typeof(T).ToString() + " (Singleton)";
 
         DontDestroyOnLoad(singletonObject);
 
-        return _instance;
+        return LocalInstance;
       }
     }
 
     protected virtual void Awake()
     {
-      if (_instance != null && _instance != this as T)
+      if (LocalInstance != null && LocalInstance != this as T)
       {
         Destroy(gameObject);
         return;
       }
 
-      _instance = this as T;
+      LocalInstance = this as T;
     }
 
     void OnApplicationQuit()

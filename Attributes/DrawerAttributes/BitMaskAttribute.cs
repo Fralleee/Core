@@ -4,10 +4,10 @@ namespace Fralle.Core
 {
   public class BitMaskAttribute : PropertyAttribute
   {
-    public System.Type propType;
+    public System.Type PropType;
     public BitMaskAttribute(System.Type aType)
     {
-      propType = aType;
+      PropType = aType;
     }
   }
 }

@@ -11,7 +11,7 @@ namespace Fralle.Core.Gameplay
   [CustomEditor(typeof(GameSceneSo), true)]
   public class GameSceneSoEditor : Editor
   {
-    private const string NO_SCENES_WARNING = "There is no Scene associated to this location yet. Add a new scene with the dropdown below";
+    private const string NoScenesWarning = "There is no Scene associated to this location yet. Add a new scene with the dropdown below";
     private GUIStyle headerLabelStyle;
     private static readonly string[] ExcludedProperties = { "m_Script", "sceneName" };
 
@@ -35,20 +35,20 @@ namespace Fralle.Core.Gameplay
 
     private void DrawScenePicker()
     {
-      string sceneName = gameSceneInspected.SceneName;
+      string sceneName = gameSceneInspected.sceneName;
       EditorGUI.BeginChangeCheck();
       int selectedScene = sceneList.ToList().IndexOf(sceneName);
 
       if (selectedScene < 0)
       {
-        EditorGUILayout.HelpBox(NO_SCENES_WARNING, MessageType.Warning);
+        EditorGUILayout.HelpBox(NoScenesWarning, MessageType.Warning);
       }
 
       selectedScene = EditorGUILayout.Popup("Scene", selectedScene, sceneList);
       if (EditorGUI.EndChangeCheck())
       {
         Undo.RecordObject(target, "Changed selected scene");
-        gameSceneInspected.SceneName = sceneList[selectedScene];
+        gameSceneInspected.sceneName = sceneList[selectedScene];
         MarkAllDirty();
       }
     }

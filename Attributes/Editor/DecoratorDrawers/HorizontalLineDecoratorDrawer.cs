@@ -18,7 +18,7 @@ namespace Fralle.Core
       Rect rect = EditorGUI.IndentedRect(position);
       rect.y += EditorGUIUtility.singleLineHeight / 3.0f;
       HorizontalLineAttribute lineAttr = (HorizontalLineAttribute)attribute;
-      NaughtyEditorGUI.HorizontalLine(rect, lineAttr.Height, lineAttr.Color.GetColor());
+      NaughtyEditorGui.HorizontalLine(rect, lineAttr.Height, lineAttr.Color.GetColor());
     }
   }
 }

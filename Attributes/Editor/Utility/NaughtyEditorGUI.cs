@@ -10,12 +10,12 @@ using UnityEngine;
 
 namespace Fralle.Core
 {
-  public static class NaughtyEditorGUI
+  public static class NaughtyEditorGui
   {
     public const float IndentLength = 15.0f;
     public const float HorizontalSpacing = 2.0f;
 
-    private static GUIStyle _buttonStyle = new GUIStyle(GUI.skin.button) { richText = true };
+    private static GUIStyle ButtonStyle = new GUIStyle(GUI.skin.button) { richText = true };
 
     private delegate void PropertyFieldFunction(Rect rect, SerializedProperty property, GUIContent label, bool includeChildren);
 
@@ -161,7 +161,7 @@ namespace Fralle.Core
 
         EditorGUI.BeginDisabledGroup(!buttonEnabled);
 
-        if (GUILayout.Button(buttonText, _buttonStyle))
+        if (GUILayout.Button(buttonText, ButtonStyle))
         {
           object[] defaultParams = methodInfo.GetParameters().Select(p => p.DefaultValue).ToArray();
           IEnumerator methodResult = methodInfo.Invoke(target, defaultParams) as IEnumerator;

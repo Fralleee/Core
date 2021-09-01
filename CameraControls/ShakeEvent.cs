@@ -1,5 +1,6 @@
 ﻿using Fralle.Core.CameraControls;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fralle.Core
 {
@@ -10,9 +11,9 @@ namespace Fralle.Core
     float timeRemaining;
     readonly ShakeTransformEventData data;
     Vector3 noiseOffset;
-    public Vector3 Noise;
+    [FormerlySerializedAs("Noise")] public Vector3 noise;
 
-    public ShakeTransformEventData.TargetTransform Target => data.Target;
+    public ShakeTransformEventData.TargetTransform Target => data.target;
 
     public bool IsAlive()
     {
@@ -23,7 +24,7 @@ namespace Fralle.Core
     {
       this.data = data;
 
-      duration = data.Duration;
+      duration = data.duration;
       timeRemaining = duration;
 
       const float rand = 32.0f;
@@ -39,22 +40,22 @@ namespace Fralle.Core
 
       timeRemaining -= deltaTime;
 
-      float noiseOffsetDelta = deltaTime * data.Frequency;
+      float noiseOffsetDelta = deltaTime * data.frequency;
 
       noiseOffset.x += noiseOffsetDelta;
       noiseOffset.y += noiseOffsetDelta;
       noiseOffset.z += noiseOffsetDelta;
 
-      Noise.x = Mathf.PerlinNoise(noiseOffset.x, 0.0f);
-      Noise.y = Mathf.PerlinNoise(noiseOffset.y, 1.0f);
-      Noise.z = Mathf.PerlinNoise(noiseOffset.z, 2.0f);
+      noise.x = Mathf.PerlinNoise(noiseOffset.x, 0.0f);
+      noise.y = Mathf.PerlinNoise(noiseOffset.y, 1.0f);
+      noise.z = Mathf.PerlinNoise(noiseOffset.z, 2.0f);
 
-      Noise -= Vector3.one * 0.5f;
+      noise -= Vector3.one * 0.5f;
 
-      Noise *= data.Amplitude;
+      noise *= data.amplitude;
 
       float agePercent = 1.0f - (timeRemaining / duration);
-      Noise *= data.BlendOverLifetime.Evaluate(agePercent);
+      noise *= data.blendOverLifetime.Evaluate(agePercent);
     }
   }
 }

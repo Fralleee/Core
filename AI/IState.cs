@@ -1,8 +1,8 @@
 ﻿namespace Fralle.Core.AI
 {
-  public interface IState<T>
+  public interface IState<out T>
   {
-    T identifier { get; }
+    T Identifier { get; }
     void OnEnter();
     void OnLogic();
     void OnExit();

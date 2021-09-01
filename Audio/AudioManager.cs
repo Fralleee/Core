@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fralle.Core.Audio
 {
@@ -20,7 +21,7 @@ namespace Fralle.Core.Audio
       set => musicSource.volume = value;
     }
 
-    public MusicPlaylist Playlist;
+    [FormerlySerializedAs("Playlist")] public MusicPlaylist playlist;
     float timePlaying = 0;
     int currentTrackIndex;
     bool musicIsPlaying;
@@ -32,13 +33,13 @@ namespace Fralle.Core.Audio
 
     void Start()
     {
-      if (Playlist != null && Playlist.Songs.Count > 0)
-        musicSource.clip = Playlist.Songs[currentTrackIndex];
+      if (playlist != null && playlist.songs.Count > 0)
+        musicSource.clip = playlist.songs[currentTrackIndex];
     }
 
     void Update()
     {
-      if (Playlist.Songs.Count > 0 && musicIsPlaying && timePlaying > musicSource.clip.length)
+      if (playlist.songs.Count > 0 && musicIsPlaying && timePlaying > musicSource.clip.length)
       {
         Next();
       }
@@ -51,7 +52,7 @@ namespace Fralle.Core.Audio
 
     public void Play(AudioEvent audioEvent)
     {
-      if (audioEvent.PlayCount > 1)
+      if (audioEvent.playCount > 1)
       {
         StartCoroutine(PlayIEnumerator(audioEvent));
       }
@@ -63,10 +64,10 @@ namespace Fralle.Core.Audio
 
     IEnumerator PlayIEnumerator(AudioEvent audioEvent)
     {
-      for (int i = 0; i < audioEvent.PlayCount; i++)
+      for (int i = 0; i < audioEvent.playCount; i++)
       {
         audioEvent.Play(audioSourcePool.GetSource());
-        yield return new WaitForSeconds(audioEvent.PlayDelay);
+        yield return new WaitForSeconds(audioEvent.playDelay);
       }
     }
 
@@ -95,11 +96,11 @@ namespace Fralle.Core.Audio
     public void Next()
     {
       currentTrackIndex++;
-      if (currentTrackIndex > Playlist.Songs.Count - 1)
+      if (currentTrackIndex > playlist.songs.Count - 1)
       {
         currentTrackIndex = 0;
       }
-      musicSource.clip = Playlist.Songs[currentTrackIndex];
+      musicSource.clip = playlist.songs[currentTrackIndex];
       musicSource.Play();
       timePlaying = 0;
     }
@@ -109,16 +110,16 @@ namespace Fralle.Core.Audio
       currentTrackIndex--;
       if (currentTrackIndex <= 0)
       {
-        currentTrackIndex = Playlist.Songs.Count - 1;
+        currentTrackIndex = playlist.songs.Count - 1;
       }
-      musicSource.clip = Playlist.Songs[currentTrackIndex];
+      musicSource.clip = playlist.songs[currentTrackIndex];
       musicSource.Play();
       timePlaying = 0;
     }
 
     public void ChangePlaylist(MusicPlaylist list)
     {
-      Playlist = list;
+      playlist = list;
     }
     #endregion
 

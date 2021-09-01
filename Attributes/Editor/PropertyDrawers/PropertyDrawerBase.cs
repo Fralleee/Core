@@ -74,14 +74,14 @@ namespace Fralle.Core
 
     public void DrawDefaultPropertyAndHelpBox(Rect rect, SerializedProperty property, string message, MessageType messageType)
     {
-      float indentLength = NaughtyEditorGUI.GetIndentLength(rect);
+      float indentLength = NaughtyEditorGui.GetIndentLength(rect);
       Rect helpBoxRect = new Rect(
         rect.x + indentLength,
         rect.y,
         rect.width - indentLength,
         GetHelpBoxHeight());
 
-      NaughtyEditorGUI.HelpBox(helpBoxRect, message, MessageType.Warning, context: property.serializedObject.targetObject);
+      NaughtyEditorGui.HelpBox(helpBoxRect, message, MessageType.Warning, context: property.serializedObject.targetObject);
 
       Rect propertyRect = new Rect(
         rect.x,

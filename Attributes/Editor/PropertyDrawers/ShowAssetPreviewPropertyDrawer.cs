@@ -48,7 +48,7 @@ namespace Fralle.Core
         {
           Rect previewRect = new Rect()
           {
-            x = rect.x + NaughtyEditorGUI.GetIndentLength(rect),
+            x = rect.x + NaughtyEditorGui.GetIndentLength(rect),
             y = rect.y + EditorGUIUtility.singleLineHeight,
             width = rect.width,
             height = GetAssetPreviewSize(property).y

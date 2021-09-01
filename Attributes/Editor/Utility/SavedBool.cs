@@ -5,31 +5,31 @@ namespace Fralle.Core
 {
   internal class SavedBool
   {
-    private bool _value;
-    private string _name;
+    private bool value;
+    private string name;
 
     public bool Value
     {
       get
       {
-        return _value;
+        return value;
       }
       set
       {
-        if (_value == value)
+        if (this.value == value)
         {
           return;
         }
 
-        _value = value;
-        EditorPrefs.SetBool(_name, value);
+        this.value = value;
+        EditorPrefs.SetBool(name, value);
       }
     }
 
     public SavedBool(string name, bool value)
     {
-      _name = name;
-      _value = EditorPrefs.GetBool(name, value);
+      this.name = name;
+      this.value = EditorPrefs.GetBool(name, value);
     }
   }
 }

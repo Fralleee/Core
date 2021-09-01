@@ -16,7 +16,7 @@ namespace Fralle.Core
     {
       InfoBoxAttribute infoBoxAttribute = (InfoBoxAttribute)attribute;
 
-      float indentLength = NaughtyEditorGUI.GetIndentLength(rect);
+      float indentLength = NaughtyEditorGui.GetIndentLength(rect);
       Rect infoBoxRect = new Rect(
         rect.x + indentLength,
         rect.y,
@@ -54,7 +54,7 @@ namespace Fralle.Core
           break;
       }
 
-      NaughtyEditorGUI.HelpBox(rect, infoText, messageType);
+      NaughtyEditorGui.HelpBox(rect, infoText, messageType);
     }
   }
 }

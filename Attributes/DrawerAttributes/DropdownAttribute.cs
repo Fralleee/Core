@@ -21,21 +21,21 @@ namespace Fralle.Core
 
   public class DropdownList<T> : IDropdownList
   {
-    private List<KeyValuePair<string, object>> _values;
+    private List<KeyValuePair<string, object>> values;
 
     public DropdownList()
     {
-      _values = new List<KeyValuePair<string, object>>();
+      values = new List<KeyValuePair<string, object>>();
     }
 
     public void Add(string displayName, T value)
     {
-      _values.Add(new KeyValuePair<string, object>(displayName, value));
+      values.Add(new KeyValuePair<string, object>(displayName, value));
     }
 
     public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
     {
-      return _values.GetEnumerator();
+      return values.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()

@@ -24,8 +24,8 @@ namespace Fralle.Core
       {
         EditorGUI.BeginProperty(rect, label, property);
 
-        float indentLength = NaughtyEditorGUI.GetIndentLength(rect);
-        float labelWidth = EditorGUIUtility.labelWidth + NaughtyEditorGUI.HorizontalSpacing;
+        float indentLength = NaughtyEditorGui.GetIndentLength(rect);
+        float labelWidth = EditorGUIUtility.labelWidth + NaughtyEditorGui.HorizontalSpacing;
         float floatFieldWidth = EditorGUIUtility.fieldWidth;
         float sliderWidth = rect.width - labelWidth - 2.0f * floatFieldWidth;
         float sliderPadding = 5.0f;

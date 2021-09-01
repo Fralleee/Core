@@ -1,19 +1,20 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fralle.Core.Audio
 {
   public class SpawnSounds : MonoBehaviour
   {
-    public GameObject PrefabSound;
+    [FormerlySerializedAs("PrefabSound")] public GameObject prefabSound;
 
-    public int SpawnCount = 1;
+    [FormerlySerializedAs("SpawnCount")] public int spawnCount = 1;
 
-    public float SpawnDelay = 1f;
+    [FormerlySerializedAs("SpawnDelay")] public float spawnDelay = 1f;
 
-    public bool DestroyWhenDone = true;
+    [FormerlySerializedAs("DestroyWhenDone")] public bool destroyWhenDone = true;
 
-    [Range(0.01f, 10f)] public float PitchRandomMultiplier = 1f;
+    [FormerlySerializedAs("PitchRandomMultiplier")] [Range(0.01f, 10f)] public float pitchRandomMultiplier = 1f;
 
     void Awake()
     {
@@ -22,15 +23,15 @@ namespace Fralle.Core.Audio
 
     public void Spawn()
     {
-      if (SpawnDelay > 0)
-        StartCoroutine(SpawnSingle(SpawnDelay));
+      if (spawnDelay > 0)
+        StartCoroutine(SpawnSingle(spawnDelay));
       else
         SpawnSingle();
     }
 
     IEnumerator SpawnSingle(float time)
     {
-      for (int i = 0; i < SpawnCount; i++)
+      for (int i = 0; i < spawnCount; i++)
       {
         SpawnSingle();
         yield return new WaitForSeconds(time);
@@ -39,21 +40,21 @@ namespace Fralle.Core.Audio
 
     void SpawnSingle()
     {
-      GameObject sound = Instantiate(PrefabSound, transform.position, Quaternion.identity);
+      GameObject sound = Instantiate(prefabSound, transform.position, Quaternion.identity);
       AudioSource source = sound.GetComponent<AudioSource>();
 
       Debug.Log($"Playing sound: {sound}");
       source.volume = 0.25f;
 
-      if (!PitchRandomMultiplier.EqualsWithTolerance(1f))
+      if (!pitchRandomMultiplier.EqualsWithTolerance(1f))
       {
         if (Random.value < .5)
-          source.pitch *= Random.Range(1 / PitchRandomMultiplier, 1);
+          source.pitch *= Random.Range(1 / pitchRandomMultiplier, 1);
         else
-          source.pitch *= Random.Range(1, PitchRandomMultiplier);
+          source.pitch *= Random.Range(1, pitchRandomMultiplier);
       }
 
-      if (!DestroyWhenDone)
+      if (!destroyWhenDone)
         return;
 
       float life = source.clip.length / source.pitch;

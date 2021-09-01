@@ -19,13 +19,13 @@ namespace Fralle.Core
             errorMessage = requiredAttribute.Message;
           }
 
-          NaughtyEditorGUI.HelpBox_Layout(errorMessage, MessageType.Error, context: property.serializedObject.targetObject);
+          NaughtyEditorGui.HelpBox_Layout(errorMessage, MessageType.Error, context: property.serializedObject.targetObject);
         }
       }
       else
       {
         string warning = requiredAttribute.GetType().Name + " works only on reference types";
-        NaughtyEditorGUI.HelpBox_Layout(warning, MessageType.Warning, context: property.serializedObject.targetObject);
+        NaughtyEditorGui.HelpBox_Layout(warning, MessageType.Warning, context: property.serializedObject.targetObject);
       }
     }
   }

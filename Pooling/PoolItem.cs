@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fralle.Core.Pooling
 {
   [System.Serializable]
   public class PoolItem
   {
-    public GameObject Obj;
-    public PooledObject RefScript;
+    [FormerlySerializedAs("Obj")] public GameObject obj;
+    [FormerlySerializedAs("RefScript")] public PooledObject refScript;
 
     public PoolItem(GameObject obj, PooledObject refScript)
     {
-      this.Obj = obj;
-      this.RefScript = refScript;
+      this.obj = obj;
+      this.refScript = refScript;
     }
   }
 }

@@ -27,12 +27,12 @@ namespace Fralle.Core.Pooling
       Pool[] pools = gameObject.GetComponentsInChildren<Pool>();
       foreach (Pool pool in pools)
       {
-        if (pool.PoolBlock.Prefab == null)
+        if (pool.poolBlock.prefab == null)
           continue;
-        else if (PoolRef.ContainsKey(pool.PoolBlock.Prefab))
-          Debug.LogWarning($"Already found pool for {pool.PoolBlock.Prefab}.");
+        else if (PoolRef.ContainsKey(pool.poolBlock.prefab))
+          Debug.LogWarning($"Already found pool for {pool.poolBlock.prefab}.");
         else
-          PoolRef.Add(pool.PoolBlock.Prefab, pool);
+          PoolRef.Add(pool.poolBlock.prefab, pool);
       }
     }
 
@@ -55,7 +55,7 @@ namespace Fralle.Core.Pooling
 
       if (!result || (!(addPool > 0) && minPool <= 0))
         return result;
-      int size = PoolRef[obj].PoolBlock.Size;
+      int size = PoolRef[obj].poolBlock.size;
       int l1 = 0;
       int l2 = 0;
       if (addPool >= 0)
@@ -78,11 +78,11 @@ namespace Fralle.Core.Pooling
       {
         PoolRef[obj].CreateObject(true);
       }
-      PoolRef[obj].PoolBlock.MaxSize = PoolRef[obj].PoolBlock.Size * 2;
+      PoolRef[obj].poolBlock.maxSize = PoolRef[obj].poolBlock.size * 2;
       if (!modBehavior)
         return true;
-      PoolRef[obj].PoolBlock.EmptyBehavior = emptyBehavior;
-      PoolRef[obj].PoolBlock.MaxEmptyBehavior = maxEmptyBehavior;
+      PoolRef[obj].poolBlock.emptyBehavior = emptyBehavior;
+      PoolRef[obj].poolBlock.maxEmptyBehavior = maxEmptyBehavior;
 
       return result;
     }
@@ -122,7 +122,7 @@ namespace Fralle.Core.Pooling
         return 0;
       }
 
-      return childScript.PoolBlock.Size - childScript.PoolStack.Count;
+      return childScript.poolBlock.size - childScript.PoolStack.Count;
     }
 
     public int GetAvailableCount(GameObject prefab)
@@ -202,9 +202,9 @@ namespace Fralle.Core.Pooling
         return false;
       }
 
-      for (int i = 0; i < childScript.MasterPool.Count; i++)
+      for (int i = 0; i < childScript.masterPool.Count; i++)
       {
-        childScript.Despawn(childScript.MasterPool[i].Obj, childScript.MasterPool[i].RefScript);
+        childScript.Despawn(childScript.masterPool[i].obj, childScript.masterPool[i].refScript);
       }
       return true;
     }

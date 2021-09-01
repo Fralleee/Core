@@ -10,19 +10,19 @@ namespace Fralle.Core
   {
     public static readonly ReorderableListPropertyDrawer Instance = new ReorderableListPropertyDrawer();
 
-    private readonly Dictionary<string, ReorderableList> _reorderableListsByPropertyName = new Dictionary<string, ReorderableList>();
+    private readonly Dictionary<string, ReorderableList> reorderableListsByPropertyName = new Dictionary<string, ReorderableList>();
 
-    private GUIStyle _labelStyle;
+    private GUIStyle labelStyle;
 
     private GUIStyle GetLabelStyle()
     {
-      if (_labelStyle == null)
+      if (labelStyle == null)
       {
-        _labelStyle = new GUIStyle(EditorStyles.boldLabel);
-        _labelStyle.richText = true;
+        labelStyle = new GUIStyle(EditorStyles.boldLabel);
+        labelStyle.richText = true;
       }
 
-      return _labelStyle;
+      return labelStyle;
     }
 
     private string GetPropertyKeyName(SerializedProperty property)
@@ -36,7 +36,7 @@ namespace Fralle.Core
       {
         string key = GetPropertyKeyName(property);
 
-        if (_reorderableListsByPropertyName.TryGetValue(key, out ReorderableList reorderableList) == false)
+        if (reorderableListsByPropertyName.TryGetValue(key, out ReorderableList reorderableList) == false)
         {
           return 0;
         }
@@ -54,7 +54,7 @@ namespace Fralle.Core
         string key = GetPropertyKeyName(property);
 
         ReorderableList reorderableList = null;
-        if (!_reorderableListsByPropertyName.ContainsKey(key))
+        if (!reorderableListsByPropertyName.ContainsKey(key))
         {
           reorderableList = new ReorderableList(property.serializedObject, property, true, true, true, true)
           {
@@ -80,10 +80,10 @@ namespace Fralle.Core
             }
           };
 
-          _reorderableListsByPropertyName[key] = reorderableList;
+          reorderableListsByPropertyName[key] = reorderableList;
         }
 
-        reorderableList = _reorderableListsByPropertyName[key];
+        reorderableList = reorderableListsByPropertyName[key];
 
         if (rect == default)
         {
@@ -97,14 +97,14 @@ namespace Fralle.Core
       else
       {
         string message = typeof(ReorderableListAttribute).Name + " can be used only on arrays or lists";
-        NaughtyEditorGUI.HelpBox_Layout(message, MessageType.Warning, context: property.serializedObject.targetObject);
+        NaughtyEditorGui.HelpBox_Layout(message, MessageType.Warning, context: property.serializedObject.targetObject);
         EditorGUILayout.PropertyField(property, true);
       }
     }
 
     public void ClearCache()
     {
-      _reorderableListsByPropertyName.Clear();
+      reorderableListsByPropertyName.Clear();
     }
 
     private Object GetAssignableObject(Object obj, ReorderableList list)

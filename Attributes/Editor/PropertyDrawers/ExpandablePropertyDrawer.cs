@@ -181,7 +181,7 @@ namespace Fralle.Core
                 height = childHeight
               };
 
-              NaughtyEditorGUI.PropertyField(childRect, childProperty, true);
+              NaughtyEditorGui.PropertyField(childRect, childProperty, true);
 
               yOffset += childHeight;
             }
