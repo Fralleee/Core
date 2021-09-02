@@ -45,12 +45,12 @@ namespace Fralle.Core.Gameplay
       }
 
       selectedScene = EditorGUILayout.Popup("Scene", selectedScene, sceneList);
-      if (EditorGUI.EndChangeCheck())
-      {
-        Undo.RecordObject(target, "Changed selected scene");
-        gameSceneInspected.sceneName = sceneList[selectedScene];
-        MarkAllDirty();
-      }
+      if (!EditorGUI.EndChangeCheck())
+        return;
+
+      Undo.RecordObject(target, "Changed selected scene");
+      gameSceneInspected.sceneName = sceneList[selectedScene];
+      MarkAllDirty();
     }
 
     private void InitializeGuiStyles()

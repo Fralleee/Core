@@ -22,10 +22,7 @@ namespace Fralle.Core.Pooling
       if (prefab == null)
         return false;
       FindPoolManager();
-      if (poolManager == null)
-        return false;
-
-      return poolManager.InitializeSpawn(prefab, addPool, minPool, emptyBehavior, maxEmptyBehavior, modBehavior);
+      return poolManager != null && poolManager.InitializeSpawn(prefab, addPool, minPool, emptyBehavior, maxEmptyBehavior, modBehavior);
     }
 
     public static GameObject Instantiate(GameObject prefab) => Spawn(prefab, null, Vector3.zero, Quaternion.identity, false);
@@ -40,72 +37,42 @@ namespace Fralle.Core.Pooling
         return null;
 
       GameObject instance = poolManager.Spawn(prefab, child, pos, rot, usePosRot, parent);
-      if (instance == null)
-      {
-        Debug.LogWarning($"Could not find pool for muzzle {prefab.gameObject.name}");
-        instance = Object.Instantiate(prefab, pos, rot, parent);
-      }
+      if (instance != null)
+        return instance;
+
+      Debug.LogWarning($"Could not find pool for muzzle {prefab.gameObject.name}");
+      instance = Object.Instantiate(prefab, pos, rot, parent);
 
       return instance;
     }
 
-    public static bool Despawn(GameObject obj)
-    {
-      if (obj == null)
-      { return false; }
-      return Despawn(obj.GetComponent<PooledObject>(), -1f);
-    }
-    public static bool Despawn(GameObject obj, float time)
-    {
-      if (obj == null)
-      { return false; }
-      return Despawn(obj.GetComponent<PooledObject>(), time);
-    }
-    public static bool Despawn(PooledObject po)
-    {
-      return Despawn(po, -1f);
-    }
-    public static bool Despawn(PooledObject po, float time)
-    {
-      if (po == null)
-      { return false; }
-      return po.Despawn(time);
-    }
+    public static bool Despawn(GameObject obj) => obj != null && Despawn(obj.GetComponent<PooledObject>(), -1f);
+    public static bool Despawn(GameObject obj, float time) => obj != null && Despawn(obj.GetComponent<PooledObject>(), time);
+    public static bool Despawn(PooledObject po) => Despawn(po, -1f);
+    public static bool Despawn(PooledObject po, float time) => po != null && po.Despawn(time);
 
     public static int GetActiveCount(GameObject obj)
     {
       FindPoolManager();
-      if (poolManager == null)
-        return 0;
-
-      return poolManager.GetActiveCount(obj);
+      return poolManager == null ? 0 : poolManager.GetActiveCount(obj);
     }
 
     public static int GetAvailableCount(GameObject obj)
     {
       FindPoolManager();
-      if (poolManager == null)
-        return 0;
-
-      return poolManager.GetAvailableCount(obj);
+      return poolManager == null ? 0 : poolManager.GetAvailableCount(obj);
     }
 
     public static bool DespawnPool(GameObject obj)
     {
       FindPoolManager();
-      if (poolManager == null)
-        return false;
-
-      return poolManager.DespawnPool(obj);
+      return poolManager != null && poolManager.DespawnPool(obj);
     }
 
     public static bool DespawnAll()
     {
       FindPoolManager();
-      if (poolManager == null)
-        return false;
-
-      return poolManager.DespawnAll();
+      return poolManager != null && poolManager.DespawnAll();
     }
 
     public static bool RemovePool(GameObject obj)
@@ -113,22 +80,18 @@ namespace Fralle.Core.Pooling
       FindPoolManager();
       if (poolManager == null)
         return false;
-      else
-      {
-        bool result = poolManager.RemovePool(obj);
-        if (result)
-        { poolManager.PoolRef.Remove(obj); }
-        return result;
-      }
+
+      bool result = poolManager.RemovePool(obj);
+      if (result)
+        poolManager.PoolRef.Remove(obj);
+
+      return result;
     }
 
     public static bool RemoveAll()
     {
       FindPoolManager();
-      if (poolManager == null)
-        return false;
-
-      return poolManager.RemoveAll();
+      return poolManager != null && poolManager.RemoveAll();
     }
 
     static void FindPoolManager()

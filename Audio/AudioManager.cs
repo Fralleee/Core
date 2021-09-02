@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+// ReSharper disable UnusedMember.Global
 
 namespace Fralle.Core.Audio
 {

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 
@@ -38,6 +39,7 @@ namespace Fralle.Core
       Calculate();
     }
 
+    [SuppressMessage("ReSharper", "LoopCanBeConvertedToQuery")]
     void Calculate()
     {
       Vector3 combinedPosition = Vector3.zero;

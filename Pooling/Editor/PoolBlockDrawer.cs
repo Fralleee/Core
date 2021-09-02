@@ -93,7 +93,7 @@ namespace Fralle.Core.Pooling
         "Reused Objects - Number of times an object was reused before despawning normally.\n\n" +
         "Most Objects Active - The most items for this pool active at once."), EditorStyles.miniButton))
       {
-        (prop.serializedObject.targetObject as Pool).PrintLog();
+        (prop.serializedObject.targetObject as Pool)?.PrintLog();
       }
       if (!EditorApplication.isPlaying)
       { GUI.enabled = false; }
@@ -102,7 +102,7 @@ namespace Fralle.Core.Pooling
       {
         if (EditorApplication.isPlaying)
         {
-          (prop.serializedObject.targetObject as Pool).Spawn();
+          (prop.serializedObject.targetObject as Pool)?.Spawn();
         }
       }
       if (!EditorApplication.isPlaying)

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fralle.Core.Pooling
@@ -48,10 +49,7 @@ namespace Fralle.Core.Pooling
         PoolRef.Remove(obj); // remove it
       }
       bool result;
-      if (PoolRef.ContainsKey(obj))
-        result = true; // already have refrence
-      else
-        result = false;
+      result = PoolRef.ContainsKey(obj);
 
       if (!result || (!(addPool > 0) && minPool <= 0))
         return result;
@@ -96,20 +94,18 @@ namespace Fralle.Core.Pooling
       } // object wasn't defined
       CheckDict();
 
-      if (PoolRef.ContainsKey(obj))
-      {
-        // reference already created
-        if (PoolRef[obj] != null)
-        { // make sure pool still exsists
-          return PoolRef[obj].Spawn(child, pos, rot, usePosRot, parent); // create spawn
-        }
-
-        // pool no longer exsists
-        PoolRef.Remove(obj); // remove reference
+      if (!PoolRef.ContainsKey(obj))
         return null;
+      // reference already created
+      if (PoolRef[obj] != null)
+      { // make sure pool still exsists
+        return PoolRef[obj].Spawn(child, pos, rot, usePosRot, parent); // create spawn
       }
 
+      // pool no longer exsists
+      PoolRef.Remove(obj); // remove reference
       return null;
+
     }
 
     public int GetActiveCount(GameObject prefab)
@@ -139,19 +135,13 @@ namespace Fralle.Core.Pooling
     {
       GameObject[] tempObj = new GameObject[PoolRef.Count];
       int i = 0;
-      foreach (GameObject obj in PoolRef.Keys)
+      foreach (var obj in PoolRef.Keys.Where(obj => PoolRef[obj] != null))
       {
-        if (PoolRef[obj] == null)
-          continue;
         tempObj[i] = obj;
         i++;
       }
-      for (int t = 0; t < tempObj.Length; t++)
-      {
-        if (tempObj[t] != null && !RemovePool(tempObj[t]))
-          return false;
-      }
-      return true;
+
+      return tempObj.All(t1 => t1 == null || RemovePool(t1));
     }
 
     public bool DespawnAll()
@@ -202,9 +192,9 @@ namespace Fralle.Core.Pooling
         return false;
       }
 
-      for (int i = 0; i < childScript.masterPool.Count; i++)
+      foreach (var t in childScript.masterPool)
       {
-        childScript.Despawn(childScript.masterPool[i].obj, childScript.masterPool[i].refScript);
+        childScript.Despawn(t.obj, t.refScript);
       }
       return true;
     }

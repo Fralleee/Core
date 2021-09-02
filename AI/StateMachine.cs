@@ -14,7 +14,6 @@ namespace Fralle.Core.AI
 
     readonly Dictionary<T, List<Transition<T>>> transitions = new Dictionary<T, List<Transition<T>>>();
     List<Transition<T>> currentTransitions = new List<Transition<T>>();
-    readonly List<Transition<T>> anyTransitions = new List<Transition<T>>();
 
     static readonly List<Transition<T>> EmptyTransitions = new List<Transition<T>>(0);
 
@@ -58,6 +57,6 @@ namespace Fralle.Core.AI
 
     public void At(IState<T> to, IState<T> from, Func<bool> condition) => AddTransition(to, from, condition);
 
-    Transition<T> GetTransition => anyTransitions.FirstOrDefault(t => t.Condition()) ?? currentTransitions.FirstOrDefault(t => t.Condition());
+    Transition<T> GetTransition => currentTransitions.FirstOrDefault(t => t.Condition());
   }
 }

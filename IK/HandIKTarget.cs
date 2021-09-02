@@ -7,15 +7,17 @@ namespace Fralle.Core
     public Hand hand;
 
     Transform transformToFollow;
+    bool isEnabled;
 
     public void Target(Transform t)
     {
       transformToFollow = t;
+      isEnabled = transformToFollow != null;
     }
 
     void LateUpdate()
     {
-      if (transformToFollow == null)
+      if (!isEnabled)
         return;
 
       transform.position = transformToFollow.position;

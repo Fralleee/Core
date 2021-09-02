@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -23,11 +24,9 @@ namespace Fralle.Core.Profiling
       if (samplesCount == 0)
         return 0;
 
-      double r = 0;
       List<ProfilerRecorderSample> samples = new List<ProfilerRecorderSample>(samplesCount);
       recorder.CopyTo(samples);
-      for (int i = 0; i < samples.Count; ++i)
-        r += samples[i].Value;
+      double r = samples.Aggregate<ProfilerRecorderSample, double>(0, (current, t) => current + t.Value);
       r /= samplesCount;
 
       return r;

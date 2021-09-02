@@ -47,10 +47,15 @@ namespace Fralle.Core
     [ContextMenu("Setup")]
     public void Setup()
     {
-      if (team == Team.Team1)
-        SetupTeam1();
-      else if (team == Team.Team2)
-        SetupTeam2();
+      switch (team)
+      {
+        case Team.Team1:
+          SetupTeam1();
+          break;
+        case Team.Team2:
+          SetupTeam2();
+          break;
+      }
 
       foreach (Collider col in hitboxParent.GetComponentsInChildren<Collider>())
         col.gameObject.layer = hitbox;

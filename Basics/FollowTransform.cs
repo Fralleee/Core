@@ -10,9 +10,6 @@ namespace Fralle.Core.Basics
 
     void LateUpdate()
     {
-      if (transformToFollow == null)
-        return;
-
       if (position)
         transform.position = transformToFollow.position;
       if (rotation)

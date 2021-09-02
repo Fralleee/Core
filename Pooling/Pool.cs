@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,14 +34,7 @@ namespace Fralle.Core.Pooling
       loaded = true;
 
       // required to allow creation or modification of pools at runtime. (Timing of script creation and initialization can get wonkey)
-      if (poolBlock == null)
-      {
-        poolBlock = new PoolBlock(0, EmptyBehavior.Grow, 0, MaxEmptyBehavior.Fail, null, false);
-      }
-      else
-      {
-        poolBlock = new PoolBlock(poolBlock.size, poolBlock.emptyBehavior, poolBlock.maxSize, poolBlock.maxEmptyBehavior, poolBlock.prefab, poolBlock.printLogOnQuit);
-      }
+      poolBlock = poolBlock == null ? new PoolBlock(0, EmptyBehavior.Grow, 0, MaxEmptyBehavior.Fail, null, false) : new PoolBlock(poolBlock.size, poolBlock.emptyBehavior, poolBlock.maxSize, poolBlock.maxEmptyBehavior, poolBlock.prefab, poolBlock.printLogOnQuit);
       PoolStack = new Stack<PoolItem>();
       masterPool = new List<PoolItem>();
 
@@ -133,6 +127,10 @@ namespace Fralle.Core.Pooling
 
             break;
           }
+          case EmptyBehavior.Grow:
+            break;
+          default:
+            throw new ArgumentOutOfRangeException();
         }
 
         if (poolBlock.emptyBehavior != EmptyBehavior.Grow)
@@ -152,6 +150,8 @@ namespace Fralle.Core.Pooling
 
               break;
             }
+            default:
+              throw new ArgumentOutOfRangeException();
           }
         }
         else

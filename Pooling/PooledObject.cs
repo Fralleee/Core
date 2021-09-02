@@ -42,12 +42,11 @@ namespace Fralle.Core.Pooling
 
     bool DoDespawn()
     {
-      if (poolScript)
-      {
-        poolScript.Despawn(gameObject, this);
-        return true;
-      }
-      return false;
+      if (!poolScript)
+        return false;
+
+      poolScript.Despawn(gameObject, this);
+      return true;
     }
 
     void OnDestroy()

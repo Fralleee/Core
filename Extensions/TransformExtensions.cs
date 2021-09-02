@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Fralle.Core
 {
@@ -44,12 +45,7 @@ namespace Fralle.Core
     public static Transform FindChildWithTag(this Transform parent, string tag)
     {
       Transform t = parent.transform;
-      foreach (Transform tr in t)
-      {
-        if (tr.CompareTag(tag))
-          return tr;
-      }
-      return null;
+      return t.Cast<Transform>().FirstOrDefault(tr => tr.CompareTag(tag));
     }
 
   }

@@ -42,7 +42,7 @@ namespace Fralle.Core
       AssetDatabase.SaveAssets();
     }
 
-    static IList<string> OpenSceneNames
+    static IEnumerable<string> OpenSceneNames
     {
       get
       {
