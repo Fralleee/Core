@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Basics
 {
@@ -7,10 +6,8 @@ namespace Fralle.Core.Basics
   public class PsColorChanger : MonoBehaviour
   {
     #region Fields
-    [FormerlySerializedAs("CurrentColor")] [Tooltip("Current \"Main\" color of all particle systems")]
-    public Color currentColor;
-    [FormerlySerializedAs("NewColor")] [Tooltip("New \"Main\" color of all particle systems")]
-    public Color newColor;
+    [Tooltip("Current \"Main\" color of all particle systems")] public Color currentColor;
+    [Tooltip("New \"Main\" color of all particle systems")] public Color newColor;
 
     Color currentHsv; // r -> H; g -> S; b -> V (not a really correct way to do it :D)
     Color newHsv; // r -> H; g -> S; b -> V (not a really correct way to do it :D)

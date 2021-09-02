@@ -1,5 +1,5 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core
 {
@@ -31,16 +31,15 @@ namespace Fralle.Core
     [SerializeField] Color team1Color = new Color(1, 0.5f, 0.5f);
     [SerializeField] Color team2Color = new Color(0.5f, 0.5f, 1);
 
-    [FormerlySerializedAs("AllyTeam")]
     [Header("Layer map")]
-    [Readonly] public int allyTeam;
-    [FormerlySerializedAs("Hitbox")] [Readonly] public int hitbox;
-    [FormerlySerializedAs("AllyProjectiles")] [Readonly] public int allyProjectiles;
-    [FormerlySerializedAs("Hostiles")] public LayerMask hostiles;
-    [FormerlySerializedAs("Neutrals")] public LayerMask neutrals;
-    [FormerlySerializedAs("HostileProjectiles")] public LayerMask hostileProjectiles;
-    [FormerlySerializedAs("Hitboxes")] public LayerMask hitboxes;
-    [FormerlySerializedAs("AttackLayerMask")] public LayerMask attackLayerMask;
+    [ReadOnly] public int allyTeam;
+    [ReadOnly] public int hitbox;
+    [ReadOnly] public int allyProjectiles;
+    public LayerMask hostiles;
+    public LayerMask neutrals;
+    public LayerMask hostileProjectiles;
+    public LayerMask hitboxes;
+    public LayerMask attackLayerMask;
 
     SkinnedMeshRenderer[] renderers;
     MaterialPropertyBlock propBlock;

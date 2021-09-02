@@ -1,29 +1,28 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Pooling
 {
   [System.Serializable]
   public class PoolBlock
   {
-    [FormerlySerializedAs("Size")] [Tooltip("Initial number of object in the pool.")]
+    [Tooltip("Initial number of object in the pool.")]
     public int size;
-    [FormerlySerializedAs("EmptyBehavior")]
+
     [Tooltip("Behavior when an object is requested and the pool is empty.\n\n" +
              "Grow - Will add a new object to the pool, \nlimited by Max Size.\n\n" +
              "Fail - No object will be spawned.\n\n" +
              "Reuse Oldest - Will reuse the oldest active object.")] // becomes slower than grow for large pools, but faster with small pools
     public EmptyBehavior emptyBehavior;
-    [FormerlySerializedAs("MaxSize")] [Tooltip("When using Grow behaviour, this is the absolute max size the pool can grow to.")]
+    [Tooltip("When using Grow behaviour, this is the absolute max size the pool can grow to.")]
     public int maxSize; // absolut limit on pool size, used with EmptyBehavior Grow mode
-    [FormerlySerializedAs("MaxEmptyBehavior")]
+
     [Tooltip("Behavior when an object is requested and the pool is empty, and the max size of the pool has been reached.\n\n" +
              "Fail - No object will be spawned.\n\n" +
              "Reuse Oldest - Will reuse the oldest active object.")]
     public MaxEmptyBehavior maxEmptyBehavior; // mode when pool is at the max size
-    [FormerlySerializedAs("Prefab")] [Tooltip("Object that this pool contains.")]
+    [Tooltip("Object that this pool contains.")]
     public GameObject prefab;
-    [FormerlySerializedAs("PrintLogOnQuit")]
+
     [Tooltip("When the scene is stopped, creates a report showing pool usage:\n\n" +
              "Start Size - Size of the pool when the scene started.\n\n" +
              "End Size - Size of the pool when the scene ended.\n\n" +

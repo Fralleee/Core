@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.CameraControls
 {
@@ -12,14 +11,14 @@ namespace Fralle.Core.CameraControls
       Rotation
     }
 
-    [FormerlySerializedAs("Target")] public TargetTransform target = TargetTransform.Position;
+    public TargetTransform target = TargetTransform.Position;
 
-    [FormerlySerializedAs("Amplitude")] public float amplitude = 1.0f;
-    [FormerlySerializedAs("Frequency")] public float frequency = 1.0f;
+    public float amplitude = 1.0f;
+    public float frequency = 1.0f;
 
-    [FormerlySerializedAs("Duration")] public float duration = 1.0f;
+    public float duration = 1.0f;
 
-    [FormerlySerializedAs("BlendOverLifetime")] public AnimationCurve blendOverLifetime = new AnimationCurve(
+    public AnimationCurve blendOverLifetime = new AnimationCurve(
 
       new Keyframe(0.0f, 0.0f, Mathf.Deg2Rad * 0.0f, Mathf.Deg2Rad * 720.0f),
       new Keyframe(0.2f, 1.0f),

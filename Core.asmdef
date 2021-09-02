@@ -3,7 +3,8 @@
     "rootNamespace": "Fralle.Core",
     "references": [
         "Unity.Animation.Rigging",
-        "Unity.RenderPipelines.Core.Runtime"
+        "Unity.RenderPipelines.Core.Runtime",
+        "Sirenix.OdinInspector.CompatibilityLayer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

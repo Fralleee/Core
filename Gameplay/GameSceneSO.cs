@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Gameplay
 {
   [CreateAssetMenu(menuName = "Core/GameScene")]
   public class GameSceneSo : ScriptableObject
   {
-    [FormerlySerializedAs("SceneName")] [Header("Information")]
-    public string sceneName;
-    [FormerlySerializedAs("ShortDescription")] public string shortDescription;
+    [Header("Information")] public string sceneName;
+    public string shortDescription;
 
-    [FormerlySerializedAs("Music")] [Header("Sounds")]
+    [Header("Sounds")]
     public AudioClip music;
 
   }

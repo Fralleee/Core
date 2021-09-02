@@ -1,20 +1,19 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Audio
 {
   public class SpawnSounds : MonoBehaviour
   {
-    [FormerlySerializedAs("PrefabSound")] public GameObject prefabSound;
+    public GameObject prefabSound;
 
-    [FormerlySerializedAs("SpawnCount")] public int spawnCount = 1;
+    public int spawnCount = 1;
 
-    [FormerlySerializedAs("SpawnDelay")] public float spawnDelay = 1f;
+    public float spawnDelay = 1f;
 
-    [FormerlySerializedAs("DestroyWhenDone")] public bool destroyWhenDone = true;
+    public bool destroyWhenDone = true;
 
-    [FormerlySerializedAs("PitchRandomMultiplier")] [Range(0.01f, 10f)] public float pitchRandomMultiplier = 1f;
+    [Range(0.01f, 10f)] public float pitchRandomMultiplier = 1f;
 
     void Awake()
     {

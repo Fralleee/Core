@@ -1,6 +1,5 @@
 ﻿using Fralle.Core.CameraControls;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core
 {
@@ -11,7 +10,7 @@ namespace Fralle.Core
     float timeRemaining;
     readonly ShakeTransformEventData data;
     Vector3 noiseOffset;
-    [FormerlySerializedAs("Noise")] public Vector3 noise;
+    public Vector3 noise;
 
     public ShakeTransformEventData.TargetTransform Target => data.target;
 

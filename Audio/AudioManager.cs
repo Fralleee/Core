@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Audio
 {
@@ -21,7 +20,7 @@ namespace Fralle.Core.Audio
       set => musicSource.volume = value;
     }
 
-    [FormerlySerializedAs("Playlist")] public MusicPlaylist playlist;
+    public MusicPlaylist playlist;
     float timePlaying = 0;
     int currentTrackIndex;
     bool musicIsPlaying;

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Animation
 {
   public class FadeoutLineRenderer : MonoBehaviour
   {
-    [FormerlySerializedAs("FadeoutTime")] public float fadeoutTime;
+    public float fadeoutTime;
 
     float fadeTimer;
     LineRenderer lineRenderer;

@@ -1,12 +1,11 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Pooling
 {
   public class PooledObject : MonoBehaviour
   {
-    [FormerlySerializedAs("PoolScript")] [HideInInspector] public Pool poolScript; // stores the location of the object pool script for this object
-    [FormerlySerializedAs("TimeSpawned")] [HideInInspector] public float timeSpawned;
+    [HideInInspector] public Pool poolScript; // stores the location of the object pool script for this object
+    [HideInInspector] public float timeSpawned;
 
     bool isQuitting;
 

@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Pooling
 {
   public class Pool : MonoBehaviour
   {
-    [FormerlySerializedAs("PoolBlock")] public PoolBlock poolBlock;
+    public PoolBlock poolBlock;
 
     public Stack<PoolItem> PoolStack;
-    [FormerlySerializedAs("MasterPool")] [HideInInspector] public List<PoolItem> masterPool; // only used when using EmptyBehavior.ReuseOldest
+    [HideInInspector] public List<PoolItem> masterPool; // only used when using EmptyBehavior.ReuseOldest
 
     int addedObjects;
     int failedSpawns;

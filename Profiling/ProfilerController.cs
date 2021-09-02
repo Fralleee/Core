@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Unity.Profiling;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Profiling
 {
@@ -12,11 +11,11 @@ namespace Fralle.Core.Profiling
     ProfilerRecorder mainThreadTimeRecorder;
     ProfilerRecorder drawCallsCountRecorder;
 
-    [FormerlySerializedAs("FrameTime")] public float frameTime;
-    [FormerlySerializedAs("Fps")] public float fps;
-    [FormerlySerializedAs("GcMemory")] public float gcMemory;
-    [FormerlySerializedAs("SystemMemory")] public float systemMemory;
-    [FormerlySerializedAs("DrawCalls")] public float drawCalls;
+    public float frameTime;
+    public float fps;
+    public float gcMemory;
+    public float systemMemory;
+    public float drawCalls;
 
     static double GetRecorderFrameAverage(ProfilerRecorder recorder)
     {

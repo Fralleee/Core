@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.CameraControls
 {
   public class FlyCam : MonoBehaviour
   {
-    [FormerlySerializedAs("CameraSensitivity")] public float cameraSensitivity = 90;
-    [FormerlySerializedAs("ClimbSpeed")] public float climbSpeed = 4;
-    [FormerlySerializedAs("NormalMoveSpeed")] public float normalMoveSpeed = 10;
-    [FormerlySerializedAs("SlowMoveFactor")] public float slowMoveFactor = 0.25f;
-    [FormerlySerializedAs("FastMoveFactor")] public float fastMoveFactor = 3;
+    public float cameraSensitivity = 90;
+    public float climbSpeed = 4;
+    public float normalMoveSpeed = 10;
+    public float slowMoveFactor = 0.25f;
+    public float fastMoveFactor = 3;
 
     float rotationX = 0.0f;
     float rotationY = 0.0f;

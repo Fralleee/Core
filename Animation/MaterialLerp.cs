@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fralle.Core.Animation
 {
   public class MaterialLerp : MonoBehaviour
   {
-    [FormerlySerializedAs("Mat1")] public Material mat1;
-    [FormerlySerializedAs("Mat2")] public Material mat2;
-    [FormerlySerializedAs("Mat3")] public Material mat3;
-    [FormerlySerializedAs("Mat4")] public Material mat4;
-    [FormerlySerializedAs("Mat5")] public Material mat5;
+    public Material mat1;
+    public Material mat2;
+    public Material mat3;
+    public Material mat4;
+    public Material mat5;
 
-    [FormerlySerializedAs("Lerptime")] public float lerptime;
+    public float lerptime;
 
     float q;
     float w;
