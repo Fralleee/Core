@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System;
 using UnityEngine;
 
 namespace Fralle.Core
@@ -55,6 +56,10 @@ namespace Fralle.Core
         case Team.Team2:
           SetupTeam2();
           break;
+        case Team.Npc:
+          break;
+        default:
+          throw new ArgumentOutOfRangeException();
       }
 
       foreach (Collider col in hitboxParent.GetComponentsInChildren<Collider>())

@@ -48,8 +48,8 @@ namespace Fralle.Core.Pooling
       { // check for broken reference
         PoolRef.Remove(obj); // remove it
       }
-      bool result;
-      result = PoolRef.ContainsKey(obj);
+
+      bool result = PoolRef.ContainsKey(obj);
 
       if (!result || (!(addPool > 0) && minPool <= 0))
         return result;
@@ -147,10 +147,9 @@ namespace Fralle.Core.Pooling
     public bool DespawnAll()
     {
       bool result = true;
-      foreach (GameObject obj in PoolRef.Keys)
+      foreach (var obj in PoolRef.Keys.Where(obj => !DespawnPool(obj)))
       {
-        if (!DespawnPool(obj))
-        { result = false; }
+        result = false;
       }
       return result;
     }

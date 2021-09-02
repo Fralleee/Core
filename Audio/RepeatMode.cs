@@ -1,4 +1,5 @@
-﻿namespace Fralle.Core.Audio
+﻿// ReSharper disable UnusedMember.Global
+namespace Fralle.Core.Audio
 {
   public enum RepeatMode
   {

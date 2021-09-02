@@ -41,6 +41,7 @@ namespace Fralle.Core
       shakeEvents.Add(new ShakeEvent(data));
     }
 
+    // ReSharper disable UnusedMember.Global
     public void AddShakeEvent(float amplitude, float frequency, float duration, AnimationCurve blendOverLifetime,
       ShakeTransformEventData.TargetTransform target)
     {

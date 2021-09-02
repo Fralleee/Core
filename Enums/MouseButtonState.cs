@@ -1,4 +1,5 @@
-﻿namespace Fralle.Core.Enums
+﻿// ReSharper disable UnusedMember.Global
+namespace Fralle.Core.Enums
 {
   public enum MouseButtonState
   {

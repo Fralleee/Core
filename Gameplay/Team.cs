@@ -1,4 +1,5 @@
-﻿namespace Fralle.Core
+﻿// ReSharper disable UnusedMember.Global
+namespace Fralle.Core
 {
   public enum Team
   {

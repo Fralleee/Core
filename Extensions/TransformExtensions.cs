@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
+// ReSharper disable UnusedMember.Global
 
 namespace Fralle.Core
 {

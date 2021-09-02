@@ -3,6 +3,8 @@ using System;
 // ReSharper disable UnusedAnonymousMethodSignature
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable MemberCanBeMadeStatic.Local
+// ReSharper disable UnusedVariable
+// ReSharper disable UnusedMember.Global
 
 namespace Fralle.Core
 {
