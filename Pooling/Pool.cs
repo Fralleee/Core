@@ -19,7 +19,6 @@ namespace Fralle.Core.Pooling
     int initSize;
     bool loaded;
 
-#if UNITY_EDITOR
     void OnValidate()
     {
       if (!loaded && poolBlock != null && poolBlock.maxSize <= poolBlock.size)
@@ -27,7 +26,6 @@ namespace Fralle.Core.Pooling
         poolBlock.maxSize = poolBlock.size * 2;
       }
     }
-#endif
 
     void Awake()
     {
