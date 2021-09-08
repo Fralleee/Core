@@ -4,7 +4,8 @@ namespace Fralle.Core.CameraControls
 {
   public class FollowTransformOffset : MonoBehaviour
   {
-    [SerializeField] Transform transformToFollow;
+    public Transform transformToFollow;
+
     [SerializeField] float offset;
 
     void LateUpdate()
