@@ -12,7 +12,7 @@ namespace Fralle.Core
     public void Target(Transform t)
     {
       transformToFollow = t;
-      isEnabled = transformToFollow != null;
+      isEnabled = transformToFollow;
     }
 
     void LateUpdate()

@@ -75,7 +75,7 @@ namespace Fralle.Core.Pooling
     public GameObject Spawn(int? child, Vector3 pos, Quaternion rot, bool usePosRot, Transform parent = null)
     {
       GameObject obj = GetObject();
-      if (obj == null)
+      if (!obj)
       { return null; } // early out
 
       obj.SetActive(false); // reset item in case object is being reused, has no effect if object is already disabled
@@ -85,7 +85,7 @@ namespace Fralle.Core.Pooling
 
       obj.SetActive(true);
 
-      if (child != null && child < obj.transform.childCount)
+      if (child && child < obj.transform.childCount)
       { // activate a specific child
         obj.transform.GetChild((int)child).gameObject.SetActive(true);
       }
@@ -120,7 +120,7 @@ namespace Fralle.Core.Pooling
           case EmptyBehavior.ReuseOldest:
           {
             result = FindOldest();
-            if (result != null)
+            if (result)
             { reusedObjects++; }
 
             break;
@@ -143,7 +143,7 @@ namespace Fralle.Core.Pooling
             case MaxEmptyBehavior.ReuseOldest:
             {
               result = FindOldest();
-              if (result != null)
+              if (result)
               { reusedObjects++; }
 
               break;
@@ -175,7 +175,7 @@ namespace Fralle.Core.Pooling
         return null;
       for (int i = 0; i < masterPool.Count; i++)
       {
-        if (masterPool[i] == null || masterPool[i].obj == null)
+        if (masterPool[i] == null || !masterPool[i].obj)
           continue;
 
         if (!(masterPool[i].refScript.timeSpawned < oldestTime))
@@ -203,11 +203,11 @@ namespace Fralle.Core.Pooling
 
       var obj = Instantiate(poolBlock.prefab, transform.position, transform.rotation);
       PooledObject oprScript = obj.GetComponent<PooledObject>();
-      if (oprScript == null)
+      if (!oprScript)
       { oprScript = obj.AddComponent<PooledObject>(); }
       oprScript.poolScript = this;
       oprScript.timeSpawned = Time.time;
-      if (obj == null || oprScript == null)
+      if (!obj || !oprScript)
         Debug.LogWarning($"Found nulls in {poolBlock.prefab}");
       masterPool.Add(new PoolItem(obj, oprScript));
 

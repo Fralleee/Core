@@ -14,12 +14,12 @@ namespace Fralle.Core.Infrastructure
         if (Destroyed)
           return null;
 
-        if (LocalInstance != null)
+        if (LocalInstance)
           return LocalInstance;
 
         LocalInstance = (T)FindObjectOfType(typeof(T));
 
-        if (LocalInstance != null)
+        if (LocalInstance)
           return LocalInstance;
 
         GameObject singletonObject = new GameObject();
@@ -34,7 +34,7 @@ namespace Fralle.Core.Infrastructure
 
     protected virtual void Awake()
     {
-      if (LocalInstance != null && LocalInstance != this as T)
+      if (LocalInstance && LocalInstance != this as T)
       {
         Destroy(gameObject);
         return;

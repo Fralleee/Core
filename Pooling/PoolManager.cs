@@ -28,7 +28,7 @@ namespace Fralle.Core.Pooling
       Pool[] pools = gameObject.GetComponentsInChildren<Pool>();
       foreach (Pool pool in pools)
       {
-        if (pool.poolBlock.prefab == null)
+        if (!pool.poolBlock.prefab)
           continue;
         if (PoolRef.ContainsKey(pool.poolBlock.prefab))
           Debug.LogWarning($"Already found pool for {pool.poolBlock.prefab}.");
@@ -39,12 +39,12 @@ namespace Fralle.Core.Pooling
 
     public bool InitializeSpawn(GameObject obj, float addPool, int minPool, EmptyBehavior emptyBehavior, MaxEmptyBehavior maxEmptyBehavior, bool modBehavior)
     {
-      if (obj == null)
+      if (!obj)
         return false;
 
       CheckDict();
 
-      if (PoolRef.ContainsKey(obj) && PoolRef[obj] == null)
+      if (PoolRef.ContainsKey(obj) && !PoolRef[obj])
       { // check for broken reference
         PoolRef.Remove(obj); // remove it
       }
@@ -88,16 +88,15 @@ namespace Fralle.Core.Pooling
 
     public GameObject Spawn(GameObject obj, int? child, Vector3 pos, Quaternion rot, bool usePosRot, Transform parent)
     {
-      if (obj == null)
-      {
+      if (!obj)
         return null;
-      } // object wasn't defined
+
       CheckDict();
 
       if (!PoolRef.ContainsKey(obj))
         return null;
       // reference already created
-      if (PoolRef[obj] != null)
+      if (PoolRef[obj])
       { // make sure pool still exsists
         return PoolRef[obj].Spawn(child, pos, rot, usePosRot, parent); // create spawn
       }
@@ -110,11 +109,11 @@ namespace Fralle.Core.Pooling
 
     public int GetActiveCount(GameObject prefab)
     {
-      if (prefab == null)
+      if (!prefab)
       { return 0; } // object wasn't defined
 
       Pool childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : null;
-      if (childScript == null)
+      if (!childScript)
       { // pool not found
         return 0;
       }
@@ -124,24 +123,24 @@ namespace Fralle.Core.Pooling
 
     public int GetAvailableCount(GameObject prefab)
     {
-      if (prefab == null)
+      if (!prefab)
       { return 0; } // object wasn't defined
 
       Pool childScript = PoolRef.ContainsKey(prefab) ? PoolRef[prefab] : null;
-      return childScript == null ? 0 : childScript.PoolStack.Count;
+      return !childScript ? 0 : childScript.PoolStack.Count;
     }
 
     public bool RemoveAll()
     {
       GameObject[] tempObj = new GameObject[PoolRef.Count];
       int i = 0;
-      foreach (var obj in PoolRef.Keys.Where(obj => PoolRef[obj] != null))
+      foreach (var obj in PoolRef.Keys.Where(obj => PoolRef[obj]))
       {
         tempObj[i] = obj;
         i++;
       }
 
-      return tempObj.All(t1 => t1 == null || RemovePool(t1));
+      return tempObj.All(t1 => !t1 || RemovePool(t1));
     }
 
     public bool DespawnAll()
@@ -156,7 +155,7 @@ namespace Fralle.Core.Pooling
 
     public bool RemovePool(GameObject prefab)
     {
-      if (prefab == null)
+      if (!prefab)
       { return false; } // object wasn't defined
 
       Pool childScript = null;
@@ -165,7 +164,7 @@ namespace Fralle.Core.Pooling
         childScript = PoolRef[prefab];
       }
 
-      if (childScript == null)
+      if (!childScript)
       { // pool not found
         return false;
       }
@@ -179,14 +178,14 @@ namespace Fralle.Core.Pooling
     public bool DespawnPool(GameObject prefab)
     {
       Debug.LogWarning($"Despawning Pool {prefab}");
-      if (prefab == null)
+      if (!prefab)
       { return false; } // object wasn't defined
       Pool childScript = null;
       if (PoolRef.ContainsKey(prefab))
       { // reference already created
         childScript = PoolRef[prefab];
       }
-      if (childScript == null)
+      if (!childScript)
       { // pool not found
         return false;
       }

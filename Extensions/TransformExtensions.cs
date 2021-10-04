@@ -37,7 +37,7 @@ namespace Fralle.Core
         if (child.name == aName)
           return child;
         Transform result = child.FindRecursively(aName);
-        if (result != null)
+        if (result)
           return result;
       }
       return null;

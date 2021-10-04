@@ -33,7 +33,7 @@ namespace Fralle.Core.Audio
 
     void Start()
     {
-      if (playlist != null && playlist.songs.Count > 0)
+      if (playlist && playlist.songs.Count > 0)
         musicSource.clip = playlist.songs[currentTrackIndex];
     }
 
