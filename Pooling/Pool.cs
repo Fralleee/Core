@@ -85,7 +85,7 @@ namespace Fralle.Core.Pooling
 
       obj.SetActive(true);
 
-      if (child && child < obj.transform.childCount)
+      if (child != null && child < obj.transform.childCount)
       { // activate a specific child
         obj.transform.GetChild((int)child).gameObject.SetActive(true);
       }
