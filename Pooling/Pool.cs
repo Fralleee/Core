@@ -80,9 +80,7 @@ namespace Fralle.Core.Pooling
 
       obj.SetActive(false); // reset item in case object is being reused, has no effect if object is already disabled
       obj.transform.SetParent(parent, false);
-      obj.transform.position = usePosRot ? pos : transform.position;
-      obj.transform.rotation = usePosRot ? rot : transform.rotation;
-
+      obj.transform.SetPositionAndRotation(usePosRot ? pos : transform.position, usePosRot ? rot : transform.rotation);
       obj.SetActive(true);
 
       if (child != null && child < obj.transform.childCount)

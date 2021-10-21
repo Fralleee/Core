@@ -20,8 +20,7 @@ namespace Fralle.Core
       if (!isEnabled)
         return;
 
-      transform.position = transformToFollow.position;
-      transform.rotation = transformToFollow.rotation;
+      transform.SetPositionAndRotation(transformToFollow.position, transformToFollow.rotation);
     }
   }
 }
