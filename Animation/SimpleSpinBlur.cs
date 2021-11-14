@@ -43,7 +43,7 @@ public class SimpleSpinBlur : MonoBehaviour
       {
         for (int i = 0; i <= Samples; i++)
         {
-          Graphics.DrawMesh(SSB_Mesh, transform.position, Quaternion.Lerp(rotationQueue.Peek(), transform.rotation, (float)i / (float)Samples), SSB_Material, 0, null, advancedSettings.subMaterialIndex);
+          Graphics.DrawMesh(SSB_Mesh, transform.position, Quaternion.Lerp(rotationQueue.Peek(), transform.rotation, i / (float)Samples), SSB_Material, 0, null, advancedSettings.subMaterialIndex);
         }
       }
 
@@ -51,7 +51,7 @@ public class SimpleSpinBlur : MonoBehaviour
       {
         for (int i = 0; i <= Samples; i++)
         {
-          Matrix4x4 matrix = Matrix4x4.TRS(transform.position, Quaternion.Lerp(rotationQueue.Peek(), transform.rotation, (float)i / (float)Samples), transform.localScale);
+          Matrix4x4 matrix = Matrix4x4.TRS(transform.position, Quaternion.Lerp(rotationQueue.Peek(), transform.rotation, i / (float)Samples), transform.localScale);
           Graphics.DrawMesh(SSB_Mesh, matrix, SSB_Material, 0, null, advancedSettings.subMaterialIndex);
         }
 
